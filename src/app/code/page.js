@@ -31,18 +31,21 @@ function getFileIcon(filename) {
 export default function CodePage() {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     async function fetchFiles() {
       try {
         const res = await fetch('/api/code');
-        if (!res.ok) {
+        if (!res) {
           throw new Error('Failed to fetch file list');
         }
         const data = await res.json();
         setFiles(data);
       } catch (err) {
         setError(err.message);
+      } finally { // Ensure loading is set to false
+        setLoading(false);
       }
     }
     fetchFiles();
@@ -52,14 +55,24 @@ export default function CodePage() {
     <div className="container mt-5">
       <h1 className="mb-4">Code Files</h1>
       {error && <p className="text-danger">{error}</p>}
-      <div className="list-group">
-        {files.map(file => (
-          <Link key={file} href={`/code/view/${file}`} className="list-group-item list-group-item-action d-flex align-items-center">
-            <i className={`bi ${getFileIcon(file)} me-3 fs-4`}></i>
-            <span>{file}</span>
-          </Link>
-        ))}
-      </div>
+      {loading && files.length === 0 ? (
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : files.length === 0 ? (
+        <p>No files found.</p>
+      ) : (
+        <div className="list-group">
+          {files.map(file => (
+            <Link key={file} href={`/code/view/${file}`} className="list-group-item list-group-item-action d-flex align-items-center">
+              <i className={`bi ${getFileIcon(file)} me-3 fs-4`}></i>
+              <span>{file}</span>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

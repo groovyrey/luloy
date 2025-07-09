@@ -53,6 +53,7 @@ export default function CodeViewer({ params }) {
     const [content, setContent] = useState('');
     const [error, setError] = useState(null);
     const [lang, setLang] = useState('plaintext');
+    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         if (!filename) return;
@@ -68,6 +69,8 @@ export default function CodeViewer({ params }) {
                 setLang(getLanguage(filename));
             } catch (err) {
                 setError(err.message);
+            } finally { // Ensure loading is set to false
+                setLoading(false);
             }
         }
 
@@ -84,13 +87,21 @@ export default function CodeViewer({ params }) {
                 <i className={`bi ${getFileIcon(filename)} me-3 fs-2`}></i>
                 <h1 className="mb-0">{filename}</h1>
             </div>
-            <div className="card">
-                <div className="card-body p-0">
-                    <SyntaxHighlighter language={lang} style={atomDark} showLineNumbers customStyle={{ margin: 0 }} wrapLines={true}>
-                        {content}
-                    </SyntaxHighlighter>
+            {loading && content === '' ? (
+                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="card">
+                    <div className="card-body p-0">
+                        <SyntaxHighlighter language={lang} style={atomDark} showLineNumbers customStyle={{ margin: 0 }} wrapLines={true}>
+                            {content}
+                        </SyntaxHighlighter>
+                    </div>
+                </div>
+            )}
             <Link href="/code" className="btn btn-secondary mt-4">
                 <i className="bi bi-arrow-left me-2"></i>
                 Back to Files
