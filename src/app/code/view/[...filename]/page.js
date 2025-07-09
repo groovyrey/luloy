@@ -10,13 +10,38 @@ function getLanguage(filename) {
     const extension = filename.split('.').pop();
     switch (extension) {
         case 'js': return 'javascript';
+        case 'jsx': return 'jsx';
+        case 'ts': return 'typescript';
+        case 'tsx': return 'tsx';
         case 'py': return 'python';
+        case 'java': return 'java';
+        case 'c': return 'c';
         case 'cpp': return 'cpp';
         case 'cxx': return 'cpp';
-        case 'css': return 'css';
-        case 'json': return 'json';
+        case 'cs': return 'csharp';
+        case 'go': return 'go';
+        case 'php': return 'php';
+        case 'rb': return 'ruby';
+        case 'swift': return 'swift';
+        case 'kt': return 'kotlin';
+        case 'rs': return 'rust';
+        case 'scala': return 'scala';
+        case 'pl': return 'perl';
+        case 'sh': return 'bash';
+        case 'bat': return 'batch';
+        case 'ps1': return 'powershell';
+        case 'sql': return 'sql';
         case 'html': return 'html';
+        case 'css': return 'css';
+        case 'scss': return 'scss';
+        case 'less': return 'less';
+        case 'json': return 'json';
+        case 'yaml': return 'yaml';
+        case 'yml': return 'yaml';
+        case 'xml': return 'xml';
         case 'md': return 'markdown';
+        case 'r': return 'r';
+        case 'dockerfile': return 'dockerfile';
         default: return 'plaintext';
     }
 }
