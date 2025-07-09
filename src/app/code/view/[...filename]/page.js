@@ -12,9 +12,11 @@ function getLanguage(filename) {
         case 'js': return 'javascript';
         case 'py': return 'python';
         case 'cpp': return 'cpp';
+        case 'cxx': return 'cpp';
         case 'css': return 'css';
         case 'json': return 'json';
         case 'html': return 'html';
+        case 'md': return 'markdown';
         default: return 'plaintext';
     }
 }
