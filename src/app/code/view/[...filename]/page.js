@@ -4,6 +4,7 @@ import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import styles from './CodeViewer.module.css';
 
 function getLanguage(filename) {
     if (!filename) return 'plaintext';
@@ -170,7 +171,7 @@ export default function CodeViewer({ params }) {
         <div className="container mt-5">
             <div className="d-flex align-items-center mb-4">
                 <i className={`bi ${getFileIcon(filename)} me-3 fs-2`}></i>
-                <h1 className="mb-0">{filename}</h1>
+                <h1 className={`${styles.filename} mb-0`}>{filename}</h1>
             </div>
             {loading && content === '' ? (
                 <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
