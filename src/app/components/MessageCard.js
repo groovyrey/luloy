@@ -118,7 +118,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
         <div className={styles.cardHeader}>
           <h5 className="card-title"><i className="bi bi-person-circle me-2"></i>{" "}{message.sender === "" ? <span className="text-danger">?</span> : <span>{message.sender}</span>}</h5>
           {user && userData && userData.authLevel === 1 && (
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-2 gap-md-3">
+            <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-2 gap-md-3" style={{ flexShrink: 0, width: '40px' }}>
               <button className="btn btn-link" onClick={() => setShowOptions(!showOptions)}>
                 <i className="bi bi-three-dots"></i>
               </button>

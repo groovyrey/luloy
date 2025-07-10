@@ -21,6 +21,12 @@
   font-weight: 600;
   color: var(--primary-color);
   margin-bottom: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 80px);
 }
 
 .messageCardContainer .card-text {
@@ -28,6 +34,7 @@
   line-height: 1.6;
   color: var(--text-color);
   margin-bottom: 1rem;
+  word-break: break-word;
 }
 
 .messageCardContainer small {

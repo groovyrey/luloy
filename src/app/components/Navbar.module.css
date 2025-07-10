@@ -8,7 +8,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1060;
 }
 
 .navbarBrandContainer {
@@ -37,6 +37,7 @@
   padding: 0;
   margin-left: 1rem;
   position: relative;
+  z-index: 1070;
 }
 
 .hamburgerLine {

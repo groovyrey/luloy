@@ -3,6 +3,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* globals.css */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
   --primary-color: #007bff; /* A clean, standard blue */
   --primary-rgb: 0, 123, 255;
@@ -21,6 +26,32 @@
   --border-color: var(--card-border-color);
   --navbar-background-color: #ffffff; /* White background for navbar */
   --navbar-background-color: #ffffff; /* White background for navbar */
+  --chat-background-color: #f8f9fa;
+  --my-message-gradient-start: #007bff;
+  --my-message-gradient-end: #0056b3;
+  --other-message-gradient-start: #e9e9eb;
+  --other-message-gradient-end: #d0d0d3;
+  --tooltip-background-color: #555;
+  --tooltip-text-color: #fff;
+  --modal-overlay-background: rgba(0, 0, 0, 0.7);
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+  --info-color: #17a2b8;
+  --warning-color: #ffc107;
+}
+
+:root {
+  --background-color-dark-theme: #1a1a2e;
+  --card-background-color-dark-theme: #16213e;
+  --card-border-color-dark-theme: #0f3460;
+  --text-color-dark-theme: #e0e0e0;
+  --light-text-color-dark-theme: #a0a0a0;
+  --primary-color-dark-theme: #e94560;
+  --secondary-color-dark-theme: #533483;
+  --border-radius-base-dark-theme: 8px;
+  --transition-base-dark-theme: all 0.3s ease;
+  --box-shadow-dark-theme: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --box-shadow-hover-dark-theme: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 html,
@@ -37,6 +68,11 @@ body {
   overflow-x: hidden;
   line-height: 1.5; /* Increased line height for better readability */
   font-size: 0.875rem; /* Slightly larger base font size */
+}
+
+body[data-theme='dark'] {
+  background-color: var(--background-color-dark-theme);
+  color: var(--text-color-dark-theme);
 }
 
 h1, h2, h3, h4, h5, h6 {

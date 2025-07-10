@@ -8,14 +8,14 @@
 }
 
 .myMessage {
-  background: linear-gradient(to right, #007bff, #0056b3); /* Subtle blue gradient */
-  color: white;
+  background: linear-gradient(to right, var(--my-message-gradient-start), var(--my-message-gradient-end)); /* Subtle blue gradient */
+  color: black;
   align-self: flex-end;
   border-bottom-right-radius: 0.25rem;
 }
 
 .otherMessage {
-  background: linear-gradient(to right, #e9e9eb, #d0d0d3); /* Subtle light gray gradient */
+  background: linear-gradient(to right, var(--other-message-gradient-start), var(--other-message-gradient-end)); /* Subtle light gray gradient */
   color: black;
   align-self: flex-start;
   border-bottom-left-radius: 0.25rem;
@@ -29,8 +29,8 @@
 .tooltiptext {
   visibility: hidden;
   width: max-content;
-  background-color: #555;
-  color: #fff;
+  background-color: var(--tooltip-background-color);
+  color: var(--tooltip-text-color);
   text-align: center;
   border-radius: 6px;
   padding: 5px 10px;

@@ -39,21 +39,21 @@ export default function LandingPageContent() {
       <div className="row my-5">
         <div className="col-md-4">
           <motion.div whileHover={{ scale: 1.05 }} className="card shadow-sm p-4 mb-4">
-            <i className="bi bi-chat-dots display-4 text-success mb-3"></i>
+            <i className="bi bi-chat-dots display-4 mb-3" style={{ color: 'var(--success-color)' }}></i>
             <h3 className="card-title">Secure Messaging</h3>
             <p className="card-text">Send and receive messages privately or publicly with ease.</p>
           </motion.div>
         </div>
         <div className="col-md-4">
           <motion.div whileHover={{ scale: 1.05 }} className="card shadow-sm p-4 mb-4">
-            <i className="bi bi-person-circle display-4 text-info mb-3"></i>
+            <i className="bi bi-person-circle display-4 mb-3" style={{ color: 'var(--info-color)' }}></i>
             <h3 className="card-title">User Management</h3>
             <p className="card-text">Manage your profile, settings, and connect with other users.</p>
           </motion.div>
         </div>
         <div className="col-md-4">
           <motion.div whileHover={{ scale: 1.05 }} className="card shadow-sm p-4 mb-4">
-            <i className="bi bi-phone display-4 text-warning mb-3"></i>
+            <i className="bi bi-phone display-4 mb-3" style={{ color: 'var(--warning-color)' }}></i>
             <h3 className="card-title">Responsive Design</h3>
             <p className="card-text">Enjoy a seamless and intuitive experience on any device.</p>
           </motion.div>

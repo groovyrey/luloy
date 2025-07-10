@@ -187,11 +187,11 @@ export default function EditUserPage() {
                   style={{
                     width: '100px',
                     height: '100px',
-                    backgroundColor: '#e9ecef',
+                    backgroundColor: 'var(--accent-color)',
                     cursor: 'not-allowed'
                   }}
                 >
-                  <i className="bi bi-person-fill" style={{ fontSize: '50px', color: '#adb5bd' }}></i>
+                  <i className="bi bi-person-fill" style={{ fontSize: '50px', color: 'var(--light-text-color)' }}></i>
                 </div>
               )}
             </div>

@@ -100,11 +100,11 @@ export default function UserProfilePage({ params }) {
                 style={{
                   width: '150px',
                   height: '150px',
-                  backgroundColor: '#e9ecef',
+                  backgroundColor: 'var(--accent-color)',
                   cursor: 'not-allowed'
                 }}
               >
-                <i className="bi bi-person-fill" style={{ fontSize: '75px', color: '#adb5bd' }}></i>
+                <i className="bi bi-person-fill" style={{ fontSize: '75px', color: 'var(--light-text-color)' }}></i>
               </div>
             )}
             {authLevelInfo && (
@@ -113,7 +113,7 @@ export default function UserProfilePage({ params }) {
                 style={{
                   width: '40px',
                   height: '40px',
-                  backgroundColor: '#fff', /* Card background color */
+                  backgroundColor: 'var(--card-background-color)', /* Card background color */
                   right: '15px', /* Adjust for overlap */
                   bottom: '15px', /* Adjust for overlap */
                   /* border: '2px solid var(--bs-primary)' */

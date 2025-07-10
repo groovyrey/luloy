@@ -62,10 +62,70 @@ function getFileIcon(filename) {
             return 'bi-filetype-json';
         case 'md':
             return 'bi-filetype-md';
-        case 'cpp':
-            return 'bi-filetype-cpp';
         case 'svg':
             return 'bi-filetype-svg';
+        case 'java':
+            return 'bi-filetype-java';
+        case 'ts':
+            return 'bi-filetype-typescript';
+        case 'tsx':
+            return 'bi-filetype-tsx';
+        case 'jsx':
+            return 'bi-filetype-jsx';
+        case 'xml':
+            return 'bi-filetype-xml';
+        case 'yml':
+        case 'yaml':
+            return 'bi-filetype-yml';
+        case 'php':
+            return 'bi-filetype-php';
+        case 'rb':
+            return 'bi-filetype-ruby';
+        case 'go':
+            return 'bi-filetype-go';
+        case 'swift':
+            return 'bi-filetype-swift';
+        case 'kt':
+            return 'bi-filetype-kotlin';
+        case 'c':
+            return 'bi-filetype-c';
+        case 'h':
+            return 'bi-filetype-h';
+        case 'hpp':
+            return 'bi-filetype-hpp';
+        case 'cs':
+            return 'bi-filetype-cs';
+        case 'sh':
+        case 'bat':
+        case 'cmd':
+            return 'bi-filetype-exe';
+        case 'sql':
+            return 'bi-filetype-sql';
+        case 'txt':
+        case 'log':
+            return 'bi-file-earmark-text';
+        case 'zip':
+        case 'rar':
+        case '7z':
+            return 'bi-file-earmark-zip';
+        case 'pdf':
+            return 'bi-filetype-pdf';
+        case 'doc':
+        case 'docx':
+            return 'bi-filetype-word';
+        case 'xls':
+        case 'xlsx':
+            return 'bi-filetype-excel';
+        case 'ppt':
+        case 'pptx':
+            return 'bi-filetype-ppt';
+        case 'png':
+        case 'jpg':
+        case 'jpeg':
+        case 'gif':
+        case 'bmp':
+        case 'webp':
+            return 'bi-file-earmark-image';
         default:
             return 'bi-file-earmark';
     }

@@ -1,0 +1,51 @@
+
+.viewerContainer {
+    padding: 1.5rem;
+    color: white;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.fileIcon {
+    font-size: 2rem;
+    margin-right: 0.75rem;
+    color: var(--primary-color);
+}
+
+.filename {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.codeWrapper {
+    background: var(--card-background-color);
+    border-radius: var(--border-radius-base);
+    overflow: hidden;
+    border: 1px solid var(--card-border-color);
+    box-shadow: var(--box-shadow);
+}
+
+.backButton {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-base);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition-base);
+    margin-top: 1.5rem;
+}
+
+.backButton:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+    transform: translateY(-2px);
+}

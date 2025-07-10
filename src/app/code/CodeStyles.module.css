@@ -1,0 +1,94 @@
+
+.pageContainer {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color-dark-theme);
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: var(--light-text-color-dark-theme);
+    text-align: center;
+}
+
+.fileGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+}
+
+.fileCard {
+    background: var(--card-background-color-dark-theme);
+    border-radius: var(--border-radius-base-dark-theme);
+    border: 1px solid var(--card-border-color-dark-theme);
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--text-color-dark-theme);
+    text-decoration: none;
+    transition: var(--transition-base-dark-theme);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--box-shadow-dark-theme);
+    position: relative;
+    overflow: hidden;
+}
+
+.fileCard::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 70%);
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: var(--transition-base-dark-theme);
+}
+
+.fileCard:hover::before {
+    opacity: 1;
+    top: -10%;
+    left: -10%;
+}
+
+.fileCard:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--box-shadow-hover-dark-theme);
+    border-color: var(--primary-color-dark-theme);
+}
+
+.fileIcon {
+    font-size: 3.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color-dark-theme);
+    transition: var(--transition-base-dark-theme);
+}
+
+.fileCard:hover .fileIcon {
+    color: var(--secondary-color-dark-theme);
+    transform: scale(1.1);
+}
+
+.fileName {
+    font-size: 1rem;
+    font-weight: 500;
+    word-break: break-all;
+    color: var(--text-color-dark-theme);
+    transition: var(--transition-base-dark-theme);
+}
+
+.fileCard:hover .fileName {
+    color: var(--light-text-color-dark-theme);
+}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import styles from './CodeStyles.module.css'; // Import the CSS module
 
 function getFileIcon(filename) {
     if (!filename) return 'bi-file-earmark';
@@ -19,10 +20,71 @@ function getFileIcon(filename) {
             return 'bi-filetype-json';
         case 'md':
             return 'bi-filetype-md';
-        case 'cpp':
-            return 'bi-filetype-cpp';
+        
         case 'svg':
             return 'bi-filetype-svg';
+        case 'java':
+            return 'bi-filetype-java';
+        case 'ts':
+            return 'bi-filetype-typescript';
+        case 'tsx':
+            return 'bi-filetype-tsx';
+        case 'jsx':
+            return 'bi-filetype-jsx';
+        case 'xml':
+            return 'bi-filetype-xml';
+        case 'yml':
+        case 'yaml':
+            return 'bi-filetype-yml';
+        case 'php':
+            return 'bi-filetype-php';
+        case 'rb':
+            return 'bi-filetype-ruby';
+        case 'go':
+            return 'bi-filetype-go';
+        case 'swift':
+            return 'bi-filetype-swift';
+        case 'kt':
+            return 'bi-filetype-kotlin';
+        case 'c':
+            return 'bi-filetype-c';
+        case 'h':
+            return 'bi-filetype-h';
+        case 'hpp':
+            return 'bi-filetype-hpp';
+        case 'cs':
+            return 'bi-filetype-cs';
+        case 'sh':
+        case 'bat':
+        case 'cmd':
+            return 'bi-filetype-exe';
+        case 'sql':
+            return 'bi-filetype-sql';
+        case 'txt':
+        case 'log':
+            return 'bi-file-earmark-text';
+        case 'zip':
+        case 'rar':
+        case '7z':
+            return 'bi-file-earmark-zip';
+        case 'pdf':
+            return 'bi-filetype-pdf';
+        case 'doc':
+        case 'docx':
+            return 'bi-filetype-word';
+        case 'xls':
+        case 'xlsx':
+            return 'bi-filetype-excel';
+        case 'ppt':
+        case 'pptx':
+            return 'bi-filetype-ppt';
+        case 'png':
+        case 'jpg':
+        case 'jpeg':
+        case 'gif':
+        case 'bmp':
+        case 'webp':
+            return 'bi-file-earmark-image';
         default:
             return 'bi-file-earmark';
     }
@@ -31,7 +93,7 @@ function getFileIcon(filename) {
 export default function CodePage() {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchFiles() {
@@ -44,7 +106,7 @@ export default function CodePage() {
         setFiles(data);
       } catch (err) {
         setError(err.message);
-      } finally { // Ensure loading is set to false
+      } finally {
         setLoading(false);
       }
     }
@@ -52,10 +114,11 @@ export default function CodePage() {
   }, []);
 
   return (
-    <div className="container mt-5">
-      <h1 className="mb-4">Code Files</h1>
+    <div className={styles.pageContainer}>
+      <h1 className={styles.title}>Code Files</h1>
+      <p className={styles.subtitle}>Browse and view your code snippets.</p>
       {error && <p className="text-danger">{error}</p>}
-      {loading && files.length === 0 ? (
+      {loading ? (
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -64,11 +127,11 @@ export default function CodePage() {
       ) : files.length === 0 ? (
         <p>No files found.</p>
       ) : (
-        <div className="list-group">
+        <div className={styles.fileGrid}>
           {files.map(file => (
-            <Link key={file} href={`/code/view/${file}`} className="list-group-item list-group-item-action d-flex align-items-center">
-              <i className={`bi ${getFileIcon(file)} me-3 fs-4`}></i>
-              <span>{file}</span>
+            <Link key={file} href={`/code/view/${file}`} className={styles.fileCard}>
+              <i className={`${styles.fileIcon} bi ${getFileIcon(file)}`}></i>
+              <span className={styles.fileName}>{file}</span>
             </Link>
           ))}
         </div>
