@@ -117,13 +117,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
       <div className="card-body">
         <div className={styles.cardHeader}>
           <h5 className="card-title"><i className="bi bi-person-circle me-2"></i>{" "}{message.sender === "" ? <span className="text-danger">?</span> : <span>{message.sender}</span>}</h5>
-          {user && userData && userData.authLevel === 1 && (
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-2 gap-md-3" style={{ flexShrink: 0, width: '40px' }}>
-              <button className="btn btn-link" onClick={() => setShowOptions(!showOptions)}>
-                <i className="bi bi-three-dots"></i>
-              </button>
-            </div>
-          )}
+          
         </div>
         <AnimatePresence>
           {showOptions && (
@@ -164,6 +158,13 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
             {message.date ? formatTimeAgo(message.date) : 'Date N/A'}
             {message.private ? <i className="bi bi-eye-slash-fill ms-2" title="Private Message"></i> : <i className="bi bi-eye-fill ms-2" title="Public Message"></i>}
           </small>
+          {user && userData && userData.authLevel === 1 && (
+            <div className={styles.optionsButtonContainer}>
+              <button className="btn btn-link" onClick={() => setShowOptions(!showOptions)}>
+                <i className="bi bi-three-dots"></i>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

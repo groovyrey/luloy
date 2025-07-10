@@ -42,6 +42,23 @@
   font-size: 0.85rem;
 }
 
+.optionsButtonContainer {
+  /* Styles to align with time period */
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Pushes it to the right */
+}
+
+.optionsButtonContainer .btn-link {
+  padding: 0; /* Remove padding from the button itself */
+  line-height: 1; /* Adjust line height */
+  color: var(--secondary-color); /* Match color with time period */
+}
+
+.optionsButtonContainer .btn-link:hover {
+  color: var(--primary-color); /* Hover effect */
+}
+
 .optionsMenu {
   position: absolute;
   bottom: 0;

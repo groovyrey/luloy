@@ -1,11 +1,14 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { motion } from 'framer-motion';
 import { showToast } from '../../../utils/toast';
 import Link from 'next/link';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './CodeViewer.module.css';
+import MotionDiv from '../../../components/MotionDiv';
+import LoadingMessage from '../../../components/LoadingMessage';
 
 function getLanguage(filename) {
     if (!filename) return 'plaintext';
@@ -183,13 +186,14 @@ export default function CodeViewer({ params }) {
                 <h1 className={`${styles.filename} mb-0`}>{filename}</h1>
             </div>
             {loading && content === '' ? (
-                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
+                <LoadingMessage />
             ) : (
-                <div className="card position-relative">
+                <MotionDiv 
+                  className="card position-relative"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
                     <button className="btn btn-secondary btn-sm position-absolute top-0 end-0 mt-2 me-2" onClick={handleCopy} style={{ zIndex: 1, '--bs-btn-hover-bg': 'var(--bs-secondary)', '--bs-btn-hover-border-color': 'var(--bs-secondary)' }}>
                         {copied ? <><i className="bi bi-check me-1"></i>Copied!</> : <><i className="bi bi-clipboard me-1"></i>Copy Code</>}
                     </button>
@@ -198,7 +202,7 @@ export default function CodeViewer({ params }) {
                             {content}
                         </SyntaxHighlighter>
                     </div>
-                </div>
+                </MotionDiv>
             )}
             <Link href="/code" className="btn btn-secondary mt-4">
                 <i className="bi bi-arrow-left me-2"></i>

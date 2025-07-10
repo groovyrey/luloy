@@ -1,0 +1,69 @@
+.skeletonCard {
+  background: var(--card-background-color);
+  border-radius: var(--border-radius-base);
+  border: 1px solid var(--card-border-color);
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeletonIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonFileName {
+  width: 80%;
+  height: 1rem;
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonMeta {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.skeletonMetaItem {
+  height: 0.75rem;
+  background-color: var(--accent-color);
+  border-radius: 4px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+/* Dark theme adjustments */
+body[data-theme='dark'] .skeletonCard {
+  background: var(--card-background-color-dark-theme);
+  border-color: var(--card-border-color-dark-theme);
+  box-shadow: var(--box-shadow-dark-theme);
+}
+
+body[data-theme='dark'] .skeletonIcon,
+body[data-theme='dark'] .skeletonFileName,
+body[data-theme='dark'] .skeletonMetaItem {
+  background-color: var(--light-text-color-dark-theme);
+}

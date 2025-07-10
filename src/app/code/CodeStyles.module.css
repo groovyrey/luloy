@@ -1,36 +1,36 @@
 
 .pageContainer {
-    padding: 2rem;
+    padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     color: var(--text-color);
     text-align: center;
 }
 
 .subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
     color: var(--light-text-color);
     text-align: center;
 }
 
 .fileGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
 }
 
 .fileCard {
     background: var(--card-background-color);
     border-radius: var(--border-radius-base);
     border: 1px solid var(--card-border-color);
-    padding: 1.5rem;
+    padding: 1rem;
     text-align: center;
     color: var(--text-color);
     text-decoration: none;
@@ -64,14 +64,14 @@
 }
 
 .fileCard:hover {
-    transform: translateY(-5px) scale(1.02);
+    transform: translateY(-3px) scale(1.01);
     box-shadow: var(--box-shadow-hover);
     border-color: var(--primary-color);
 }
 
 .fileIcon {
-    font-size: 3.5rem;
-    margin-bottom: 0.75rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
     color: var(--primary-color);
     transition: var(--transition-base);
 }
@@ -82,7 +82,7 @@
 }
 
 .fileName {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     word-break: break-all;
     color: var(--text-color);
@@ -91,6 +91,15 @@
 
 .fileCard:hover .fileName {
     color: var(--light-text-color);
+}
+
+.fileMeta {
+    font-size: 0.75rem;
+    color: var(--light-text-color);
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
 }
 
 body[data-theme='dark'] .title {
@@ -132,3 +141,4 @@ body[data-theme='dark'] .fileName {
 body[data-theme='dark'] .fileCard:hover .fileName {
     color: var(--light-text-color-dark-theme);
 }
+

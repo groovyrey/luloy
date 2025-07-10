@@ -39,8 +39,7 @@ export default function Offcanvas({ isOpen, onClose }) {
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.offcanvasHeader}>
-            </div>
+            
             <div className={styles.offcanvasBody}>
               <div className={styles.navbarLinks}>
                 <ul>

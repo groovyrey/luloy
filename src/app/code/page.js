@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './CodeStyles.module.css'; // Import the CSS module
+import FileCardSkeleton from '../components/FileCardSkeleton';
+import MotionWrapper from '../components/MotionWrapper';
 
 function getFileIcon(filename) {
     if (!filename) return 'bi-file-earmark';
@@ -115,26 +117,34 @@ export default function CodePage() {
 
   return (
     <div className={styles.pageContainer}>
-      <h1 className={styles.title}>Code Files</h1>
-      <p className={styles.subtitle}>Browse and view your code snippets.</p>
+      <h1 className={styles.title}>Code Snippets</h1>
+      <p className={styles.subtitle}>A Collection of code snippets, for fun and academic purposes.</p>
       {error && <p className="text-danger">{error}</p>}
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
+        <div className={styles.fileGrid}>
+          {Array.from({ length: 8 }).map((_, index) => (
+            <FileCardSkeleton key={index} />
+          ))}
         </div>
       ) : files.length === 0 ? (
         <p>No files found.</p>
       ) : (
-        <div className={styles.fileGrid}>
+        <MotionWrapper 
+          className={styles.fileGrid}
+        >
           {files.map(file => (
-            <Link key={file} href={`/code/view/${file}`} className={styles.fileCard}>
-              <i className={`${styles.fileIcon} bi ${getFileIcon(file)}`}></i>
-              <span className={styles.fileName}>{file}</span>
-            </Link>
+            file && file.filename && (
+              <Link key={file.filename} href={`/code/view/${file.filename}`} className={styles.fileCard}>
+                <i className={`${styles.fileIcon} bi ${getFileIcon(file.filename)}`}></i>
+                <span className={styles.fileName}>{file.filename}</span>
+                <div className={styles.fileMeta}>
+                  <span>{file.size ? (file.size / 1024).toFixed(2) : '0'} KB</span>
+                  <span>{file.mtime ? new Date(file.mtime).toLocaleDateString() : 'Invalid Date'}</span>
+                </div>
+              </Link>
+            )
           ))}
-        </div>
+        </MotionWrapper>
       )}
     </div>
   );

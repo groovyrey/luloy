@@ -12,31 +12,20 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 250px;
+  width: 250px; /* Reverted to original width */
   height: 100%;
   background-color: var(--background-color);
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5); /* Reverted to original shadow */
   z-index: 1050;
   display: flex;
   flex-direction: column;
 }
 
-.offcanvasHeader {
-  padding: 1rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.closeButton {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--text-color);
-}
-
 .offcanvasBody {
-  padding: 1rem;
+  padding-top: 4rem; /* Added top padding to prevent collision with navbar */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 1.5rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -49,7 +38,7 @@
 }
 
 .navbarLinks li {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem; /* Slightly reduced margin for tighter list */
 }
 
 .navbarLinks a {
@@ -57,29 +46,36 @@
   color: var(--text-color);
   font-weight: bold;
   display: block;
-  padding: 0.5rem 0;
+  padding: 0.75rem 1rem; /* Added horizontal padding */
+  border-radius: var(--border-radius-base); /* Rounded corners */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Smooth transition */
 }
 
 .navbarLinks a:hover {
   color: var(--primary-color);
+  background-color: rgba(var(--primary-rgb), 0.1); /* Subtle background on hover */
 }
 
 .navbarActions {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 1.5rem; /* Increased padding */
   border-top: 1px solid var(--border-color);
+  display: flex; /* Use flexbox for better alignment */
+  flex-direction: column;
+  gap: 0.75rem; /* Spacing between buttons */
 }
 
 .navbarActions .btn {
   display: block;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0; /* Remove individual margin-bottom */
 }
 
 .authButtons {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 0.75rem; /* Spacing between buttons */
+  flex-wrap: nowrap; /* Prevent wrapping */
 }
 
 .userProfileContainer {

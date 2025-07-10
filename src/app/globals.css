@@ -20,7 +20,7 @@
   --card-border-color: #dee2e6; /* Subtle card borders */
   --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Minimal shadow */
   --box-shadow-hover: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1); /* Slightly more on hover */
-  --border-radius-base: 0.25rem; /* Slightly rounded corners */
+  --border-radius-base: 0.5rem; /* Increased border roundness */
   --transition-base: all 0.2s ease-in-out;
   --background-color-dark: #e9ecef; /* Darker background for contrast */
   --border-color: var(--card-border-color);
@@ -48,7 +48,7 @@
   --light-text-color-dark-theme: #a0a0a0;
   --primary-color-dark-theme: #e94560;
   --secondary-color-dark-theme: #533483;
-  --border-radius-base-dark-theme: 8px;
+  --border-radius-base-dark-theme: 0.5rem; /* Increased border roundness */
   --transition-base-dark-theme: all 0.3s ease;
   --box-shadow-dark-theme: 0 4px 8px rgba(0, 0, 0, 0.2);
   --box-shadow-hover-dark-theme: 0 8px 16px rgba(0, 0, 0, 0.4);
