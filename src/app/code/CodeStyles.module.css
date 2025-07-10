@@ -9,14 +9,14 @@
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
-    color: var(--primary-color-dark-theme);
+    color: var(--text-color);
     text-align: center;
 }
 
 .subtitle {
     font-size: 1.1rem;
     margin-bottom: 2rem;
-    color: var(--light-text-color-dark-theme);
+    color: var(--light-text-color);
     text-align: center;
 }
 
@@ -27,19 +27,19 @@
 }
 
 .fileCard {
-    background: var(--card-background-color-dark-theme);
-    border-radius: var(--border-radius-base-dark-theme);
-    border: 1px solid var(--card-border-color-dark-theme);
+    background: var(--card-background-color);
+    border-radius: var(--border-radius-base);
+    border: 1px solid var(--card-border-color);
     padding: 1.5rem;
     text-align: center;
-    color: var(--text-color-dark-theme);
+    color: var(--text-color);
     text-decoration: none;
-    transition: var(--transition-base-dark-theme);
+    transition: var(--transition-base);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--box-shadow-dark-theme);
+    box-shadow: var(--box-shadow);
     position: relative;
     overflow: hidden;
 }
@@ -51,10 +51,10 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 123, 255, 0.1) 0%, transparent 70%);
     transform: rotate(45deg);
     opacity: 0;
-    transition: var(--transition-base-dark-theme);
+    transition: var(--transition-base);
 }
 
 .fileCard:hover::before {
@@ -65,19 +65,19 @@
 
 .fileCard:hover {
     transform: translateY(-5px) scale(1.02);
-    box-shadow: var(--box-shadow-hover-dark-theme);
-    border-color: var(--primary-color-dark-theme);
+    box-shadow: var(--box-shadow-hover);
+    border-color: var(--primary-color);
 }
 
 .fileIcon {
     font-size: 3.5rem;
     margin-bottom: 0.75rem;
-    color: var(--primary-color-dark-theme);
-    transition: var(--transition-base-dark-theme);
+    color: var(--primary-color);
+    transition: var(--transition-base);
 }
 
 .fileCard:hover .fileIcon {
-    color: var(--secondary-color-dark-theme);
+    color: var(--secondary-color);
     transform: scale(1.1);
 }
 
@@ -85,10 +85,50 @@
     font-size: 1rem;
     font-weight: 500;
     word-break: break-all;
-    color: var(--text-color-dark-theme);
-    transition: var(--transition-base-dark-theme);
+    color: var(--text-color);
+    transition: var(--transition-base);
 }
 
 .fileCard:hover .fileName {
+    color: var(--light-text-color);
+}
+
+body[data-theme='dark'] .title {
+    color: var(--text-color-dark-theme);
+}
+
+body[data-theme='dark'] .subtitle {
+    color: var(--light-text-color-dark-theme);
+}
+
+body[data-theme='dark'] .fileCard {
+    background: var(--card-background-color-dark-theme);
+    border-color: var(--card-border-color-dark-theme);
+    color: var(--text-color-dark-theme);
+    box-shadow: var(--box-shadow-dark-theme);
+}
+
+body[data-theme='dark'] .fileCard::before {
+    background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 70%);
+}
+
+body[data-theme='dark'] .fileCard:hover {
+    box-shadow: var(--box-shadow-hover-dark-theme);
+    border-color: var(--primary-color-dark-theme);
+}
+
+body[data-theme='dark'] .fileIcon {
+    color: var(--primary-color-dark-theme);
+}
+
+body[data-theme='dark'] .fileCard:hover .fileIcon {
+    color: var(--secondary-color-dark-theme);
+}
+
+body[data-theme='dark'] .fileName {
+    color: var(--text-color-dark-theme);
+}
+
+body[data-theme='dark'] .fileCard:hover .fileName {
     color: var(--light-text-color-dark-theme);
 }

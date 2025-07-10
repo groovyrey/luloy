@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { showToast } from '../../../utils/toast';
 import Link from 'next/link';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './CodeViewer.module.css';
 
 function getLanguage(filename) {
@@ -140,6 +141,14 @@ export default function CodeViewer({ params }) {
     const [error, setError] = useState(null);
     const [lang, setLang] = useState('plaintext');
     const [loading, setLoading] = useState(true); // Add loading state
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(content);
+        showToast('Code copied to clipboard!', 'success');
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     useEffect(() => {
         if (!filename) return;
@@ -180,9 +189,12 @@ export default function CodeViewer({ params }) {
                     </div>
                 </div>
             ) : (
-                <div className="card">
+                <div className="card position-relative">
+                    <button className="btn btn-secondary btn-sm position-absolute top-0 end-0 mt-2 me-2" onClick={handleCopy} style={{ zIndex: 1, '--bs-btn-hover-bg': 'var(--bs-secondary)', '--bs-btn-hover-border-color': 'var(--bs-secondary)' }}>
+                        {copied ? <><i className="bi bi-check me-1"></i>Copied!</> : <><i className="bi bi-clipboard me-1"></i>Copy Code</>}
+                    </button>
                     <div className="card-body p-0">
-                        <SyntaxHighlighter language={lang} style={atomDark} showLineNumbers customStyle={{ margin: 0 }} wrapLines={true}>
+                        <SyntaxHighlighter language={lang} style={dracula} showLineNumbers customStyle={{ margin: '40px 0 0 0' }} wrapLines={true} wrapLongLines={true}>
                             {content}
                         </SyntaxHighlighter>
                     </div>
