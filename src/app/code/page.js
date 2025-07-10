@@ -139,7 +139,6 @@ export default function CodePage() {
                 <span className={styles.fileName}>{file.filename}</span>
                 <div className={styles.fileMeta}>
                   <span>{file.size ? (file.size / 1024).toFixed(2) : '0'} KB</span>
-                  <span>{file.mtime ? new Date(file.mtime).toLocaleDateString() : 'Invalid Date'}</span>
                 </div>
               </Link>
             )
