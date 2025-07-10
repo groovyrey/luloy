@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 1040;
 }
 
@@ -15,7 +15,7 @@
   width: 250px;
   height: 100%;
   background-color: var(--background-color);
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
   z-index: 1050;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,6 @@
   padding: 1rem;
   display: flex;
   justify-content: flex-end;
-  border-bottom: 1px solid var(--border-color);
 }
 
 .closeButton {
@@ -75,6 +74,12 @@
   display: block;
   width: 100%;
   margin-bottom: 0.5rem;
+}
+
+.authButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .userProfileContainer {
@@ -136,7 +141,7 @@
 }
 
 .loadingSpinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
+  border: 4px solid rgba(var(--primary-rgb), 0.1);
   border-left-color: var(--primary-color);
   border-radius: 50%;
   width: 24px;

@@ -40,9 +40,6 @@ export default function Offcanvas({ isOpen, onClose }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.offcanvasHeader}>
-              <button onClick={onClose} className={styles.closeButton}>
-                &times;
-              </button>
             </div>
             <div className={styles.offcanvasBody}>
               <div className={styles.navbarLinks}>
@@ -110,14 +107,14 @@ export default function Offcanvas({ isOpen, onClose }) {
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <>
+                  <div className={styles.authButtons}>
                     <Link href="/login" onClick={onClose} className="btn btn-primary">
                       <i className="bi bi-box-arrow-in-right"></i>Login
                     </Link>
                     <Link href="/signup" onClick={onClose} className="btn btn-primary">
                       <i className="bi bi-person-plus-fill"></i>Sign Up
                     </Link>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
