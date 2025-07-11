@@ -8,20 +8,15 @@
 }
 
 .loadingMessageContainer .lottie-animation {
-  width: 10%;
-  height: 10%;
+  width: 3%;
+  height: 3%;
+  max-width: 150px; /* Example max width */
+  max-height: 150px; /* Example max height */
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .loadingMessageContainer p {
     font-size: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .loadingMessageContainer .lottie-animation {
-    width: 15%;
-  height: 15%;
   }
 }

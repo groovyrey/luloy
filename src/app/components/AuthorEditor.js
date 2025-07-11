@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { capitalizeName } from '../utils/capitalizeName';
 
-export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLevel, onRename, isLoading }) {
+export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLevel, onRename, isLoading, loading }) {
     const [isEditing, setIsEditing] = useState(false);
     const [authorName, setAuthorName] = useState(initialAuthor);
 
@@ -21,6 +21,38 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
         setAuthorName(initialAuthor);
         setIsEditing(false);
     };
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
+
+    if (loading) {
+        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
+    }
 
     if (isEditing) {
         return (
@@ -43,7 +75,7 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
     return (
         <>
             {authorDetails ? (
-                <Link href={`/user/${authorDetails.uid}`} className="text-decoration-none">
+                <Link href={`/user/${authorDetails.uid}`} className="text-decoration-underline">
                     {capitalizeName(authorDetails.firstName)} {capitalizeName(authorDetails.lastName)}
                 </Link>
             ) : (

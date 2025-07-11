@@ -236,6 +236,7 @@ export default function CodeViewer({ params }) {
                         userAuthLevel={userAuthLevel}
                         onRename={handleRenameAuthor}
                         isLoading={isRenaming}
+                        loading={loading}
                     />
                 </div>
             )}
