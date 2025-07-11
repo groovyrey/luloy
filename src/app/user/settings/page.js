@@ -222,6 +222,10 @@ export default function EditUserPage() {
             </button>
           </div>
           <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email</label>
+            <input type="email" id="email" className="form-control" value={user?.email} disabled readOnly />
+          </div>
+          <div className="mb-3">
             <label htmlFor="firstName" className="form-label">First Name</label>
             <input type="text" id="firstName" className="form-control" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} disabled={isUpdating} />
           </div>
@@ -235,7 +239,10 @@ export default function EditUserPage() {
           </div>
           <div className="mb-3">
             <label htmlFor="bio" className="form-label">Bio</label>
-            <textarea id="bio" className="form-control" placeholder="Tell us about yourself..." value={bio} onChange={e => setBio(e.target.value)} rows="3" disabled={isUpdating}></textarea>
+            <textarea id="bio" className="form-control" placeholder="Tell us about yourself..." value={bio} onChange={e => setBio(e.target.value.slice(0, 50))} rows="3" maxLength={50} disabled={isUpdating}></textarea>
+            <div className="text-end text-muted" style={{ fontSize: '0.85em' }}>
+              {bio.length}/50 characters
+            </div>
           </div>
           <button className="btn btn-primary w-100" onClick={handleUpdate} disabled={isUpdating}>
             {isUpdating ? (

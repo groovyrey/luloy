@@ -27,10 +27,10 @@
   --navbar-background-color: #ffffff; /* White background for navbar */
   --navbar-background-color: #ffffff; /* White background for navbar */
   --chat-background-color: #f8f9fa;
-  --my-message-gradient-start: #007bff;
-  --my-message-gradient-end: #0056b3;
-  --other-message-gradient-start: #e9e9eb;
-  --other-message-gradient-end: #d0d0d3;
+  --my-message-gradient-start: #66b3ff;
+  --my-message-gradient-end: #3385ff;
+  --other-message-gradient-start: #f0f0f0;
+  --other-message-gradient-end: #e0e0e0;
   --tooltip-background-color: #555;
   --tooltip-text-color: #fff;
   --modal-overlay-background: rgba(0, 0, 0, 0.7);
@@ -263,4 +263,23 @@ body::after {
 
 .main-content {
   padding: 1rem;
+}
+
+/* Custom class for Lead Developer with red gradient animation */
+.text-lead-developer {
+  background: linear-gradient(90deg, #000000, #ff0000, #000000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  animation: gradient-animation 3s linear infinite;
+  background-size: 400% 100%;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }

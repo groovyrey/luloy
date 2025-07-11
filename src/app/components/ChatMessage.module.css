@@ -8,8 +8,8 @@
 }
 
 .myMessage {
-  background: linear-gradient(to right, var(--my-message-gradient-start), var(--my-message-gradient-end)); /* Subtle blue gradient */
-  color: black;
+  background: linear-gradient(to right, var(--my-message-gradient-start), var(--my-message-gradient-end));
+  color: white;
   align-self: flex-end;
   border-bottom-right-radius: 0.25rem;
 }
