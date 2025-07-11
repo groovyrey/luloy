@@ -10,6 +10,7 @@ import styles from './CodeViewer.module.css';
 import MotionDiv from '../../../components/MotionDiv';
 import LoadingMessage from '../../../components/LoadingMessage';
 import { useUser } from '../../../context/UserContext';
+import AuthorEditor from '../../../components/AuthorEditor';
 
 function getLanguage(filename) {
     if (!filename) return 'plaintext';
@@ -148,7 +149,7 @@ export default function CodeViewer({ params }) {
     const [lang, setLang] = useState('plaintext');
     const [loading, setLoading] = useState(true);
     const [copied, setCopied] = useState(false);
-    
+    const [isRenaming, setIsRenaming] = useState(false);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(content);
@@ -157,18 +158,34 @@ export default function CodeViewer({ params }) {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const [showRenameAuthor, setShowRenameAuthor] = useState(false);
-    const [newAuthorName, setNewAuthorName] = useState('');
-
     const { user } = useUser();
     const userAuthLevel = user?.authLevel || 0;
 
-    const handleRenameAuthor = async () => {
+    const fetchFileContent = async () => {
+        try {
+            const res = await fetch(`/api/code/view/${filename}`);
+            if (!res.ok) {
+                throw new Error(`File not found: ${filename}`);
+            }
+            const data = await res.json();
+            setContent(data.content);
+            setLang(getLanguage(filename));
+            setAuthor(data.author);
+            setAuthorDetails(data.authorDetails);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRenameAuthor = async (newAuthorName) => {
         if (!newAuthorName.trim()) {
             showToast('Author name cannot be empty.', 'error');
             return;
         }
 
+        setIsRenaming(true);
         try {
             const res = await fetch('/api/code/rename-author', {
                 method: 'POST',
@@ -184,35 +201,16 @@ export default function CodeViewer({ params }) {
             }
 
             showToast('Author renamed successfully!', 'success');
-            setAuthor(newAuthorName);
-            setNewAuthorName('');
-            setShowRenameAuthor(false);
+            fetchFileContent(); // Re-fetch data to update author details
         } catch (err) {
             showToast(err.message, 'error');
+        } finally {
+            setIsRenaming(false);
         }
     };
 
     useEffect(() => {
         if (!filename) return;
-
-        async function fetchFileContent() {
-            try {
-                const res = await fetch(`/api/code/view/${filename}`);
-                if (!res.ok) {
-                    throw new Error(`File not found: ${filename}`);
-                }
-                const data = await res.json();
-                setContent(data.content);
-                setLang(getLanguage(filename));
-                setAuthor(data.author);
-                setAuthorDetails(data.authorDetails);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        }
-
         fetchFileContent();
     }, [filename]);
 
@@ -229,30 +227,16 @@ export default function CodeViewer({ params }) {
                 <h1 className={`${styles.filename} mb-0 flex-grow-1`}>{filename}</h1>
             </div>
 
-            {author && <p className="text-muted mb-4">Author: {
-                authorDetails ? (
-                    <Link href={`/user/${authorDetails.uid}`} className="text-decoration-none">
-                        {authorDetails.firstName} {authorDetails.lastName}
-                    </Link>
-                ) : (
-                    author
-                )
-            } {userAuthLevel >= 1 && (
-                <button className="btn btn-sm btn-outline-secondary ms-2" onClick={() => setShowRenameAuthor(!showRenameAuthor)}>
-                    {showRenameAuthor ? 'Cancel' : 'Rename Author'}
-                </button>
-            )}
-            </p>}
-            {showRenameAuthor && userAuthLevel >= 1 && (
-                <div className="input-group mb-3">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="New Author Name"
-                        value={newAuthorName}
-                        onChange={(e) => setNewAuthorName(e.target.value)}
+            {author && (
+                <div className="text-muted mb-4 d-flex align-items-center">
+                    <span className="me-2">Author:</span>
+                    <AuthorEditor
+                        initialAuthor={author}
+                        authorDetails={authorDetails}
+                        userAuthLevel={userAuthLevel}
+                        onRename={handleRenameAuthor}
+                        isLoading={isRenaming}
                     />
-                    <button className="btn btn-primary" onClick={handleRenameAuthor}>Save</button>
                 </div>
             )}
             {loading && content === '' ? (
