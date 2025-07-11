@@ -130,6 +130,11 @@ export default function UserProfilePage({ params }) {
           <div className="col-12 text-center mb-3">
               <h1 className="display-4 d-inline-block">{toTitleCase((profileData.firstName || '') + " " + (profileData.lastName || ''))}</h1>
             </div>
+            {profileData.bio && (
+              <div className="col-12 text-center mb-3">
+                <p className="text-muted fst-italic">{profileData.bio}</p>
+              </div>
+            )}
           <div className="row mb-3">
             <div className="col-12 col-md-6">
               <p className="mb-1"><strong>Email:</strong></p>

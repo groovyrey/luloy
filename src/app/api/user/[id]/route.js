@@ -21,6 +21,7 @@ export async function GET(request, { params }) {
       lastName: userData.lastName,
       email: userData.email,
       age: userData.age,
+      bio: userData.bio || null,
       profilePictureUrl: userData.profilePictureUrl || null,
       authLevel: authLevel,
     };

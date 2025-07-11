@@ -7,6 +7,7 @@ import LoadingMessage from '../../../app/components/LoadingMessage';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { showToast } from '../../../app/utils/toast';
+import { capitalizeName } from '../../../app/utils/capitalizeName';
 
 export default function EditUserPage() {
   const { user, userData, loading, refreshUserData } = useUser();
@@ -16,6 +17,7 @@ export default function EditUserPage() {
   const [age, setAge] = useState('');
   const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [profilePicturePreviewUrl, setProfilePicturePreviewUrl] = useState(null);
+  const [bio, setBio] = useState('');
   
   const [isFetchingUserData, setIsFetchingUserData] = useState(true); // New state for data fetching
 
@@ -30,6 +32,7 @@ export default function EditUserPage() {
       if (userData.profilePictureUrl) {
         setProfilePicturePreviewUrl(userData.profilePictureUrl);
       }
+      setBio(userData.bio || ''); // Set bio from userData
       setIsFetchingUserData(false); // Data is available from context
     }
   }, [user, loading, router, userData]);
@@ -62,11 +65,12 @@ export default function EditUserPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid: user.uid, firstName, lastName, age: parseInt(age) }),
+        body: JSON.stringify({ uid: user.uid, firstName: capitalizeName(firstName), lastName: capitalizeName(lastName), age: parseInt(age), bio }),
       });
 
       if (res.ok) {
         showToast('Profile updated successfully!', 'success');
+        await refreshUserData(); // Refresh user data in context
       } else {
         let errorData = {};
         try {
@@ -228,6 +232,10 @@ export default function EditUserPage() {
           <div className="mb-3">
             <label htmlFor="age" className="form-label">Age</label>
             <input type="number" id="age" className="form-control" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} disabled={isUpdating} />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="bio" className="form-label">Bio</label>
+            <textarea id="bio" className="form-control" placeholder="Tell us about yourself..." value={bio} onChange={e => setBio(e.target.value)} rows="3" disabled={isUpdating}></textarea>
           </div>
           <button className="btn btn-primary w-100" onClick={handleUpdate} disabled={isUpdating}>
             {isUpdating ? (
