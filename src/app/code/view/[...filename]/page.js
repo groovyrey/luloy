@@ -9,6 +9,7 @@ import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './CodeViewer.module.css';
 import MotionDiv from '../../../components/MotionDiv';
 import LoadingMessage from '../../../components/LoadingMessage';
+import { useUser } from '../../../context/UserContext';
 
 function getLanguage(filename) {
     if (!filename) return 'plaintext';
@@ -142,14 +143,12 @@ export default function CodeViewer({ params }) {
 
     const [content, setContent] = useState('');
     const [author, setAuthor] = useState('Unknown');
-    const [authorEmail, setAuthorEmail] = useState('');
+    const [authorDetails, setAuthorDetails] = useState(null);
     const [error, setError] = useState(null);
     const [lang, setLang] = useState('plaintext');
     const [loading, setLoading] = useState(true);
     const [copied, setCopied] = useState(false);
-    const [isAuthorUser, setIsAuthorUser] = useState(false);
-    const [authorUserId, setAuthorUserId] = useState(null);
-    const [checkingAuthorEmail, setCheckingAuthorEmail] = useState(false);
+    
 
     const handleCopy = () => {
         navigator.clipboard.writeText(content);
@@ -158,32 +157,55 @@ export default function CodeViewer({ params }) {
         setTimeout(() => setCopied(false), 2000);
     };
 
+    const [showRenameAuthor, setShowRenameAuthor] = useState(false);
+    const [newAuthorName, setNewAuthorName] = useState('');
+
+    const { user } = useUser();
+    const userAuthLevel = user?.authLevel || 0;
+
+    const handleRenameAuthor = async () => {
+        if (!newAuthorName.trim()) {
+            showToast('Author name cannot be empty.', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/code/rename-author', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ filename, newAuthorName }),
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Failed to rename author');
+            }
+
+            showToast('Author renamed successfully!', 'success');
+            setAuthor(newAuthorName);
+            setNewAuthorName('');
+            setShowRenameAuthor(false);
+        } catch (err) {
+            showToast(err.message, 'error');
+        }
+    };
+
     useEffect(() => {
         if (!filename) return;
 
         async function fetchFileContent() {
             try {
-                const res = await fetch(`/api/code/${filename}`);
+                const res = await fetch(`/api/code/view/${filename}`);
                 if (!res.ok) {
                     throw new Error(`File not found: ${filename}`);
                 }
                 const data = await res.json();
                 setContent(data.content);
-                setAuthor(data.author);
-                setAuthorEmail(data.authorEmail);
                 setLang(getLanguage(filename));
-
-                if (data.authorEmail) {
-                    setCheckingAuthorEmail(true);
-                    const emailCheckRes = await fetch(`/api/user/check-email?email=${encodeURIComponent(data.authorEmail)}`);
-                    const emailCheckData = await emailCheckRes.json();
-                    if (emailCheckData.exists) {
-                        setIsAuthorUser(true);
-                        setAuthorUserId(emailCheckData.userId);
-                    }
-                    setCheckingAuthorEmail(false);
-                }
-
+                setAuthor(data.author);
+                setAuthorDetails(data.authorDetails);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -194,21 +216,7 @@ export default function CodeViewer({ params }) {
         fetchFileContent();
     }, [filename]);
 
-    const githubProfileUrl = (() => {
-        if (authorEmail && authorEmail.endsWith('@users.noreply.github.com')) {
-            const usernameMatch = authorEmail.match(/^(.*)\+.*@users\.noreply\.github\.com$/);
-            if (usernameMatch && usernameMatch[1]) {
-                return `https://github.com/${usernameMatch[1]}`;
-            } else {
-                // Fallback for cases like username@users.noreply.github.com without the +
-                return `https://github.com/${authorEmail.split('@')[0]}`;
-            }
-        } else if (author) {
-            // If not a GitHub noreply email, use the author's name directly as the username
-            return `https://github.com/${author}`;
-        }
-        return null;
-    })();
+    
 
     if (error) {
         return <div className="container mt-5"><p className="text-danger">{error}</p></div>;
@@ -221,26 +229,32 @@ export default function CodeViewer({ params }) {
                 <h1 className={`${styles.filename} mb-0 flex-grow-1`}>{filename}</h1>
             </div>
 
-            <div className="mb-4 text-muted">
-                <small>
-                    Author: <span className="fw-bold">{author}</span>
-                    {authorEmail && (
-                        <>
-                            {' | '}
-                            {checkingAuthorEmail ? (
-                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : isAuthorUser ? (
-                                <Link href={`/user/${authorUserId}`} className="text-decoration-none">
-                                    View profile
-                                </Link>
-                            ) : (
-                                authorEmail
-                            )}
-                        </>
-                    )}
-                </small>
-            </div>
-
+            {author && <p className="text-muted mb-4">Author: {
+                authorDetails ? (
+                    <Link href={`/user/${authorDetails.uid}`} className="text-decoration-none">
+                        {authorDetails.firstName} {authorDetails.lastName}
+                    </Link>
+                ) : (
+                    author
+                )
+            } {userAuthLevel >= 1 && (
+                <button className="btn btn-sm btn-outline-secondary ms-2" onClick={() => setShowRenameAuthor(!showRenameAuthor)}>
+                    {showRenameAuthor ? 'Cancel' : 'Rename Author'}
+                </button>
+            )}
+            </p>}
+            {showRenameAuthor && userAuthLevel >= 1 && (
+                <div className="input-group mb-3">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="New Author Name"
+                        value={newAuthorName}
+                        onChange={(e) => setNewAuthorName(e.target.value)}
+                    />
+                    <button className="btn btn-primary" onClick={handleRenameAuthor}>Save</button>
+                </div>
+            )}
             {loading && content === '' ? (
                 <LoadingMessage />
             ) : (

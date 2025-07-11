@@ -102,6 +102,14 @@
     gap: 0.2rem;
 }
 
+.fileAuthor {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px; /* Adjust as needed */
+    display: block; /* Ensure it takes full width for ellipsis */
+}
+
 body[data-theme='dark'] .title {
     color: var(--text-color-dark-theme);
 }
