@@ -1,25 +1,25 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
 
 export async function GET() {
   const dir = path.join(process.cwd(), 'public', 'code');
-  
+  const authorsFilePath = path.join(dir, 'authors.json');
+  let authors = {};
+
+  try {
+    const authorsFileContent = fs.readFileSync(authorsFilePath, 'utf8');
+    authors = JSON.parse(authorsFileContent);
+  } catch (error) {
+    console.warn('Could not read authors.json, defaulting to unknown authors:', error.message);
+  }
+
   try {
     const files = fs.readdirSync(dir).map(filename => {
       const filePath = path.join(dir, filename);
       const stats = fs.statSync(filePath);
       
-      let author = 'Unknown';
-      try {
-        // Get the author of the first commit for the file
-        author = execSync(`git log --diff-filter=A --format="%an" --max-count=1 -- "${filePath}"`, { encoding: 'utf8', cwd: process.cwd() }).trim();
-        
-      } catch (gitError) {
-        
-        // Ensure the file is still returned even if git author fails
-      }
+      const author = authors[filename] || 'Unknown';
 
       const fileData = {
         filename,
