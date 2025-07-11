@@ -267,12 +267,11 @@ body::after {
 
 /* Custom class for Lead Developer with red gradient animation */
 .text-lead-developer {
-  background: linear-gradient(90deg, #000000, #ff0000, #000000);
+  background: linear-gradient(90deg, #000000, #0000FF, #000000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% 100%;
-  animation: gradient-animation 3s linear infinite;
-  background-size: 400% 100%;
+  background-size: 600% 100%;
+  animation: gradient-animation 6s linear infinite;
 }
 
 @keyframes gradient-animation {

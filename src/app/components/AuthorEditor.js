@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { capitalizeName } from '../utils/capitalizeName';
 
 export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLevel, onRename, isLoading }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -43,7 +44,7 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
         <>
             {authorDetails ? (
                 <Link href={`/user/${authorDetails.uid}`} className="text-decoration-none">
-                    {authorDetails.firstName} {authorDetails.lastName}
+                    {capitalizeName(authorDetails.firstName)} {capitalizeName(authorDetails.lastName)}
                 </Link>
             ) : (
                 initialAuthor
