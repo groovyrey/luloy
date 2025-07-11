@@ -141,10 +141,15 @@ export default function CodeViewer({ params }) {
     const filename = rawFilename.map(segment => decodeURIComponent(segment)).join('/');
 
     const [content, setContent] = useState('');
+    const [author, setAuthor] = useState('Unknown');
+    const [authorEmail, setAuthorEmail] = useState('');
     const [error, setError] = useState(null);
     const [lang, setLang] = useState('plaintext');
-    const [loading, setLoading] = useState(true); // Add loading state
+    const [loading, setLoading] = useState(true);
     const [copied, setCopied] = useState(false);
+    const [isAuthorUser, setIsAuthorUser] = useState(false);
+    const [authorUserId, setAuthorUserId] = useState(null);
+    const [checkingAuthorEmail, setCheckingAuthorEmail] = useState(false);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(content);
@@ -158,16 +163,30 @@ export default function CodeViewer({ params }) {
 
         async function fetchFileContent() {
             try {
-                const res = await fetch(`/code/${filename}`);
+                const res = await fetch(`/api/code/${filename}`);
                 if (!res.ok) {
                     throw new Error(`File not found: ${filename}`);
                 }
-                const text = await res.text();
-                setContent(text);
+                const data = await res.json();
+                setContent(data.content);
+                setAuthor(data.author);
+                setAuthorEmail(data.authorEmail);
                 setLang(getLanguage(filename));
+
+                if (data.authorEmail) {
+                    setCheckingAuthorEmail(true);
+                    const emailCheckRes = await fetch(`/api/user/check-email?email=${encodeURIComponent(data.authorEmail)}`);
+                    const emailCheckData = await emailCheckRes.json();
+                    if (emailCheckData.exists) {
+                        setIsAuthorUser(true);
+                        setAuthorUserId(emailCheckData.userId);
+                    }
+                    setCheckingAuthorEmail(false);
+                }
+
             } catch (err) {
                 setError(err.message);
-            } finally { // Ensure loading is set to false
+            } finally {
                 setLoading(false);
             }
         }
@@ -175,39 +194,85 @@ export default function CodeViewer({ params }) {
         fetchFileContent();
     }, [filename]);
 
+    const githubProfileUrl = (() => {
+        if (authorEmail && authorEmail.endsWith('@users.noreply.github.com')) {
+            const usernameMatch = authorEmail.match(/^(.*)\+.*@users\.noreply\.github\.com$/);
+            if (usernameMatch && usernameMatch[1]) {
+                return `https://github.com/${usernameMatch[1]}`;
+            } else {
+                // Fallback for cases like username@users.noreply.github.com without the +
+                return `https://github.com/${authorEmail.split('@')[0]}`;
+            }
+        } else if (author) {
+            // If not a GitHub noreply email, use the author's name directly as the username
+            return `https://github.com/${author}`;
+        }
+        return null;
+    })();
+
     if (error) {
         return <div className="container mt-5"><p className="text-danger">{error}</p></div>;
     }
 
     return (
-        <div className="container mt-5">
-            <div className="d-flex align-items-center mb-4">
-                <i className={`bi ${getFileIcon(filename)} me-3 fs-2`}></i>
-                <h1 className={`${styles.filename} mb-0`}>{filename}</h1>
+        <section className={`${styles.viewerContainer} container-fluid mt-5`}>
+            <div className={`${styles.header} d-flex align-items-center mb-4`}>
+                <i className={`bi ${getFileIcon(filename)} ${styles.fileIcon} me-3`}></i>
+                <h1 className={`${styles.filename} mb-0 flex-grow-1`}>{filename}</h1>
             </div>
+
+            <div className="mb-4 text-muted">
+                <small>
+                    Author: <span className="fw-bold">{author}</span>
+                    {authorEmail && (
+                        <>
+                            {' | '}
+                            {checkingAuthorEmail ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : isAuthorUser ? (
+                                <Link href={`/user/${authorUserId}`} className="text-decoration-none">
+                                    View profile
+                                </Link>
+                            ) : (
+                                authorEmail
+                            )}
+                        </>
+                    )}
+                </small>
+            </div>
+
             {loading && content === '' ? (
                 <LoadingMessage />
             ) : (
                 <MotionDiv 
-                  className="card position-relative"
+                  className={`${styles.codeWrapper} card`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                    <button className="btn btn-secondary btn-sm position-absolute top-0 end-0 mt-2 me-2" onClick={handleCopy} style={{ zIndex: 1, '--bs-btn-hover-bg': 'var(--bs-secondary)', '--bs-btn-hover-border-color': 'var(--bs-secondary)' }}>
-                        {copied ? <><i className="bi bi-check me-1"></i>Copied!</> : <><i className="bi bi-clipboard me-1"></i>Copy Code</>}
-                    </button>
+                    <div className="card-header d-flex justify-content-end align-items-center bg-transparent border-bottom-0 p-3">
+                        <button className="btn btn-sm btn-outline-secondary" onClick={handleCopy}>
+                            {copied ? <><i className="bi bi-check me-1"></i>Copied!</> : <><i className="bi bi-clipboard me-1"></i>Copy Code</>}
+                        </button>
+                    </div>
                     <div className="card-body p-0">
-                        <SyntaxHighlighter language={lang} style={dracula} showLineNumbers customStyle={{ margin: '40px 0 0 0' }} wrapLines={true} wrapLongLines={true}>
+                        <SyntaxHighlighter 
+                            language={lang} 
+                            style={dracula} 
+                            showLineNumbers 
+                            customStyle={{ margin: '0', padding: '1rem', borderRadius: 'var(--border-radius-base)' }} 
+                            wrapLines={true} 
+                            wrapLongLines={true}
+                        >
                             {content}
                         </SyntaxHighlighter>
                     </div>
                 </MotionDiv>
             )}
-            <Link href="/code" className="btn btn-secondary mt-4">
+            <Link href="/code" className={`${styles.backButton} btn btn-secondary mt-4`}>
                 <i className="bi bi-arrow-left me-2"></i>
                 Back to Files
             </Link>
-        </div>
+        </section>
     );
 }

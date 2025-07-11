@@ -1,6 +1,6 @@
 
 .viewerContainer {
-    padding: 1.5rem;
+    padding: 0 5px;
     color: var(--text-color);
 }
 
@@ -11,13 +11,13 @@
 }
 
 .fileIcon {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-right: 0.75rem;
     color: var(--primary-color);
 }
 
 .filename {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
     margin: 0;
     overflow-wrap: break-word;
@@ -27,9 +27,9 @@
 .codeWrapper {
     background: var(--card-background-color);
     border-radius: var(--border-radius-base);
-    
     border: 1px solid var(--card-border-color);
     box-shadow: var(--box-shadow);
+    overflow: hidden; /* Ensures content respects border-radius */
 }
 
 .backButton {
@@ -52,6 +52,7 @@
     transform: translateY(-2px);
 }
 
+/* Dark Theme Adjustments */
 body[data-theme='dark'] .viewerContainer {
     color: var(--text-color-dark-theme);
 }
