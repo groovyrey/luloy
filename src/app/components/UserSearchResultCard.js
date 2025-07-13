@@ -10,7 +10,7 @@ export default function UserSearchResultCard({ user }) {
 
   return (
     <div className={styles.card}>
-      <Link href={`/user/${user.username || user.id}`} className={styles.link}>
+      <Link href={`/user/${user.id}`} className={styles.link}>
         <div className={styles.profilePictureContainer}>
           {user.profilePictureUrl ? (
             <Image

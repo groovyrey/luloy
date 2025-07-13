@@ -27,10 +27,27 @@ export async function GET(request, context) {
       author = docSnap.data().author || "Unknown";
 
       // Check if the author string is an email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,3}$/;
       if (emailRegex.test(author)) {
         // Query Firestore for a user with this email
         const usersSnapshot = await firestore.collection("users").where("email", "==", author).limit(1).get();
+        if (!usersSnapshot.empty) {
+          const userDoc = usersSnapshot.docs[0];
+          authorDetails = {
+            uid: userDoc.id,
+            firstName: userDoc.data().firstName,
+            lastName: userDoc.data().lastName,
+            username: userDoc.data().username || null,
+          };
+        }
+      } else {
+        // Try to find user by username
+        let usersSnapshot = await firestore.collection("users").where("username", "==", author).limit(1).get();
+        if (usersSnapshot.empty) {
+          // If not found by username, try by UID
+          usersSnapshot = await firestore.collection("users").where(admin.firestore.FieldPath.documentId(), "==", author).limit(1).get();
+        }
+
         if (!usersSnapshot.empty) {
           const userDoc = usersSnapshot.docs[0];
           authorDetails = {

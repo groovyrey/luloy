@@ -26,34 +26,6 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
         return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
     }
 
-    if (loading) {
-        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
-    }
-
-    if (loading) {
-        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
-    }
-
-    if (loading) {
-        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
-    }
-
-    if (loading) {
-        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
-    }
-
-    if (loading) {
-        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
-    }
-
-    if (loading) {
-        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
-    }
-
-    if (loading) {
-        return <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>;
-    }
-
     if (isEditing) {
         return (
             <div className="input-group d-inline-flex w-auto">
@@ -75,7 +47,7 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
     return (
         <>
             {authorDetails ? (
-                <Link href={`/user/${authorDetails.username || authorDetails.uid}`} className="text-decoration-underline">
+                <Link href={`/user/${authorDetails.uid}`} className="text-decoration-underline">
                     {capitalizeName(authorDetails.firstName)} {capitalizeName(authorDetails.lastName)}
                 </Link>
             ) : (
