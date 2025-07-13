@@ -88,6 +88,30 @@ export default function EditUserPage() {
     }
   };
 
+  const handleResetPassword = async () => {
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: user.email }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        showToast('Password reset link sent to your email!', 'success');
+        // You can optionally show the link for testing
+        // console.log("Reset link:", data.link);
+      } else {
+        showToast(data.error || 'Failed to send password reset link.', 'error');
+      }
+    } catch (err) {
+      showToast('An unexpected error occurred.', 'error');
+    }
+  };
+
   const handleProfilePictureUpload = async () => {
     if (!profilePictureFile) {
       showToast("Please select a file to upload.", 'error');
@@ -253,6 +277,9 @@ export default function EditUserPage() {
           </button>
           <div className="text-center mt-3">
             <Link href="/" className="btn btn-link">Back to Home</Link>
+          </div>
+          <div className="text-center mt-3">
+            <button className="btn btn-secondary" onClick={handleResetPassword}>Reset Password</button>
           </div>
         </div>
       </div>
