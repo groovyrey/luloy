@@ -36,7 +36,7 @@ export default function UserDisplay() {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickCoutside);
     };
   }, [optionsRef]);
 
@@ -86,7 +86,7 @@ export default function UserDisplay() {
               )}
             </div>
           )}
-          <p className="card-title">Logged in as: {user.email}</p>
+          <p className="card-title">Logged in as: {userData?.username || user.email}</p>
           <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-2 gap-md-3">
             <button className="btn btn-link" onClick={() => setShowOptions(!showOptions)}>
               <i className="bi bi-three-dots"></i>
@@ -103,7 +103,7 @@ export default function UserDisplay() {
                 exit="exit"
                 transition={{ duration: 0.2 }}
               >
-                <Link href={`/user/${user.uid}`} className="btn btn-link text-start" onClick={() => setShowOptions(false)}>
+                <Link href={`/user/${userData?.username || user.uid}`} className="btn btn-link text-start" onClick={() => setShowOptions(false)}>
                   <i className="bi bi-person-vcard me-2"></i> View Profile
                 </Link>
                 <Link href="/user/settings" className="btn btn-link text-start" onClick={() => setShowOptions(false)}>

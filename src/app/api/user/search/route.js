@@ -11,17 +11,23 @@ export async function GET(request) {
     }
 
     const usersRef = admin.firestore().collection("users");
-    const users = [];
-    const queryLower = query.toLowerCase();
+    const foundUsers = new Map(); // Use a Map to store unique users by UID
 
-    const snapshot = await usersRef.get();
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const fullName = `${data.firstName} ${data.lastName}`.toLowerCase();
-      if (fullName.includes(queryLower)) {
-        users.push({ id: doc.id, ...data });
-      }
-    });
+    if (query.startsWith('@')) {
+      const usernameQuery = query.substring(1).toLowerCase();
+      const usernameSnapshot = await usersRef.where("username", ">=", usernameQuery).where("username", "<=", usernameQuery + "\uf8ff").get();
+      usernameSnapshot.forEach(doc => {
+        foundUsers.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+    } else {
+      const queryLower = query.toLowerCase();
+      const fullNameSnapshot = await usersRef.where("fullName", ">=", queryLower).where("fullName", "<=", queryLower + "\uf8ff").get();
+      fullNameSnapshot.forEach(doc => {
+        foundUsers.set(doc.id, { id: doc.id, ...doc.data() });
+      });
+    }
+
+    const users = Array.from(foundUsers.values());
 
     
 

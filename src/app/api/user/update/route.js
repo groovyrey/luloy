@@ -12,6 +12,7 @@ export async function PUT(request) {
     const updateData = {
       firstName,
       lastName,
+      fullName: `${firstName} ${lastName}`.toLowerCase(), // Update fullName
       age: parseInt(age),
     };
 

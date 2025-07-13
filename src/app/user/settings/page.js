@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../../../app/context/UserContext';
 import LoadingMessage from '../../../app/components/LoadingMessage';
@@ -8,6 +8,9 @@ import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { showToast } from '../../../app/utils/toast';
 import { capitalizeName } from '../../../app/utils/capitalizeName';
+import { validateUsername } from '../../../app/utils/usernameValidation';
+
+const COOLDOWN_PERIOD_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 export default function EditUserPage() {
   const { user, userData, loading, refreshUserData } = useUser();
@@ -18,8 +21,14 @@ export default function EditUserPage() {
   const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [profilePicturePreviewUrl, setProfilePicturePreviewUrl] = useState(null);
   const [bio, setBio] = useState('');
+  const [currentUsername, setCurrentUsername] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [usernameAvailable, setUsernameAvailable] = useState(null);
+  const [lastUsernameChange, setLastUsernameChange] = useState(null);
   
   const [isFetchingUserData, setIsFetchingUserData] = useState(true); // New state for data fetching
+  const [isUpdating, setIsUpdating] = useState(false); // New state for update loading
 
   useEffect(() => {
     document.title = "User Settings";
@@ -32,18 +41,62 @@ export default function EditUserPage() {
       if (userData.profilePictureUrl) {
         setProfilePicturePreviewUrl(userData.profilePictureUrl);
       }
-      setBio(userData.bio || ''); // Set bio from userData
-      setIsFetchingUserData(false); // Data is available from context
+      setBio(userData.bio || '');
+      setCurrentUsername(userData.username || '');
+      setNewUsername(userData.username || ''); // Initialize newUsername with current username
+      if (userData.lastUsernameChange) {
+        setLastUsernameChange(new Date(userData.lastUsernameChange._seconds * 1000 + userData.lastUsernameChange._nanoseconds / 1000000));
+      }
+      setIsFetchingUserData(false);
     }
   }, [user, loading, router, userData]);
 
-  
+  const checkUsernameAvailability = useCallback(async (uname) => {
+    if (!uname || uname === currentUsername) {
+      setUsernameAvailable(null);
+      setUsernameError('');
+      return;
+    }
 
-  const [isUpdating, setIsUpdating] = useState(false); // New state for update loading
+    const { isValid, message } = validateUsername(uname);
+    if (!isValid) {
+      setUsernameError(message);
+      setUsernameAvailable(false);
+      return;
+    }
+
+    setUsernameError('');
+    try {
+      const res = await fetch(`/api/user/check-username?username=${uname}`);
+      const data = await res.json();
+      if (res.ok) {
+        setUsernameAvailable(data.isAvailable);
+        if (!data.isAvailable) {
+          setUsernameError(data.message);
+        }
+      } else {
+        setUsernameAvailable(false);
+        setUsernameError(data.error || 'Error checking username.');
+      }
+    } catch (error) {
+      console.error("Error checking username:", error);
+      setUsernameAvailable(false);
+      setUsernameError('Network error checking username.');
+    }
+  }, [currentUsername]);
+
+  // Debounce username availability check
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      checkUsernameAvailability(newUsername);
+    }, 500); // 500ms debounce time
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [newUsername, checkUsernameAvailability]);
 
   const handleUpdate = async () => {
-    
-
     // Client-side validation
     if (!firstName.trim()) {
       showToast('First Name cannot be empty.', 'error');
@@ -58,7 +111,7 @@ export default function EditUserPage() {
       return;
     }
 
-    setIsUpdating(true); // Start update loading
+    setIsUpdating(true);
     try {
       const res = await fetch('/api/user/update', {
         method: 'PUT',
@@ -70,7 +123,7 @@ export default function EditUserPage() {
 
       if (res.ok) {
         showToast('Profile updated successfully!', 'success');
-        await refreshUserData(); // Refresh user data in context
+        await refreshUserData();
       } else {
         let errorData = {};
         try {
@@ -84,7 +137,65 @@ export default function EditUserPage() {
       console.error("An unexpected error occurred during profile update:", err);
       showToast('An unexpected error occurred.', 'error');
     } finally {
-      setIsUpdating(false); // End update loading
+      setIsUpdating(false);
+    }
+  };
+
+  const handleUsernameChange = async () => {
+    if (!newUsername || newUsername === currentUsername) {
+      showToast("Please enter a new username.", 'error');
+      return;
+    }
+
+    const { isValid: usernameFormatValid } = validateUsername(newUsername);
+    if (!usernameFormatValid) {
+      showToast(usernameError || "Invalid username format.", 'error');
+      return;
+    }
+
+    if (usernameAvailable === false) {
+      showToast(usernameError || "Username is not available.", 'error');
+      return;
+    }
+
+    // Check cooldown
+    if (lastUsernameChange) {
+      const timeSinceLastChange = Date.now() - lastUsernameChange.getTime();
+      if (timeSinceLastChange < COOLDOWN_PERIOD_MS) {
+        const remainingTimeMs = COOLDOWN_PERIOD_MS - timeSinceLastChange;
+        const remainingDays = Math.ceil(remainingTimeMs / (1000 * 60 * 60 * 24));
+        showToast(`You can only change your username once every 7 days. Please wait ${remainingDays} more day(s).`, 'error');
+        return;
+      }
+    }
+
+    setIsUpdating(true);
+    try {
+      const res = await fetch('/api/user/update-username', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ uid: user.uid, newUsername }),
+      });
+
+      if (res.ok) {
+        showToast('Username updated successfully!', 'success');
+        await refreshUserData(); // Refresh user data in context
+      } else {
+        let errorData = {};
+        try {
+          errorData = await res.json();
+        } catch (jsonError) {
+          console.error("Failed to parse error response:", jsonError);
+        }
+        showToast(errorData.error || 'Failed to update username.', 'error');
+      }
+    } catch (err) {
+      console.error("An unexpected error occurred during username update:", err);
+      showToast('An unexpected error occurred.', 'error');
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -102,8 +213,6 @@ export default function EditUserPage() {
 
       if (res.ok) {
         showToast('Password reset link sent to your email!', 'success');
-        // You can optionally show the link for testing
-        // console.log("Reset link:", data.link);
       } else {
         showToast(data.error || 'Failed to send password reset link.', 'error');
       }
@@ -132,7 +241,7 @@ export default function EditUserPage() {
 
       if (res.ok) {
         showToast('Profile picture uploaded successfully!', 'success');
-        await refreshUserData(); // Refresh user data in context
+        await refreshUserData();
         const updatedUserData = await res.json();
         setProfilePicturePreviewUrl(updatedUserData.url);
       } else {
@@ -146,7 +255,7 @@ export default function EditUserPage() {
       }
     } catch (err) {
       console.error("An unexpected error occurred during file upload:", err);
-      showToast('An unexpected error occurred during file upload.', 'error');
+      showToast('An unexpected error occurred.', 'error');
     } finally {
       setIsUpdating(false);
     }
@@ -162,9 +271,9 @@ export default function EditUserPage() {
 
       if (res.ok) {
         showToast('Profile picture removed successfully!', 'success');
-        setProfilePicturePreviewUrl(null); // Clear preview
-        setProfilePictureFile(null); // Clear file input
-        await refreshUserData(); // Refresh user data in context
+        setProfilePicturePreviewUrl(null);
+        setProfilePictureFile(null);
+        await refreshUserData();
       } else {
         let errorData = {};
         try {
@@ -176,13 +285,16 @@ export default function EditUserPage() {
       }
     } catch (err) {
       console.error("An unexpected error occurred during profile picture removal:", err);
-      showToast('An unexpected error occurred during profile picture removal.', 'error');
+      showToast('An unexpected error occurred.', 'error');
     } finally {
       setIsUpdating(false);
     }
   };
 
-  if (loading || isFetchingUserData) { // Include isFetchingUserData in loading check
+  const canChangeUsername = lastUsernameChange ? (Date.now() - lastUsernameChange.getTime() >= COOLDOWN_PERIOD_MS) : true;
+  const remainingCooldownTime = lastUsernameChange ? Math.ceil((COOLDOWN_PERIOD_MS - (Date.now() - lastUsernameChange.getTime())) / (1000 * 60 * 60 * 24)) : 0;
+
+  if (loading || isFetchingUserData) {
     return <LoadingMessage />;
   }
 
@@ -248,6 +360,43 @@ export default function EditUserPage() {
           <div className="mb-3">
             <label htmlFor="email" className="form-label">Email</label>
             <input type="email" id="email" className="form-control" value={user?.email} disabled readOnly />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="usernameInput" className="form-label">{canChangeUsername ? 'Change Username' : 'Current Username'}</label>
+            <input 
+              type="text" 
+              className={`form-control ${usernameError ? 'is-invalid' : ''} ${usernameAvailable === true && newUsername !== currentUsername ? 'is-valid' : ''}`}
+              id="usernameInput" 
+              placeholder="Username" 
+              value={canChangeUsername ? newUsername : currentUsername}
+              onChange={e => {
+                if (canChangeUsername) {
+                  setNewUsername(e.target.value);
+                }
+              }}
+              disabled={isUpdating || !canChangeUsername}
+              readOnly={!canChangeUsername}
+            />
+            {usernameError && <div className="invalid-feedback">{usernameError}</div>}
+            {usernameAvailable === true && newUsername !== currentUsername && !usernameError && <div className="valid-feedback">Username is available!</div>}
+            {!canChangeUsername && (
+              <div className="form-text text-danger">
+                You can change your username again in {remainingCooldownTime} day(s).
+              </div>
+            )}
+            {canChangeUsername && (
+              <button 
+                className="btn btn-secondary w-100 mt-2"
+                onClick={handleUsernameChange}
+                disabled={isUpdating || newUsername === currentUsername || usernameAvailable === false || usernameError !== ''}
+              >
+                {isUpdating ? (
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                ) : (
+                  <i className="bi-pencil"></i>
+                )}{' '}{isUpdating ? 'Updating Username...' : 'Change Username'}
+              </button>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="firstName" className="form-label">First Name</label>

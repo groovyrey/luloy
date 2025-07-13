@@ -77,11 +77,11 @@ export default function Offcanvas({ isOpen, onClose }) {
                   <div className={styles.userProfileContainer}>
                     <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className={`btn btn-primary ${styles.userProfileButton}`}>
                       {userData?.profilePictureUrl ? (
-                        <img src={userData.profilePictureUrl} alt={userData.firstName} className={styles.profilePicture} />
+                        <img src={userData.profilePictureUrl} alt={userData.username || userData.firstName} className={styles.profilePicture} />
                       ) : (
                         <i className="bi bi-person-circle"></i>
                       )}
-                      <span className="ms-2">{userData?.firstName}</span>
+                      <span className="ms-2">{userData?.username || userData?.firstName}</span>
                     </button>
                     <AnimatePresence>
                       {isDropdownOpen && (
@@ -92,7 +92,7 @@ export default function Offcanvas({ isOpen, onClose }) {
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2 }}
                         >
-                          <Link href={`/user/${user.uid}`} onClick={handleDropdownLinkClick}>
+                          <Link href={`/user/${userData?.username || user.uid}`} onClick={handleDropdownLinkClick}>
                             <i className="bi bi-person-fill"></i> View Profile
                           </Link>
                           <Link href="/user/settings" onClick={handleDropdownLinkClick}>

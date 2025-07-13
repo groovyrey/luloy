@@ -94,7 +94,7 @@ export default function MyChatMessage({ message, user, onDelete, onEdit, onReply
                         </motion.div>
                     )}
                     <small className="fw-bold mb-1">
-                        {capitalizeName(message.senderName)} {AUTH_LEVEL_RANKS[senderAuthLevel] && <i className={`${AUTH_LEVEL_RANKS[senderAuthLevel].icon} ${AUTH_LEVEL_RANKS[senderAuthLevel].color}`}></i>}
+                        {message.senderUsername || capitalizeName(message.senderName)} {AUTH_LEVEL_RANKS[senderAuthLevel] && <i className={`${AUTH_LEVEL_RANKS[senderAuthLevel].icon} ${AUTH_LEVEL_RANKS[senderAuthLevel].color}`}></i>}
                     </small>
                     <p className="mb-0">{message.text} {message.isEdited && <small className="text-muted">(Edited)</small>}</p>
                     {message.reactions && (
