@@ -1,6 +1,9 @@
 
 import nodemailer from 'nodemailer';
 
+console.log('EMAIL_USER:', process.env.EMAIL_USER);
+console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '********' : 'NOT SET'); // Mask password for logs
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
