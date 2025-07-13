@@ -37,6 +37,7 @@ export async function GET(request, context) {
             uid: userDoc.id,
             firstName: userDoc.data().firstName,
             lastName: userDoc.data().lastName,
+            username: userDoc.data().username || null,
           };
         }
       }

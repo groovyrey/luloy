@@ -19,7 +19,8 @@ export default function UserProfilePage({ params }) {
 
   useEffect(() => {
     if (profileData) {
-      document.title = `${toTitleCase(profileData.firstName || '')} ${toTitleCase(profileData.lastName || '')}'s Profile`;
+      const title = profileData.username ? `@${profileData.username}` : `${toTitleCase(profileData.firstName || '')} ${toTitleCase(profileData.lastName || '')}`;
+      document.title = `${title}'s Profile`;
     }
   }, [profileData]);
 
@@ -128,7 +129,12 @@ export default function UserProfilePage({ params }) {
           </div>
 
           <div className="col-12 text-center mb-3">
-              <h1 className="display-4 d-inline-block">{toTitleCase((profileData.firstName || '') + " " + (profileData.lastName || ''))}</h1>
+            <div className="d-flex justify-content-center align-items-baseline flex-wrap">
+              <h1 className="display-4 mb-0 me-2">{toTitleCase((profileData.firstName || '') + " " + (profileData.lastName || ''))}</h1>
+              {profileData.username && (
+                <p className="text-muted fs-5 mb-0">@{profileData.username}</p>
+              )}
+            </div>
             </div>
             {profileData.bio && (
               <div className="col-12 text-center mb-3">

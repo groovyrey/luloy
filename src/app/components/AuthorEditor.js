@@ -75,7 +75,7 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
     return (
         <>
             {authorDetails ? (
-                <Link href={`/user/${authorDetails.uid}`} className="text-decoration-underline">
+                <Link href={`/user/${authorDetails.username || authorDetails.uid}`} className="text-decoration-underline">
                     {capitalizeName(authorDetails.firstName)} {capitalizeName(authorDetails.lastName)}
                 </Link>
             ) : (

@@ -40,6 +40,7 @@ export async function GET(request) {
         email: user.email,
         profilePictureUrl: user.profilePictureUrl || null,
         authLevel: user.authLevel || 0, // Assuming authLevel is now directly in the user's Firestore document
+        username: user.username || null,
       };
     });
 
