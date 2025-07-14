@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "/lib/firebase.js";
-import { useRouter } "next/navigation";
+import { useRouter } from "next/navigation";
 import { useUser } from '../context/UserContext';
 import LoadingMessage from '../components/LoadingMessage';
 import { motion } from "framer-motion";
