@@ -1,7 +1,8 @@
 ---
 title: Introduction to IT Infrastructure and Network Technologies
 date: 2025-07-15
-author: Unknown
+author: Luloy
+description: "A high-level overview of the core components of IT infrastructure and the fundamental concepts of networking."
 ---
 
 # Introduction to IT Infrastructure and Network Technologies

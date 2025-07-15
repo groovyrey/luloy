@@ -2,6 +2,7 @@
 title: Introduction to Data Structures and Algorithms
 date: 2025-07-15
 author: Roksy9RE20Wl4TOVggJYprrEgUm2
+description: "A foundational look at what data structures and algorithms are and why they are essential for efficient software development."
 ---
 
 # Introduction to Data Structures and Algorithms (DSA)

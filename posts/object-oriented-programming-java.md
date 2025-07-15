@@ -2,9 +2,11 @@
 title: Object-Oriented Programming in Java
 date: 2025-07-15
 author: Roksy9RE20Wl4TOVggJYprrEgUm2
+description: "An introduction to the core concepts of Object-Oriented Programming (OOP) in Java, including classes, objects, and the four main pillars."
 ---
 
 # Object-Oriented Programming (OOP) in Java
+
 
 This lesson introduces the fundamental concepts of Object-Oriented Programming (OOP) using Java. OOP is a programming paradigm based on the concept of "objects", which can contain data and code: data in the form of fields (often known as attributes or properties), and code in the form of procedures (often known as methods).
 
