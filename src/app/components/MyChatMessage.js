@@ -16,6 +16,7 @@ export default function MyChatMessage({ message, user, onDelete, onEdit, onReply
     const { allUsersData, fetchAndStoreUserData } = useUser();
     const messageCardRef = useRef(null);
     const [showModal, setShowModal] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
     const holdTimeoutRef = useRef(null);
     const [senderAuthLevel, setSenderAuthLevel] = useState(message.senderAuthLevel);
 
@@ -70,7 +71,8 @@ export default function MyChatMessage({ message, user, onDelete, onEdit, onReply
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
-            whileTap={{ scale: 1.05 }} // Slightly increase size while holding
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             <div
                 ref={messageCardRef}
@@ -97,34 +99,38 @@ export default function MyChatMessage({ message, user, onDelete, onEdit, onReply
                         {message.senderUsername || capitalizeName(message.senderName)} {AUTH_LEVEL_RANKS[senderAuthLevel] && <i className={`${AUTH_LEVEL_RANKS[senderAuthLevel].icon} ${AUTH_LEVEL_RANKS[senderAuthLevel].color}`}></i>}
                     </small>
                     <p className="mb-0">{message.text} {message.isEdited && <small className="text-muted">(Edited)</small>}</p>
-                    {message.reactions && (
-                        <motion.div
-                            className="d-flex mt-2"
-                            initial="hidden"
-                            animate="visible"
-                            variants={{
-                                visible: { transition: { staggerChildren: 0.05 } },
-                                hidden: {},
-                            }}
-                        >
-                            {Object.entries(message.reactions)
-                                .filter(([emoji]) => emoji !== null && emoji !== undefined && emoji !== 'null' && emoji !== 'undefined') // Filter out null/undefined emoji keys and string 'null'/'undefined'
-                                .map(([emoji, users]) => (
-                                <motion.span
-                                    key={emoji}
-                                    className={`${styles.badgeWithTooltip} badge bg-light text-dark me-1`}
-                                    style={{ cursor: 'pointer' }}
-                                    variants={{
-                                        visible: { opacity: 1, scale: 1 },
-                                        hidden: { opacity: 0, scale: 0.8 },
-                                    }}
-                                    whileTap={{ scale: 1.2 }} // Add this line for animation on click
-                                >
-                                    {emoji} {Object.keys(users).length}
-                                </motion.span>
-                            ))}
-                        </motion.div>
-                    )}
+                    <div className="d-flex align-items-center mt-2">
+                        {message.reactions && (
+                            <div className="d-flex me-2">
+                                {Object.entries(message.reactions)
+                                    .filter(([emoji]) => emoji !== null && emoji !== undefined && emoji !== 'null' && emoji !== 'undefined')
+                                    .map(([emoji, users]) => (
+                                        <motion.span
+                                            key={emoji}
+                                            className={`${styles.badgeWithTooltip} badge bg-light text-dark me-1`}
+                                            style={{ cursor: 'pointer' }}
+                                            variants={{
+                                                visible: { opacity: 1, scale: 1 },
+                                                hidden: { opacity: 0, scale: 0.8 },
+                                            }}
+                                            whileTap={{ scale: 1.2 }}
+                                            onClick={() => onReact(message.id, emoji)} // Moved onClick here
+                                        >
+                                            {emoji} {Object.keys(users).length}
+                                        </motion.span>
+                                    ))}
+                            </div>
+                        )}
+                        {isHovered && !isPreview && (
+                            <motion.button
+                                className={`btn btn-sm ${styles.transparentButton}`}
+                                onClick={() => setShowModal(true)} // This now only opens the modal
+                                whileTap={{ scale: 0.9 }}
+                            >
+                                <i className="fas fa-plus"></i>
+                            </motion.button>
+                        )}
+                    </div>
                 </div>
                 
             </div>
@@ -136,7 +142,6 @@ export default function MyChatMessage({ message, user, onDelete, onEdit, onReply
                 onReply={onReply}
                 message={message}
                 user={user}
-                onReact={onReact}
             />
         </motion.div>
     );

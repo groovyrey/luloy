@@ -85,12 +85,12 @@ export default function LoginPage() {
             <h2 className="card-title text-center"><i className="bi bi-person-circle me-2"></i>Login</h2>
           </div>
           
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="emailInput" placeholder="Email" onChange={e => setEmail(e.target.value)} />
-            <label htmlFor="emailInput"><i class="bi bi-envelope me-2"></i>Email</label>
+          <div className="form-floating mb-3">
+            <input type="email" className="form-control" id="emailInput" placeholder="Email" onChange={e => setEmail(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') handleLogin(); }} />
+            <label htmlFor="emailInput"><i className="bi bi-envelope me-2"></i>Email</label>
           </div>
           <div className="form-floating mb-3">
-            <input type="password" className="form-control" id="passwordInput" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+            <input type="password" className="form-control" id="passwordInput" placeholder="Password" onChange={e => setPassword(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') handleLogin(); }} />
             <label htmlFor="passwordInput"><i className="bi bi-lock me-2"></i>Password</label>
           </div>
           <div className="d-grid gap-2">
