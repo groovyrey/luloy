@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -31,12 +30,7 @@ const renderAuthor = (author, authorDetails) => {
 
 export default function LearnPostClient({ postData }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}
-    >
+    <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
       <h1>{postData.title}</h1>
       <p><em>By {renderAuthor(postData.author, postData.authorDetails)} on {new Date(postData.date).toLocaleDateString()}</em></p>
       <div className={styles.markdownBody}>
@@ -64,6 +58,6 @@ export default function LearnPostClient({ postData }) {
         {postData.content}
       </ReactMarkdown>
       </div>
-    </motion.div>
+    </div>
   );
 }
