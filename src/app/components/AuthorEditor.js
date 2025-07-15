@@ -47,11 +47,13 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
     return (
         <>
             {authorDetails ? (
-                <Link href={`/user/${authorDetails.uid}`}>
-                    {capitalizeName(authorDetails.firstName)} {capitalizeName(authorDetails.lastName)}
-                </Link>
+                <em>
+                    <Link href={`/user/${authorDetails.uid}`}>
+                        {capitalizeName(authorDetails.firstName)} {capitalizeName(authorDetails.lastName)}
+                    </Link>
+                </em>
             ) : (
-                initialAuthor
+                <em>{initialAuthor}</em>
             )}
             {userAuthLevel >= 1 && (
                 <button className="btn btn-sm btn-outline-secondary ms-2" onClick={() => setIsEditing(true)}>

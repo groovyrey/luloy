@@ -115,79 +115,7 @@ class Dog extends Animal {
 
 *   **`@Override`**: This annotation is optional but highly recommended. It tells the compiler that this method is intended to override a method in the superclass. If there's no such method in the superclass, the compiler will throw an error, helping to catch mistakes.
 
-*   **`public void speak()` (Overridden Method)**: The `Dog` class provides its own implementation of the `speak()` method, which was inherited from `Animal`. When `speak()` is called on a `Dog` object, this specific implementation (`getName() + " barks."`) will be executed instead of the `Animal`'s generic `speak()` method. This is runtime polymorphism (dynamic method dispatch).
-
-## 4. Abstraction
-
-**Abstraction** is the concept of hiding the complex implementation details and showing only the essential features of the object. It focuses on *what* the object does rather than *how* it does it. In Java, abstraction can be achieved using abstract classes and interfaces.
-
-Here, we use an **Interface** for abstraction:
-
-```java
-interface Trainable {
-    void doTrick(); // method without body (abstract)
-}
-
-// Dog implements an interface
-class TrainedDog extends Dog implements Trainable {
-    public TrainedDog(String name, int age, String breed) {
-        super(name, age, breed);
-    }
-
-    // implementing abstract method
-    public void doTrick() {
-        System.out.println(getName() + " rolls over!");
-    }
-}
-```
-
-### Explanation of Methods and Concepts:
-
-*   **`interface Trainable`**: An interface is a completely abstract class that is used to group related methods with empty bodies. Methods declared in an interface are implicitly `public` and `abstract`.
-
-*   **`void doTrick();`**: This is an abstract method declaration within the `Trainable` interface. It has no body, meaning any class that `implements` `Trainable` *must* provide an implementation for `doTrick()`.
-
-*   **`class TrainedDog extends Dog implements Trainable`**: The `TrainedDog` class inherits from `Dog` and also `implements` the `Trainable` interface. This means `TrainedDog` must provide an implementation for all abstract methods defined in `Trainable`.
-
-*   **`public void doTrick()` (Implementing Abstract Method)**: `TrainedDog` provides the concrete implementation for the `doTrick()` method required by the `Trainable` interface. This demonstrates how abstraction forces subclasses to define specific behaviors.
-
-## 5. Object Creation and Usage
-
-An **Object** is an instance of a class. When a class is defined, no memory is allocated, but when an object is created (instantiated), memory is allocated. Objects are the real-world entities that have state and behavior.
-
-Here's how objects are created and used in the `Main` class:
-
-```java
-public class Main {
-    public static void main(String[] args) {
-        // OBJECT creation
-        Animal generic = new Animal("Unknown", 3);
-        Dog dog = new Dog("Buddy", 5, "Labrador");
-        TrainedDog trained = new TrainedDog("Max", 4, "German Shepherd");
-
-        // Calling methods
-        generic.speak();           // Animal method
-        dog.speak();               // Overridden Dog method
-        trained.speak();           // Inherited Dog method
-        trained.doTrick();         // Interface method
-
-        // Accessing fields through getters
-        System.out.println("Dog's breed: " + dog.getBreed());
-    }
-}
-```
-
-### Explanation of Methods and Concepts:
-
-*   **`Animal generic = new Animal("Unknown", 3);`**: This line creates a new `Animal` object. `new Animal("Unknown", 3)` calls the `Animal` class constructor, and the resulting object is assigned to the `generic` variable of type `Animal`.
-
-*   **`Dog dog = new Dog("Buddy", 5, "Labrador");`**: This creates a `Dog` object, initializing it with its specific properties.
-
-*   **`TrainedDog trained = new TrainedDog("Max", 4, "German Shepherd");`**: This creates a `TrainedDog` object.
-
-*   **`generic.speak();`**: Calls the `speak()` method on the `generic` (Animal) object. This will execute the `speak()` method defined in the `Animal` class.
-
-*   **`dog.speak();`**: Calls the `speak()` method on the `dog` object. Due to polymorphism (method overriding), this will execute the `speak()` method defined in the `Dog` class.
+*   **`public void speak()` (Overridden Method)**: The `Dog` class provides its own implementation of the `speak()` method, which was inherited from `Animal`. When `speak()` is called on a `Dog` object, this specific implementation (`getName() + " barks."`) will be executed instead of the `Animal`'s generic `speak()` method.
 
 *   **`trained.speak();`**: Calls the `speak()` method on the `trained` object. Since `TrainedDog` inherits from `Dog` and doesn't override `speak()` itself, it uses the `Dog`'s overridden `speak()` method.
 
@@ -196,3 +124,8 @@ public class Main {
 *   **`System.out.println("Dog's breed: " + dog.getBreed());`**: Demonstrates accessing an object's property (`breed`) through its public getter method (`getBreed()`), adhering to encapsulation principles.
 
 This example illustrates how these core OOP principles work together to create modular, reusable, and maintainable code in Java.
+
+## References
+
+1.  Oracle. (n.d.). *The Java Tutorials - Learning the Java Language*. Retrieved from https://docs.oracle.com/javase/tutorial/java/
+2.  Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley.

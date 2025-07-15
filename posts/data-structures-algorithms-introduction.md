@@ -90,3 +90,8 @@ This simple example highlights how different data structures can lead to differe
 ## Next Steps
 
 In future lessons, we will dive deeper into specific data structures and algorithms, analyzing their properties, implementations, and use cases. Stay tuned!
+
+## References
+
+1.  GeeksforGeeks. (n.d.). *Data Structures*. Retrieved from https://www.geeksforgeeks.org/data-structures/
+2.  Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009). *Introduction to Algorithms*. MIT Press.

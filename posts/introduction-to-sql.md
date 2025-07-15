@@ -78,3 +78,8 @@ WHERE CustomerID = 1;
 ```
 
 SQL is a powerful and essential skill for anyone working with data.
+
+## References
+
+1.  W3Schools. (n.d.). *SQL Tutorial*. Retrieved from https://www.w3schools.com/sql/
+2.  Date, C. J. (2003). *An Introduction to Database Systems*. Addison-Wesley.
