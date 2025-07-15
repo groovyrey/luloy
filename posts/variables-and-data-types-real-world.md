@@ -5,7 +5,7 @@ author: "Luloy"
 description: "Understanding how computers store information by comparing variables to containers and data types to the kind of items they hold."
 ---
 
-## Variables and Data Types: Real-World Analogies
+# Variables and Data Types: Real-World Analogies
 
 Imagine you're organizing your kitchen. You have different containers for different types of food. This is very similar to how computers handle **variables** and **data types**.
 

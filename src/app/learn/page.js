@@ -7,7 +7,7 @@ export default function LearnPage() {
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
       <h1>Learning Resources</h1>
-      <p>Explore possible useful learning resources:</p>
+      <p>Explore possible useful learning resources for various fields from different sources.</p>
       <ul>
         {allPostsData.map(({ slug, title, date, description }) => (
           <li key={slug} style={{ marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px solid var(--border-color)' }}>

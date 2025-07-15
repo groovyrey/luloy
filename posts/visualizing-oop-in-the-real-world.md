@@ -5,6 +5,8 @@ author: "Luloy"
 description: "Learn the core concepts of OOP by comparing classes and objects to real-world examples like blueprints and cars."
 ---
 
+# Visualizing Object-Oriented Programming in the Real World
+
 Object-Oriented Programming (OOP) can seem abstract, but it's designed to model the real world. By thinking about everyday objects, we can make these concepts crystal clear.
 
 ## The Blueprint: A Class

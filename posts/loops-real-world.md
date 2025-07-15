@@ -5,7 +5,7 @@ author: "Luloy"
 description: "Discover how computers perform repetitive tasks using loops, comparing them to everyday routines and instructions."
 ---
 
-## Loops: Repeating Actions Efficiently
+# Loops: Repeating Actions Efficiently
 
 Imagine you have a task that needs to be done many times, like brushing your teeth every morning, or taking 10 steps forward. Doing it manually each time would be tedious. In programming, when we need to repeat a set of instructions, we use **loops**.
 

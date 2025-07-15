@@ -5,7 +5,7 @@ author: "Luloy"
 description: "Learn how computers make decisions using if/else statements, comparing them to everyday choices and rules."
 ---
 
-## Conditional Statements: Making Decisions
+# Conditional Statements: Making Decisions
 
 Computers, at their core, are very good at following instructions and making decisions. These decisions are based on conditions, much like the choices we make every day. In programming, we use **conditional statements** like `if`, `else if`, and `else` to tell the computer what to do under different circumstances.
 

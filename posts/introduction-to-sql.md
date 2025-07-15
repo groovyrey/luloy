@@ -22,6 +22,8 @@ It's the backbone of many data-driven applications, allowing you to interact wit
 *   **Rows (Records):** A single entry in a table.
 *   **Columns (Fields):** Attributes or categories of data within a table.
 
+
+
 ## Basic SQL Commands:
 
 *   `SELECT`: Extracts data from a database.
