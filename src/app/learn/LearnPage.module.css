@@ -1,0 +1,58 @@
+.markdownBody h1 {
+  font-size: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.markdownBody h2 {
+  font-size: 2rem;
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: var(--text-color);
+}
+
+.markdownBody h3 {
+  font-size: 1.75rem;
+  margin-top: 1rem;
+  margin-bottom: 0.6rem;
+  color: var(--text-color);
+}
+
+.markdownBody p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.markdownBody pre {
+  background-color: #2d2d2d; /* Dracula theme background */
+  color: #f8f8f2; /* Dracula theme text color */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.markdownBody code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.markdownBody ul,
+.markdownBody ol {
+  margin-bottom: 1rem;
+  padding-left: 20px;
+}
+
+.markdownBody li {
+  margin-bottom: 0.5rem;
+}
+
+.markdownBody a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.markdownBody a:hover {
+  text-decoration: none;
+}

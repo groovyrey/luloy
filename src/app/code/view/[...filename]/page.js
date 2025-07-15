@@ -228,8 +228,8 @@ export default function CodeViewer({ params }) {
             </div>
 
             {author && (
-                <div className="text-muted mb-4 d-flex align-items-center">
-                    <span className="me-2">Author:</span>
+                <p className="text-muted mb-4">
+                    <em>By </em>
                     <AuthorEditor
                         initialAuthor={author}
                         authorDetails={authorDetails}
@@ -238,7 +238,7 @@ export default function CodeViewer({ params }) {
                         isLoading={isRenaming}
                         loading={loading}
                     />
-                </div>
+                </p>
             )}
             {loading && content === '' ? (
                 <LoadingMessage />

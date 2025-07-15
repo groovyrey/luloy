@@ -68,6 +68,11 @@ export default function Offcanvas({ isOpen, onClose }) {
                       <i className="bi bi-code-slash me-2"></i>Luloy Codes
                     </Link>
                   </li>
+                  <li>
+                    <Link href="/learn" onClick={onClose}>
+                      <i className="bi bi-book me-2"></i>Learn
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div className={styles.navbarActions}>
