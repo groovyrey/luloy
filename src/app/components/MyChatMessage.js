@@ -140,6 +140,7 @@ export default function MyChatMessage({ message, user, onDelete, onEdit, onReply
                 onDelete={onDelete}
                 onEdit={onEdit}
                 onReply={onReply}
+                onReact={onReact}
                 message={message}
                 user={user}
             />

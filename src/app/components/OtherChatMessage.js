@@ -138,6 +138,7 @@ export default function OtherChatMessage({ message, user, onReply, onReact, onMe
                 user={user}
                 showDeleteEdit={false}
                 onReply={onReply}
+                onReact={onReact}
             />
         </motion.div>
     );
