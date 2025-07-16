@@ -2,24 +2,38 @@
 
 import Link from 'next/link';
 import { useUser } from '../context/UserContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Offcanvas.module.css';
 
 export default function Offcanvas({ isOpen, onClose }) {
   const { user, userData, logout, loading } = useUser();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isMessagesDropdownOpen, setIsMessagesDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
-    onClose();
-    setIsDropdownOpen(false);
+    setIsUserDropdownOpen(false);
+    setIsMessagesDropdownOpen(false);
+    setTimeout(() => {
+      onClose();
+    }, 300); // Match the dropdown exit animation duration
   };
 
   const handleDropdownLinkClick = () => {
-    setIsDropdownOpen(false);
-    onClose();
+    setIsUserDropdownOpen(false);
+    setIsMessagesDropdownOpen(false);
+    setTimeout(() => {
+      onClose();
+    }, 300); // Match the dropdown exit animation duration
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      setIsUserDropdownOpen(false);
+      setIsMessagesDropdownOpen(false);
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -43,15 +57,39 @@ export default function Offcanvas({ isOpen, onClose }) {
             <div className={styles.offcanvasBody}>
               <div className={styles.navbarLinks}>
                 <ul>
-                  <li>
-                    <Link href="/messages/public" onClick={onClose}>
-                      <i className="bi bi-chat-left-text me-2"></i>Public Messages
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/messages/send" onClick={onClose}>
-                      <i className="bi bi-send me-2"></i>Send Message
-                    </Link>
+                  <li className={styles.navDropdown}>
+                    <button onClick={() => setIsMessagesDropdownOpen(!isMessagesDropdownOpen)}>
+                      <i className="bi bi-envelope me-2"></i>Messages
+                      <i className={`bi bi-chevron-down ${isMessagesDropdownOpen ? 'rotate-180' : ''}`}></i>
+                    </button>
+                    <AnimatePresence>
+                      {isMessagesDropdownOpen && (
+                        <motion.div
+                          className={styles.navDropdownMenu}
+                          initial={{ maxHeight: 0, opacity: 0 }}
+                          animate={{ maxHeight: "150px", opacity: 1 }}
+                          exit={{ maxHeight: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
+                        >
+                          <motion.div
+                          className={styles.navDropdownMenu}
+                          initial={{ maxHeight: 0, opacity: 0 }}
+                          animate={{ maxHeight: "150px", opacity: 1 }}
+                          exit={{ maxHeight: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
+                        >
+                          <div className={styles.navDropdownContent}>
+                            <Link href="/messages/public" onClick={onClose}>
+                              Public Messages
+                            </Link>
+                            <Link href="/messages/send" onClick={onClose}>
+                              Send Message
+                            </Link>
+                          </div>
+                        </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </li>
                   <li>
                     <Link href="/user/search" onClick={onClose}>
@@ -74,13 +112,30 @@ export default function Offcanvas({ isOpen, onClose }) {
                     </Link>
                   </li>
                 </ul>
+                {userData?.authLevel === 1 && (
+                  <div className={styles.adminNav}>
+                    <p className={styles.adminNavLabel}>Admin Navigation</p>
+                    <ul>
+                      <li>
+                        <Link href="/user/update-authlevel" onClick={onClose}>
+                          <i className="bi bi-person-badge me-2"></i>Update Auth Level
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/messages/private" onClick={onClose}>
+                          <i className="bi bi-shield-lock me-2"></i>Private Messages
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
               <div className={styles.navbarActions}>
                 {loading ? (
                   <div className={styles.loadingSpinner}></div>
                 ) : user ? (
                   <div className={styles.userProfileContainer}>
-                    <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className={`btn btn-primary ${styles.userProfileButton}`}>
+                    <button onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)} className={`btn btn-primary ${styles.userProfileButton}`}>
                       {userData?.profilePictureUrl ? (
                         <img src={userData.profilePictureUrl} alt={userData.username || userData.firstName} className={styles.profilePicture} />
                       ) : (
@@ -89,13 +144,13 @@ export default function Offcanvas({ isOpen, onClose }) {
                       <span className="ms-2">{userData?.username || userData?.firstName}</span>
                     </button>
                     <AnimatePresence>
-                      {isDropdownOpen && (
+                      {isUserDropdownOpen && (
                         <motion.div 
                           className={styles.dropdownMenu}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.2 }}
+                          initial={{ maxHeight: 0, opacity: 0 }}
+                          animate={{ maxHeight: "150px", opacity: 1 }}
+                          exit={{ maxHeight: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeOut" }}
                         >
                           <Link href={`/user/${userData?.username || user.uid}`} onClick={handleDropdownLinkClick}>
                             <i className="bi bi-person-fill"></i> View Profile
