@@ -34,7 +34,7 @@ export async function POST(request) {
 
     if (typeof isPrivate !== 'boolean') {
       console.error(`Validation Error for messageId ${messageId}: Invalid 'private' status provided: ${isPrivate}`);
-      return NextResponse.json({ message: 'Bad Request: 'private' status must be a boolean.' }, { status: 400 });
+      return NextResponse.json({ message: "Bad Request: 'private' status must be a boolean." }, { status: 400 });
     }
 
     const messageRef = firestore.collection('maindata').doc(messageId);

@@ -5,10 +5,6 @@ export async function PUT(request) {
   let uid, authLevel;
   try {
     ({ uid, authLevel } = await request.json());
-  } catch (error) {
-    console.error("Error parsing JSON for auth level update:", error);
-    return NextResponse.json({ error: 'Invalid JSON in request body.' }, { status: 400 });
-  }
 
     if (!uid || typeof uid !== 'string' || uid.trim().length === 0) {
       console.error("Validation Error: UID is missing or invalid for auth level update.");

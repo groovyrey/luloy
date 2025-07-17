@@ -5,10 +5,6 @@ export async function PUT(request) {
   let uid, firstName, lastName, age, bio, authLevel;
   try {
     ({ uid, firstName, lastName, age, bio, authLevel } = await request.json());
-  } catch (error) {
-    console.error("Error parsing JSON for user update:", error);
-    return NextResponse.json({ error: 'Invalid JSON in request body.' }, { status: 400 });
-  }
 
     if (!uid) {
       console.error("Validation Error: UID is missing for user update.");
