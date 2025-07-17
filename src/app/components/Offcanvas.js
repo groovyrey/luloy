@@ -126,6 +126,7 @@ export default function Offcanvas({ isOpen, onClose }) {
                           <i className="bi bi-shield-lock me-2"></i>Private Messages
                         </Link>
                       </li>
+                      
                     </ul>
                   </div>
                 )}

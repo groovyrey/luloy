@@ -27,7 +27,7 @@ export async function GET(request) {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email,
+        
         profilePictureUrl: user.profilePictureUrl || null,
         authLevel: user.authLevel || 0, // Assuming authLevel is now directly in the user's Firestore document
       };

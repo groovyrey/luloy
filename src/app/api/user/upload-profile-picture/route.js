@@ -15,8 +15,28 @@ export async function POST(request) {
     const uid = formData.get("uid");
     const file = formData.get("file");
 
-    if (!uid || !file) {
-      return NextResponse.json({ error: "Missing UID or file." }, { status: 400 });
+    if (!uid || typeof uid !== 'string' || uid.trim().length === 0) {
+      console.error("Validation Error: Missing or invalid UID for profile picture upload.");
+      return NextResponse.json({ error: "User ID is required." }, { status: 400 });
+    }
+
+    if (!file) {
+      console.error(`Validation Error for UID ${uid}: No file provided for upload.`);
+      return NextResponse.json({ error: "File is required." }, { status: 400 });
+    }
+
+    // Validate file type (e.g., only images)
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      console.error(`Validation Error for UID ${uid}: Invalid file type provided: ${file.type}`);
+      return NextResponse.json({ error: "Only JPEG, PNG, GIF, and WEBP images are allowed." }, { status: 400 });
+    }
+
+    // Validate file size (e.g., max 5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    if (file.size > MAX_FILE_SIZE) {
+      console.error(`Validation Error for UID ${uid}: File size exceeds limit. Size: ${file.size} bytes.`);
+      return NextResponse.json({ error: "File size exceeds the 5MB limit." }, { status: 400 });
     }
 
     // Fetch current user data to check for existing profile picture

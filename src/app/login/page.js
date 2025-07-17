@@ -37,32 +37,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleForgotPassword = async () => {
-    const email = prompt("Please enter your email to reset your password:");
-    if (!email) return;
-
-    try {
-      const res = await fetch('/api/auth/reset-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        showToast('Password reset link sent to your email!', 'success');
-        // You can optionally show the link for testing
-        // console.log("Reset link:", data.link);
-      } else {
-        showToast(data.error || 'Failed to send password reset link.', 'error');
-      }
-    } catch (err) {
-      showToast('An unexpected error occurred.', 'error');
-    }
-  };
+  
 	
   if (loading) {
     return <LoadingMessage />;
@@ -104,7 +79,7 @@ export default function LoginPage() {
             </button>
           </div>
           <p className="mt-3 text-center">Don't have an account? <a className="text-primary" href="/signup"><i className="bi bi-person-plus me-2"></i>Sign up</a></p>
-          <p className="mt-3 text-center"><a className="text-primary" href="#" onClick={handleForgotPassword}><i className="bi bi-key me-2"></i>Forgot Password?</a></p>
+          <p className="mt-3 text-center"><a className="text-primary" href="/reset-password"><i className="bi bi-key me-2"></i>Forgot Password?</a></p>
         </div>
       </div>
     </motion.div>

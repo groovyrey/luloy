@@ -2,12 +2,28 @@
 import { auth } from '../../../../../lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { sendPasswordResetEmail } from '../../../utils/email';
+import { rateLimit } from '../../../utils/rateLimit';
 
 export async function POST(req) {
+  const ip = req.headers.get('x-forwarded-for') || req.ip;
+  const limited = rateLimit(ip, 3, 60 * 1000); // 3 requests per minute for password reset
+
+  if (!limited.allowed) {
+    console.warn(`Rate limit exceeded for IP: ${ip} on password reset`);
+    return NextResponse.json({ error: 'Too many password reset requests. Please try again later.' }, { status: 429 });
+  }
+
+  let email;
   try {
-    const { email } = await req.json();
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    ({ email } = await req.json());
+  } catch (error) {
+    console.error("Error parsing JSON for reset password:", error);
+    return NextResponse.json({ error: 'Invalid JSON in request body.' }, { status: 400 });
+  }
+
+  try {
+    if (!email || !/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,3}$/.test(email)) {
+      return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
     }
 
     console.log(`Generating password reset link for: ${email}`);

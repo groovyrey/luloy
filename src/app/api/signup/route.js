@@ -1,10 +1,24 @@
 import { admin } from "/lib/firebase-admin.js";
 import { NextResponse } from "next/server";
 import { capitalizeName } from "../../utils/capitalizeName";
+import { rateLimit } from '../../utils/rateLimit';
 
 export async function POST(request) {
+  const ip = request.headers.get('x-forwarded-for') || request.ip;
+  const limited = rateLimit(ip, 5, 60 * 1000); // 5 requests per minute
+
+  if (!limited.allowed) {
+    return NextResponse.json({ message: 'Too many requests. Please try again later.' }, { status: 429 });
+  }
+
   try {
-    const { idToken, firstName, lastName, age } = await request.json();
+    let idToken, firstName, lastName, age;
+    try {
+      ({ idToken, firstName, lastName, age } = await request.json());
+    } catch (error) {
+      console.error("Error parsing JSON for signup:", error);
+      return NextResponse.json({ error: 'Invalid JSON in request body.' }, { status: 400 });
+    }
 
     if (!firstName || !lastName || !age || isNaN(parseInt(age))) {
       return NextResponse.json({ error: "Missing or invalid user data." }, { status: 400 });

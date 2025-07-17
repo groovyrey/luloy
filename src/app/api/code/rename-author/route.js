@@ -4,10 +4,22 @@ import { cookies } from "next/headers";
 
 export async function POST(request) {
   try {
-    const { filename, newAuthorName } = await request.json();
+    let filename, newAuthorName;
+    try {
+      ({ filename, newAuthorName } = await request.json());
+    } catch (error) {
+      console.error("Error parsing JSON for rename author:", error);
+      return NextResponse.json({ message: 'Invalid JSON in request body.' }, { status: 400 });
+    }
 
-    if (!filename || !newAuthorName) {
-      return NextResponse.json({ message: "Filename and new author name are required." }, { status: 400 });
+    if (!filename || typeof filename !== 'string' || filename.trim().length === 0) {
+      console.error("Validation Error: Invalid or missing filename for author rename.");
+      return NextResponse.json({ message: "Filename is required and must be a non-empty string." }, { status: 400 });
+    }
+
+    if (!newAuthorName || typeof newAuthorName !== 'string' || newAuthorName.trim().length === 0) {
+      console.error(`Validation Error for filename ${filename}: Invalid or missing newAuthorName provided: ${newAuthorName}`);
+      return NextResponse.json({ message: "New author name is required and must be a non-empty string." }, { status: 400 });
     }
 
     const session = (await cookies()).get("session")?.value || "";

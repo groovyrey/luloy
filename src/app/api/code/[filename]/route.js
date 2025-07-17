@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { spawn } from 'child_process';
 
 export async function GET(request, { params }) {
   const { filename: rawFilename } = params;
@@ -15,13 +15,47 @@ export async function GET(request, { params }) {
     let author = 'Unknown';
     let authorEmail = '';
     try {
-      // Get the author name and email of the first commit for the file
-      const gitLogOutput = execSync(`git log --diff-filter=A --format="%an%n%ae" --max-count=1 -- "${filePath}"`, { encoding: 'utf8', cwd: process.cwd() }).trim();
+      const gitLogArgs = [
+        'log',
+        '--diff-filter=A',
+        '--format=%an%n%ae',
+        '--max-count=1',
+        '--',
+        filePath,
+      ];
+
+      const gitProcess = spawn('git', gitLogArgs, { encoding: 'utf8', cwd: process.cwd() });
+
+      let stdout = '';
+      let stderr = '';
+
+      gitProcess.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+
+      gitProcess.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+
+      await new Promise((resolve, reject) => {
+        gitProcess.on('close', (code) => {
+          if (code === 0) {
+            resolve();
+          } else {
+            reject(new Error(`git command exited with code ${code}: ${stderr}`));
+          }
+        });
+        gitProcess.on('error', (err) => {
+          reject(err);
+        });
+      });
+
+      const gitLogOutput = stdout.trim();
       const [name, email] = gitLogOutput.split('\n');
       author = name || 'Unknown';
       authorEmail = email || '';
     } catch (gitError) {
-      
+      console.error(`Error getting git log for ${filename}:`, gitError.message);
     }
 
     return NextResponse.json({ content, filename, author, authorEmail });

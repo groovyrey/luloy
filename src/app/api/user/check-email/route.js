@@ -15,7 +15,7 @@ export async function GET(request) {
 
     if (!snapshot.empty) {
       const userDoc = snapshot.docs[0];
-      return NextResponse.json({ exists: true, userId: userDoc.id }, { status: 200 });
+      return NextResponse.json({ exists: true }, { status: 200 });
     } else {
       return NextResponse.json({ exists: false }, { status: 200 });
     }

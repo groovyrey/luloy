@@ -2,11 +2,23 @@ import { admin, auth, firestore } from '/lib/firebase-admin';
 
 export async function POST(req) {
   try {
-    const { messageId } = await req.json();
+    let messageId;
+    try {
+      ({ messageId } = await req.json());
+    } catch (error) {
+      console.error("Error parsing JSON for message deletion:", error);
+      return new Response(JSON.stringify({ message: 'Invalid JSON in request body.' }), { status: 400 });
+    }
     const idToken = req.headers.get('Authorization')?.split('Bearer ')[1];
 
     if (!idToken) {
+      console.warn("Unauthorized attempt to delete message: No ID token provided.");
       return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
+    }
+
+    if (!messageId || typeof messageId !== 'string' || messageId.trim().length === 0) {
+      console.error("Validation Error: Invalid or missing messageId for message deletion.");
+      return new Response(JSON.stringify({ message: 'Bad Request: Message ID is required.' }), { status: 400 });
     }
 
     const decodedToken = await auth.verifyIdToken(idToken);
