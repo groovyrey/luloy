@@ -45,7 +45,7 @@ export default function LandingPageContent() {
           },
           onHover: {
             enable: true,
-            mode: "repulse",
+            mode: "attract",
           },
         },
         modes: {
@@ -90,7 +90,7 @@ export default function LandingPageContent() {
           value: 0.5,
         },
         shape: {
-          type: "circle",
+          type: "star",
         },
         size: {
           value: {
@@ -201,14 +201,7 @@ export default function LandingPageContent() {
         </Link>
       </motion.div>
 
-      {/* Footer */}
-      <motion.footer variants={itemVariants} className="mt-5 pt-4 border-top">
-        <div className="d-flex justify-content-center gap-4 mb-4">
-          <a href="mailto:luloyapp@gmail.com" className="text-muted"><i className="bi bi-envelope-fill fs-4"></i></a>
-          <a href="https://www.facebook.com/groovyrey" target="_blank" rel="noopener noreferrer" className="text-muted"><i className="bi bi-facebook fs-4"></i></a>
-        </div>
-        <p className="text-muted">&copy; 2025 Luloy. All rights reserved.</p>
-      </motion.footer>
+      
     </motion.div>
   );
 }
