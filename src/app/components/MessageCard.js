@@ -116,7 +116,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
     >
       <div className="card-body">
         <div className={styles.cardHeader}>
-          <h5 className="card-title"><i className="bi bi-person-circle me-2"></i>{" "}{message.sender === "" ? <span className="text-danger">?</span> : <span>{message.sender}</span>}</h5>
+          <h5 className={styles.senderName}><i className="bi bi-person-circle me-2"></i>{" "}{message.sender === "" ? <span className="text-danger">?</span> : <span>{message.sender}</span>}</h5>
           
         </div>
         <AnimatePresence>
@@ -152,7 +152,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
             </motion.div>
           )}
         </AnimatePresence>
-        <p className="card-text fs-5">{message.message}</p>
+        <p className="text-muted fs-5">{message.message}</p>
         <div className="d-flex justify-content-between align-items-center">
           <small className="">
             {message.date ? formatTimeAgo(message.date) : 'Date N/A'}

@@ -5,11 +5,13 @@ import { useUser } from '../context/UserContext';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Offcanvas.module.css';
+import { useTheme } from '../context/ThemeContext'; // Import useTheme
 
 export default function Offcanvas({ isOpen, onClose }) {
   const { user, userData, logout, loading } = useUser();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isMessagesDropdownOpen, setIsMessagesDropdownOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme(); // Use theme hook
 
   const handleLogout = () => {
     logout();
@@ -110,6 +112,11 @@ export default function Offcanvas({ isOpen, onClose }) {
                     <Link href="/learn" onClick={onClose}>
                       <i className="bi bi-book me-2"></i>Learn
                     </Link>
+                  </li>
+                  <li>
+                    <button onClick={toggleTheme} className="btn btn-link text-decoration-none w-100 text-start">
+                      {theme === 'light' ? <><i className="bi bi-moon-fill me-2"></i>Dark Mode</> : <><i className="bi bi-sun-fill me-2"></i>Light Mode</>}
+                    </button>
                   </li>
                 </ul>
                 {userData?.authLevel === 1 && (

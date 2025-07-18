@@ -25,9 +25,7 @@ export default function Navbar() {
         <Link href="/">
           <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '1.5em', marginRight: '0.5em' }} />
         </Link>
-        <button onClick={toggleTheme} className="btn btn-link text-decoration-none">
-          {theme === 'light' ? <i className="bi bi-moon-fill"></i> : <i className="bi bi-sun-fill"></i>}
-        </button>
+        
       </div>
       <button
         className={`${styles.mobileMenuToggle} ${isOffcanvasOpen ? styles.open : ''}`}
