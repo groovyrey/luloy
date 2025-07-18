@@ -113,6 +113,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
       initial="hidden"
       animate="visible"
       transition={{ duration: 0.5 }}
+      onClick={() => { if (user && userData && userData.authLevel === 1) setShowOptions(!showOptions); }}
     >
       <div className="card-body">
         <div className={styles.cardHeader}>
@@ -129,6 +130,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
               animate="visible"
               exit="exit"
               transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()} // Prevent clicks inside options from closing the card
             >
               <button className="btn btn-link text-start" onClick={() => {
                 router.push(`/messages/edit/${message.id}`);
@@ -156,15 +158,8 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
         <div className="d-flex justify-content-between align-items-center">
           <small className="">
             {message.date ? formatTimeAgo(message.date) : 'Date N/A'}
-            {message.private ? <i className="bi bi-eye-slash-fill ms-2" title="Private Message"></i> : <i className="bi bi-eye-fill ms-2" title="Public Message"></i>}
           </small>
-          {user && userData && userData.authLevel === 1 && (
-            <div className={styles.optionsButtonContainer}>
-              <button className="btn btn-link" onClick={() => setShowOptions(!showOptions)}>
-                <i className="bi bi-three-dots"></i>
-              </button>
-            </div>
-          )}
+          
         </div>
       </div>
     </motion.div>

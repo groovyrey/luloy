@@ -61,6 +61,7 @@ export default function PublicMessagesPage() {
 
   useEffect(() => {
     fetchMessages();
+    window.scrollTo(0, 0); // Scroll to top after fetching messages
   }, [page]);
 
   const handleNextPage = () => {
@@ -115,9 +116,16 @@ export default function PublicMessagesPage() {
             animate="visible"
           >
             {messages.map(message => (
-              <div className="col-md-6 col-lg-4" key={message.id}>
+              <motion.div
+                className="col-md-6 col-lg-4"
+                key={message.id}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+              >
                 <MessageCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         )}

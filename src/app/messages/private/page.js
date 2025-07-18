@@ -8,6 +8,7 @@ import MessageCard from '@/app/components/MessageCard';
 import LoadingMessage from '@/app/components/LoadingMessage';
 import Link from 'next/link';
 import { useUser } from '@/app/context/UserContext'; // Import useUser
+import { motion, AnimatePresence } from 'framer-motion';
 import { showToast } from '../../utils/toast';
 
 export default function PrivateMessagesPage() {
@@ -57,7 +58,7 @@ export default function PrivateMessagesPage() {
       showToast("Error fetching messages: " + error.message, 'error');
     }
     setLoading(false);
-  }, [page, pageCursors]);
+  }, [page]);
 
   const handleDeleteMessage = (deletedMessageId) => {
     fetchMessages();
@@ -77,7 +78,7 @@ export default function PrivateMessagesPage() {
     if (!userLoading && user && userData && userData.authLevel === 1) {
       fetchMessages();
     }
-  }, [page, pageCursors, user, userLoading, userData, refreshUserData]);
+  }, [page, user, userLoading, userData, refreshUserData]);
 
   const handleNextPage = () => {
     if (hasNextPage) {
@@ -88,6 +89,14 @@ export default function PrivateMessagesPage() {
   const handlePrevPage = () => {
     if (page > 1) {
       setPage(prevPage => prevPage - 1);
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
     }
   };
 
@@ -123,14 +132,31 @@ export default function PrivateMessagesPage() {
         <Link href="/messages/private" className="btn btn-primary m-2"><i className="bi bi-lock me-2"></i>Private</Link>
         <Link href="/messages/send" className="btn btn-outline-primary m-2"><i className="bi bi-send me-2"></i>Send a Message</Link>
       </div>
-      <div className="row">
-        {messages.map(message => (
-          <div className="col-md-6 col-lg-4" key={message.id}>
-            <MessageCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />
-          </div>
-        ))}
-      </div>
-      {loading && <LoadingMessage />}
+      <AnimatePresence>
+        {loading ? (
+          <LoadingMessage />
+        ) : (
+          <motion.div
+            className="row"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {messages.map(message => (
+              <motion.div
+                className="col-md-6 col-lg-4"
+                key={message.id}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+              >
+                <MessageCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="d-flex justify-content-center my-4">
         <button className="btn btn-primary mx-2" onClick={handlePrevPage} disabled={page === 1}><i className="bi bi-arrow-left-circle me-2"></i>Previous</button>
         <button className="btn btn-primary mx-2" onClick={handleNextPage} disabled={!hasNextPage}><i className="bi bi-arrow-right-circle me-2"></i>Next</button>

@@ -6,7 +6,7 @@
 }
 
 .messageCardContainer .card-body {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .cardHeader {
@@ -30,11 +30,12 @@
 }
 
 .messageCardContainer .card-text {
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  line-height: 1.5;
   color: var(--text-color);
-  margin-bottom: 1rem;
-  word-break: break-word;
+  margin-bottom: 0.5rem;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .messageCardContainer small {
