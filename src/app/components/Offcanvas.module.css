@@ -48,7 +48,8 @@
   display: block;
   padding: 0.75rem 1rem; /* Added horizontal padding */
   border-radius: var(--border-radius-base); /* Rounded corners */
-  border: 1px solid var(--border-color);
+  background-color: var(--card-background-color); /* Changed to card background color */
+  border: 1px solid var(--card-border-color); /* Changed to card border color */
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Smooth transition */
 }
 
@@ -62,8 +63,8 @@
 }
 
 .navDropdown button {
-  background: none;
-  border: 1px solid var(--border-color);
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
   border-radius: var(--border-radius-base);
   color: var(--text-color);
   font-weight: bold;
@@ -100,7 +101,9 @@
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   display: block;
-  border: none; /* Ensure no border for dropdown items */
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-base);
 }
 
 .navDropdownContent {
@@ -127,7 +130,7 @@
 .navbarActions {
   margin-top: auto;
   padding-top: 1.5rem; /* Increased padding */
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--card-border-color);
   display: flex; /* Use flexbox for better alignment */
   flex-direction: column;
   gap: 0.75rem; /* Spacing between buttons */
@@ -156,6 +159,38 @@
   align-items: center;
   width: 100%;
   justify-content: center;
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-base);
+  color: var(--text-color);
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.userProfileButton:hover {
+  color: var(--primary-color);
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+
+.authButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-base);
+  color: var(--text-color);
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.authButton:hover {
+  color: var(--primary-color);
+  background-color: rgba(var(--primary-rgb), 0.1);
 }
 
 .profilePicture {
@@ -187,8 +222,8 @@
   padding: 0.5rem 1rem;
   color: var(--text-color);
   text-decoration: none;
-  background: none;
-  border: none;
+  background-color: var(--card-background-color);
+  border: none; /* Explicitly remove border */
   cursor: pointer;
   text-align: left;
   margin-bottom: 0.5rem;

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { showToast } from '../../../utils/toast';
 import Link from 'next/link';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './CodeViewer.module.css';
 import MotionDiv from '../../../components/MotionDiv';
 import LoadingMessage from '../../../components/LoadingMessage';
@@ -257,7 +257,7 @@ export default function CodeViewer({ params }) {
                     <div className="card-body p-0">
                         <SyntaxHighlighter 
                             language={lang} 
-                            style={dracula} 
+                            style={vscDarkPlus} 
                             showLineNumbers 
                             customStyle={{ margin: '0', padding: '1rem', borderRadius: 'var(--border-radius-base)' }} 
                             wrapLines={true} 

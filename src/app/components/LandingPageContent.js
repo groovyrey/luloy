@@ -113,7 +113,7 @@ export default function LandingPageContent() {
     >
       {/* Hero Section */}
       <div
-        className="my-5 p-5 rounded-3"
+        className="my-5 p-3 rounded-3"
         style={{ position: 'relative', height: '500px', overflow: 'hidden', backgroundColor: 'transparent' }}
       >
         {particlesInitState && (

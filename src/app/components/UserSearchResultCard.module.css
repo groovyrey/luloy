@@ -1,17 +1,18 @@
 .card {
   display: flex;
   align-items: center;
-  padding: 15px;
+  padding: 10px; /* Reduced padding */
   border: 1px solid var(--card-border-color);
-  border-radius: 8px;
+  border-radius: 8px; /* Slightly less rounded corners */
   box-shadow: var(--box-shadow);
   background-color: var(--card-background-color);
-  transition: transform 0.2s ease-in-out;
-  margin-bottom: 15px; /* Add space between cards */
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 10px; /* Reduced margin */
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-3px); /* Less pronounced lift effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Lighter shadow on hover */
 }
 
 .link {
@@ -24,15 +25,16 @@
 
 .profilePictureContainer {
   flex-shrink: 0;
-  width: 80px;
-  height: 80px;
+  width: 60px; /* Smaller profile picture */
+  height: 60px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 15px;
+  margin-right: 10px; /* Reduced margin */
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--background-color);
+  border: 1px solid var(--primary-color); /* Thinner border to the profile picture */
 }
 
 .profilePicture {
@@ -42,17 +44,46 @@
 }
 
 .placeholderPicture {
-  font-size: 40px;
+  font-size: 30px; /* Smaller icon */
   color: var(--light-text-color);
 }
 
 .userInfo {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.userName,
+.userEmail,
+.userId {
+  margin: 0; /* Reset all margins */
+}
+
+.userEmail {
+  margin-top: 2px; /* Add a small top margin for spacing */
+}
+
+.userId {
+  margin-top: 2px; /* Add a small top margin for spacing */
 }
 
 .userName {
   margin: 0;
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.1rem; /* Smaller font size for name */
+  font-weight: 600; /* Slightly less bold font weight */
   color: var(--text-color);
+}
+
+.userEmail {
+  font-size: 0.8rem; /* Smaller font size for email */
+  color: var(--light-text-color);
+  margin-top: 2px; /* Reduced margin */
+}
+
+.userId {
+  font-size: 0.7rem;
+  color: var(--light-text-color);
+  margin-top: 2px;
 }

@@ -8,7 +8,7 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('theme') || 'light';
+    const storedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(storedTheme);
     document.body.setAttribute('data-theme', storedTheme);
     if (storedTheme === 'dark') {

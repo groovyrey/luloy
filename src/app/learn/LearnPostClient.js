@@ -2,7 +2,7 @@
 
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Link from 'next/link';
 import styles from './LearnPage.module.css';
 
@@ -43,7 +43,7 @@ export default function LearnPostClient({ postData }) {
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
       <h1>{postData.title}</h1>
-      <p><em>By {renderAuthor(postData.author, postData.authorDetails)} on {new Date(postData.date).toLocaleDateString()}</em></p>
+      <p><em>By {renderAuthor(postData.author, postData.authorDetails)} on {new Date(postData.date).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}</em></p>
       <div className={styles.markdownBody}>
         <ReactMarkdown
           components={{
@@ -51,9 +51,8 @@ export default function LearnPostClient({ postData }) {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
               <SyntaxHighlighter
-                style={dracula}
+                style={vscDarkPlus}
                 language={match[1]}
-                PreTag="div"
                 {...props}
               >
                 {String(children).replace(/\n$/, '')}

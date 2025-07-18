@@ -24,17 +24,16 @@
   line-height: 1.6;
 }
 
-.markdownBody pre {
-  background-color: #282a36;
-  color: #f8f8f2;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin-bottom: 1rem;
-}
 
-[data-theme='dark'] .markdownBody pre {
-  background-color: #282a36;
+
+
+
+
+
+.markdownBody pre {
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius-base);
+  overflow-x: auto;
 }
 
 .markdownBody code {

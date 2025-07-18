@@ -31,10 +31,16 @@ export default function Offcanvas({ isOpen, onClose }) {
   };
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
       setIsUserDropdownOpen(false);
       setIsMessagesDropdownOpen(false);
     }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen]);
 
   return (
@@ -113,7 +119,29 @@ export default function Offcanvas({ isOpen, onClose }) {
                   </li>
                   <li>
                     <button onClick={toggleTheme} className="btn btn-link text-decoration-none w-100 text-start">
-                      {theme === 'light' ? <><i className="bi bi-moon-fill me-2"></i>Dark Mode</> : <><i className="bi bi-sun-fill me-2"></i>Light Mode</>}
+                      <AnimatePresence mode="wait" initial={false}>
+                        {theme === 'light' ? (
+                          <motion.span
+                            key="dark-mode"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <i className="bi bi-moon-fill me-2"></i>Dark Mode
+                          </motion.span>
+                        ) : (
+                          <motion.span
+                            key="light-mode"
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <i className="bi bi-sun-fill me-2"></i>Light Mode
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
                     </button>
                   </li>
                 </ul>
@@ -141,7 +169,7 @@ export default function Offcanvas({ isOpen, onClose }) {
                   <div className={styles.loadingSpinner}></div>
                 ) : user ? (
                   <div className={styles.userProfileContainer}>
-                    <button onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)} className={`btn btn-primary ${styles.userProfileButton}`}>
+                    <button onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)} className={styles.userProfileButton}>
                       {userData?.profilePictureUrl ? (
                         <img src={userData.profilePictureUrl} alt={userData.username || userData.firstName} className={styles.profilePicture} />
                       ) : (
@@ -173,11 +201,11 @@ export default function Offcanvas({ isOpen, onClose }) {
                   </div>
                 ) : (
                   <div className={styles.authButtons}>
-                    <Link href="/login" onClick={onClose} className="btn btn-primary">
-                      <i className="bi bi-box-arrow-in-right"></i>Login
+                    <Link href="/login" onClick={onClose} className={styles.authButton}>
+                      <i className="bi bi-box-arrow-in-right me-2"></i>Login
                     </Link>
-                    <Link href="/signup" onClick={onClose} className="btn btn-primary">
-                      <i className="bi bi-person-plus-fill"></i>Sign Up
+                    <Link href="/signup" onClick={onClose} className={styles.authButton}>
+                      <i className="bi bi-person-plus-fill me-2"></i>Sign Up
                     </Link>
                   </div>
                 )}
