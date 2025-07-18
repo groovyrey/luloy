@@ -41,11 +41,11 @@
   --background-color: #0f0f0f; /* Slightly darker than card background */
   --text-color: #f0f0f0; /* Off-white */
   --light-text-color: #cccccc; /* Light Grey */
-  --card-background-color: #1a1a1a; /* Darker Almost Black */
+  --card-background-color: #181818; /* Darker Almost Black */
   --card-border-color: #333333; /* Lighter Darker Grey */
   --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   --box-shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.8);
-  --navbar-background-color: #111111; /* Slightly Lighter Black */
+  --navbar-background-color: #181818; /* Slightly Lighter Black */
   
   --my-message-gradient-start: #333333; /* Dark Grey */
   
