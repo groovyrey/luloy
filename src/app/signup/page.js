@@ -98,23 +98,23 @@ export default function SignupPage() {
           </div>
           
           <div className="form-floating mb-3">
-            <input type="text" className="form-control" id="firstNameInput" placeholder="First Name" onChange={e => setFirstName(e.target.value)} />
+            <input type="text" className="form-control" id="firstNameInput" onChange={e => setFirstName(e.target.value)} />
             <label htmlFor="firstNameInput"><i className="bi bi-person me-2"></i>First Name</label>
           </div>
           <div className="form-floating mb-3">
-            <input type="text" className="form-control" id="lastNameInput" placeholder="Last Name" onChange={e => setLastName(e.target.value)} />
+            <input type="text" className="form-control" id="lastNameInput" onChange={e => setLastName(e.target.value)} />
             <label htmlFor="lastNameInput"><i className="bi bi-person me-2"></i>Last Name</label>
           </div>
           <div className="form-floating mb-3">
-            <input type="number" className="form-control" id="ageInput" placeholder="Age" onChange={e => setAge(e.target.value)} />
+            <input type="number" className="form-control" id="ageInput" onChange={e => setAge(e.target.value)} />
             <label htmlFor="ageInput"><i className="bi bi-calendar me-2"></i>Age</label>
           </div>
           <div className="form-floating mb-3">
-            <input type="email" className="form-control" id="emailInput" placeholder="Email" onChange={e => setEmail(e.target.value)} />
+            <input type="email" className="form-control" id="emailInput" onChange={e => setEmail(e.target.value)} />
             <label htmlFor="emailInput"><i className="bi bi-envelope me-2"></i>Email</label>
           </div>
           <div className="form-floating mb-3">
-            <input type="password" className="form-control" id="passwordInput" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+            <input type="password" className="form-control" id="passwordInput" onChange={e => setPassword(e.target.value)} />
             <label htmlFor="passwordInput"><i className="bi bi-lock me-2"></i>Password</label>
           </div>
           <div className="d-grid gap-2">
