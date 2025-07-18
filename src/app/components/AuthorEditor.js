@@ -28,7 +28,7 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
 
     if (isEditing) {
         return (
-            <div className="input-group d-inline-flex w-auto">
+            <span className="input-group d-inline-flex w-auto">
                 <input
                     type="text"
                     className="form-control form-control-sm"
@@ -40,7 +40,7 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
                     {isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : 'Save'}
                 </button>
                 <button className="btn btn-sm btn-secondary" onClick={handleCancel} disabled={isLoading}>Cancel</button>
-            </div>
+            </span>
         );
     }
 
@@ -49,7 +49,12 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
             {authorDetails ? (
                 <em>
                     <Link href={`/user/${authorDetails.uid}`}>
-                        {capitalizeName(authorDetails.firstName)} {capitalizeName(authorDetails.lastName)}
+                        {authorDetails.firstName && authorDetails.lastName ? 
+                            `${capitalizeName(authorDetails.firstName)} ${capitalizeName(authorDetails.lastName)}` :
+                            authorDetails.firstName ? capitalizeName(authorDetails.firstName) :
+                            authorDetails.lastName ? capitalizeName(authorDetails.lastName) :
+                            authorDetails.uid // Fallback to UID if no name parts are found
+                        }
                     </Link>
                 </em>
             ) : (

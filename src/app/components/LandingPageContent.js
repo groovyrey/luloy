@@ -145,7 +145,7 @@ export default function LandingPageContent() {
         <motion.div variants={itemVariants} style={{ position: 'relative', zIndex: 1 }} className="p-5 d-flex flex-column justify-content-start align-items-center h-100">
           <h1 className="display-3 fw-bold text-primary">Welcome to Luloy</h1>
           <p className="lead text-muted mt-3">
-            Chat, learn, and share code with others.
+            Luloy is a place for developers and tech fans to connect, share code, and learn.
           </p>
           <div className="d-grid gap-2 col-md-6 mx-auto mt-4">
             <Link href="/login" className="btn btn-primary btn-lg">
@@ -162,9 +162,9 @@ export default function LandingPageContent() {
       <motion.div variants={itemVariants} className="row my-5">
         <div className="col-md-4 mb-4">
           <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card shadow-sm p-4 h-100">
-            <i className="bi bi-shield-check display-4 mb-3 text-success"></i>
-            <h3 className="card-title">Safe Chats</h3>
-            <p className="card-text text-muted">Talk with friends in public or private messages.</p>
+            <i className="bi bi-chat-dots display-4 mb-3 text-success"></i>
+            <h3 className="card-title">Share Thoughts</h3>
+            <p className="card-text text-muted">Share your thoughts anonymously or publicly through messages.</p>
           </motion.div>
         </div>
         <div className="col-md-4 mb-4">
@@ -194,7 +194,7 @@ export default function LandingPageContent() {
       <motion.div variants={itemVariants} className="my-5 p-5 rounded-3">
         <h2 className="display-5 fw-bold">Why Luloy?</h2>
         <p className="lead text-muted mt-3">
-          Luloy is a place for everyone to chat, learn, and share ideas. It's easy to use and a great way to meet new people.
+          Luloy mixes social sharing with tech work. Share your projects, get ideas, and learn from others. If you're new or a pro, Luloy helps you grow.
         </p>
         <Link href="/messages/public" className="btn btn-primary btn-lg mt-4">
           See What's Happening

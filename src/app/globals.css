@@ -19,7 +19,7 @@
   --border-radius-base: 0.5rem;
   --transition-base: all 0.2s ease-in-out;
   --navbar-background-color: #ffffff;
-  --chat-background-color: #f8f9fa;
+  
   --my-message-gradient-start: #66b3ff;
   --my-message-gradient-end: #3385ff;
   --other-message-gradient-start: #f0f0f0;
@@ -46,9 +46,9 @@
   --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   --box-shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.8);
   --navbar-background-color: #111111; /* Slightly Lighter Black */
-  --chat-background-color: #1a1a1a; /* Lighter Very Dark Grey */
+  
   --my-message-gradient-start: #333333; /* Dark Grey */
-  --my-message-gradient-end: #1a1a1a; /* Very Dark Grey */
+  
   --other-message-gradient-start: #222222; /* Darker Grey */
   --other-message-gradient-end: #000000; /* Pure Black */
 }
@@ -89,10 +89,7 @@ p {
   padding: 0.5rem;
 }
 
-.chat-container {
-    max-width: 800px;
-    margin: 0 auto;
-}
+
 
 .card {
   background-color: var(--card-background-color);
@@ -198,6 +195,10 @@ input[type="file"]:focus {
 
 label {
   color: var(--text-color);
+}
+
+.form-control::placeholder {
+  color: var(--light-text-color) !important;
 }
 
 .text-primary {

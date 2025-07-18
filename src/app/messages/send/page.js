@@ -62,7 +62,7 @@ export default function SendMessage() {
               <small className="form-text text-muted">{sender.length}/50</small>
             </div>
             <div className="mb-3">
-              <label htmlFor="message" className="form-label"><i className="bi bi-chat-left-text me-2"></i>Message Content</label>
+              
               <textarea
                 id="message"
                 className="form-control"

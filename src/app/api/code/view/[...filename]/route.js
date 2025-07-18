@@ -25,37 +25,27 @@ export async function GET(request, context) {
 
     if (docSnap.exists) {
       author = docSnap.data().author || "Unknown";
+      console.log(`[API/Code/View] Fetched author from Firestore: ${author}`);
 
-      // Check if the author string is an email
-      const emailRegex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,3}$/;
-      if (emailRegex.test(author)) {
-        // Query Firestore for a user with this email
-        const usersSnapshot = await firestore.collection("users").where("email", "==", author).limit(1).get();
-        if (!usersSnapshot.empty) {
-          const userDoc = usersSnapshot.docs[0];
-          authorDetails = {
-            uid: userDoc.id,
-            firstName: userDoc.data().firstName,
-            lastName: userDoc.data().lastName,
-            username: userDoc.data().username || null,
-          };
-        }
-      } else {
-        // Try to find user by username
-        let usersSnapshot = await firestore.collection("users").where("username", "==", author).limit(1).get();
-        if (usersSnapshot.empty) {
-          // If not found by username, try by UID
-          usersSnapshot = await firestore.collection("users").where(admin.firestore.FieldPath.documentId(), "==", author).limit(1).get();
-        }
+      const isUid = /^[a-zA-Z0-9]{20,40}$/.test(author);
+      console.log(`[API/Code/View] Is author a UID? ${isUid}`);
 
-        if (!usersSnapshot.empty) {
-          const userDoc = usersSnapshot.docs[0];
-          authorDetails = {
-            uid: userDoc.id,
-            firstName: userDoc.data().firstName,
-            lastName: userDoc.data().lastName,
-            username: userDoc.data().username || null,
-          };
+      if (isUid) {
+        try {
+          const userDoc = await firestore.collection("users").doc(author).get();
+          if (userDoc.exists) {
+            authorDetails = {
+              uid: userDoc.id,
+              firstName: userDoc.data().firstName,
+              lastName: userDoc.data().lastName,
+              username: userDoc.data().username || null,
+            };
+            console.log(`[API/Code/View] Found user details for UID: ${author}`);
+          } else {
+            console.warn(`[API/Code/View] User document not found for UID: ${author}`);
+          }
+        } catch (error) {
+          console.error(`[API/Code/View] Error fetching author details from Firestore for UID ${author}:`, error);
         }
       }
     }

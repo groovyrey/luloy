@@ -107,7 +107,7 @@ export default function PrivateMessagesPage() {
             </div>
             <p className="text-lg text-muted mb-8">You are not authorized to view this page.</p>
             <Link href="/messages" className="btn btn-primary">
-              <i className="bi-chat-dots me-2"></i> Go to Messages
+              
             </Link>
           </div>
         </div>

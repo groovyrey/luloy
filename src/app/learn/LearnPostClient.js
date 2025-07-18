@@ -11,9 +11,20 @@ const renderAuthor = (author, authorDetails) => {
   const isUid = /^[a-zA-Z0-9]{20,40}$/.test(author);
 
   if (isUid && authorDetails) {
+    let displayName = '';
+    if (authorDetails.firstName && authorDetails.lastName) {
+      displayName = `${authorDetails.firstName} ${authorDetails.lastName}`;
+    } else if (authorDetails.firstName) {
+      displayName = authorDetails.firstName;
+    } else if (authorDetails.lastName) {
+      displayName = authorDetails.lastName;
+    } else {
+      displayName = author; // Fallback to UID if no name parts are found
+    }
+
     return (
       <Link href={`/user/${author}`} style={{ textDecoration: 'underline', color: 'var(--primary-color)' }}>
-        {authorDetails.firstName} {authorDetails.lastName}
+        {displayName}
       </Link>
     );
   } else if (isUid) {

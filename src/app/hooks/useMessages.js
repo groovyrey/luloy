@@ -15,7 +15,7 @@ export const useMessages = (user, userLoading, refreshUserData, messagesContaine
     // or a dedicated offline-first library for more persistent and larger data storage.
     const getMessagesFromCache = () => {
         try {
-            const cachedMessages = localStorage.getItem('chatMessages');
+            
             return cachedMessages ? JSON.parse(cachedMessages) : [];
         } catch (error) {
             console.error('Error reading from localStorage:', error);
@@ -25,7 +25,7 @@ export const useMessages = (user, userLoading, refreshUserData, messagesContaine
 
     const saveMessagesToCache = (messagesToSave) => {
         try {
-            localStorage.setItem('chatMessages', JSON.stringify(messagesToSave));
+            
         } catch (error) {
             console.error('Error writing to localStorage:', error);
         }
@@ -117,9 +117,7 @@ export const useMessages = (user, userLoading, refreshUserData, messagesContaine
                 setMessagesLoading(false);
             }, { onlyOnce: true });
 
-            // TODO: Real-time Update Efficiency: For high-volume chat, evaluate the performance of Firebase
-            // onChildAdded/Changed/Removed listeners. If performance issues arise, consider debouncing
-            // updates or exploring alternative real-time strategies.
+            
             const onChildAddedListener = onChildAdded(messagesRef, (snapshot) => {
                 const newMessage = { id: snapshot.key, ...snapshot.val() };
                 setMessages(prevMessages => {

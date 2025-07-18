@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import { UserProvider } from "./context/UserContext";
+import ToastProvider from "./components/ToastProvider";
 import { ThemeProvider } from "./context/ThemeContext";
 
 import Navbar from "./components/Navbar";
@@ -34,9 +35,9 @@ export default function RootLayout({ children }) {
               <p className="text-muted">&copy; 2025 Luloy. All rights reserved.</p>
             </footer>
           </UserProvider>
+        <ToastProvider />
         </ThemeProvider>
         <BootstrapClient />
-        <Toaster />
       </body>
     </html>
   );

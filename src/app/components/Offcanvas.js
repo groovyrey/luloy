@@ -99,9 +99,7 @@ export default function Offcanvas({ isOpen, onClose }) {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/chat" onClick={onClose}>
-                      <i className="bi bi-chat-dots me-2"></i>Global Chat
-                    </Link>
+                    
                   </li>
                   <li>
                     <Link href="/code" onClick={onClose}>
