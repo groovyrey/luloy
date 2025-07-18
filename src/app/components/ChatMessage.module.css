@@ -16,7 +16,7 @@
 
 .otherMessage {
   background: linear-gradient(to right, var(--other-message-gradient-start), var(--other-message-gradient-end)); /* Subtle light gray gradient */
-  color: black;
+  color: var(--text-color);
   align-self: flex-start;
   border-bottom-left-radius: 0.25rem;
 }

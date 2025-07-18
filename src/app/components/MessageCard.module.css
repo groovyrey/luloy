@@ -64,8 +64,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: var(--background-color-dark);
-  border-top: 1px solid var(--border-color);
+  background-color: var(--card-background-color);
+  border-top: 1px solid var(--card-border-color);
   border-radius: 0 0 var(--border-radius-base) var(--border-radius-base);
   display: flex;
   flex-direction: column;

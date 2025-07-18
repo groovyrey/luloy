@@ -25,12 +25,16 @@
 }
 
 .markdownBody pre {
-  background-color: #2d2d2d; /* Dracula theme background */
-  color: #f8f8f2; /* Dracula theme text color */
+  background-color: #282a36;
+  color: #f8f8f2;
   padding: 1rem;
   border-radius: 0.5rem;
   overflow-x: auto;
   margin-bottom: 1rem;
+}
+
+[data-theme='dark'] .markdownBody pre {
+  background-color: #282a36;
 }
 
 .markdownBody code {

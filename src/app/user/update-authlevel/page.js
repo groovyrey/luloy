@@ -30,7 +30,7 @@ export default function UpdateAuthLevelPage() {
               <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '3em', marginBottom: '1em' }} />
               <h2 className="card-title text-center text-danger"><i className="bi bi-exclamation-triangle me-2"></i>Unauthorized Access</h2>
             </div>
-            <p className="text-lg text-gray-600 mb-8">You are not authorized to view this page.</p>
+            <p className="text-lg text-muted mb-8">You are not authorized to view this page.</p>
             <Link href="/" className="btn btn-primary">
               <i className="bi-house-door me-2"></i> Go to Home
             </Link>

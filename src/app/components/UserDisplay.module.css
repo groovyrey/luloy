@@ -14,8 +14,8 @@
   bottom: 100%; /* Position above the button */
   left: 0;
   right: 0;
-  background-color: var(--background-color-dark);
-  border-bottom: 1px solid var(--border-color); /* Change to bottom border */
+  background-color: var(--card-background-color);
+  border-bottom: 1px solid var(--card-border-color); /* Change to bottom border */
   border-radius: var(--border-radius-base) var(--border-radius-base) 0 0; /* Adjust border-radius */
   display: flex;
   flex-direction: column;

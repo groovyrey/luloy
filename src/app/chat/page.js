@@ -151,7 +151,7 @@ export default function ChatPage() {
                         />
                     ))}
                 </div>
-                <div className="p-3 bg-light">
+                <div className="p-3">
                     <ChatInput
                         user={user}
                         editingMessageId={editingMessageId}

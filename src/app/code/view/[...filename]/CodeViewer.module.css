@@ -37,26 +37,6 @@
     box-shadow: var(--box-shadow);
 }
 
-.codeWrapper:hover {
-    transform: none;
-    box-shadow: var(--box-shadow);
-}
-
-.codeWrapper:hover {
-    transform: none;
-    box-shadow: var(--box-shadow);
-}
-
-.codeWrapper:hover {
-    transform: none;
-    box-shadow: var(--box-shadow);
-}
-
-.codeWrapper:hover {
-    transform: none;
-    box-shadow: var(--box-shadow);
-}
-
 .backButton {
     background-color: var(--secondary-color);
     border: 1px solid var(--secondary-color);
@@ -72,32 +52,6 @@
 }
 
 .backButton:hover {
-    background-color: #5a6268;
-    border-color: #5a6268;
+    filter: brightness(0.9);
     transform: translateY(-2px);
-}
-
-/* Dark Theme Adjustments */
-body[data-theme='dark'] .viewerContainer {
-    color: var(--text-color-dark-theme);
-}
-
-body[data-theme='dark'] .fileIcon {
-    color: var(--primary-color-dark-theme);
-}
-
-body[data-theme='dark'] .codeWrapper {
-    background: var(--card-background-color-dark-theme);
-    border-color: var(--card-border-color-dark-theme);
-    box-shadow: var(--box-shadow-dark-theme);
-}
-
-body[data-theme='dark'] .backButton {
-    background-color: var(--secondary-color-dark-theme);
-    border-color: var(--secondary-color-dark-theme);
-}
-
-body[data-theme='dark'] .backButton:hover {
-    background-color: var(--primary-color-dark-theme);
-    border-color: var(--primary-color-dark-theme);
 }
