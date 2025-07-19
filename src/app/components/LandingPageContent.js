@@ -131,7 +131,7 @@ export default function LandingPageContent() {
             <Particles
               id="tsparticles"
               particlesLoaded={async (container) => {
-              console.log("Particles container loaded", container);
+              
             }}
               options={particlesOptions}
               style={{

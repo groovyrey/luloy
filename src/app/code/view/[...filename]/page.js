@@ -11,6 +11,7 @@ import MotionDiv from '../../../components/MotionDiv';
 import LoadingMessage from '../../../components/LoadingMessage';
 import { useUser } from '../../../context/UserContext';
 import AuthorEditor from '../../../components/AuthorEditor';
+import FileIcon from '../../../components/FileIcon';
 
 function getLanguage(filename) {
     if (!filename) return 'plaintext';
@@ -53,90 +54,7 @@ function getLanguage(filename) {
     }
 }
 
-function getFileIcon(filename) {
-    if (!filename) return 'bi-file-earmark';
-    const extension = filename.split('.').pop();
-    switch (extension) {
-        case 'js':
-            return 'bi-filetype-js';
-        case 'py':
-            return 'bi-filetype-py';
-        case 'html':
-            return 'bi-filetype-html';
-        case 'css':
-            return 'bi-filetype-css';
-        case 'json':
-            return 'bi-filetype-json';
-        case 'md':
-            return 'bi-filetype-md';
-        case 'svg':
-            return 'bi-filetype-svg';
-        case 'java':
-            return 'bi-filetype-java';
-        case 'ts':
-            return 'bi-filetype-typescript';
-        case 'tsx':
-            return 'bi-filetype-tsx';
-        case 'jsx':
-            return 'bi-filetype-jsx';
-        case 'xml':
-            return 'bi-filetype-xml';
-        case 'yml':
-        case 'yaml':
-            return 'bi-filetype-yml';
-        case 'php':
-            return 'bi-filetype-php';
-        case 'rb':
-            return 'bi-filetype-ruby';
-        case 'go':
-            return 'bi-filetype-go';
-        case 'swift':
-            return 'bi-filetype-swift';
-        case 'kt':
-            return 'bi-filetype-kotlin';
-        case 'c':
-            return 'bi-filetype-c';
-        case 'h':
-            return 'bi-filetype-h';
-        case 'hpp':
-            return 'bi-filetype-hpp';
-        case 'cs':
-            return 'bi-filetype-cs';
-        case 'sh':
-        case 'bat':
-        case 'cmd':
-            return 'bi-filetype-exe';
-        case 'sql':
-            return 'bi-filetype-sql';
-        case 'txt':
-        case 'log':
-            return 'bi-file-earmark-text';
-        case 'zip':
-        case 'rar':
-        case '7z':
-            return 'bi-file-earmark-zip';
-        case 'pdf':
-            return 'bi-filetype-pdf';
-        case 'doc':
-        case 'docx':
-            return 'bi-filetype-word';
-        case 'xls':
-        case 'xlsx':
-            return 'bi-filetype-excel';
-        case 'ppt':
-        case 'pptx':
-            return 'bi-filetype-ppt';
-        case 'png':
-        case 'jpg':
-        case 'jpeg':
-        case 'gif':
-        case 'bmp':
-        case 'webp':
-            return 'bi-file-earmark-image';
-        default:
-            return 'bi-file-earmark';
-    }
-}
+
 
 export default function CodeViewer({ params }) {
     const { filename: rawFilename } = use(params);
@@ -223,7 +141,7 @@ export default function CodeViewer({ params }) {
     return (
         <section className={`${styles.viewerContainer} container-fluid mt-5`}>
             <div className={`${styles.header} d-flex align-items-center mb-4`}>
-                <i className={`bi ${getFileIcon(filename)} ${styles.fileIcon} me-3`}></i>
+                <FileIcon filename={filename} className={`${styles.fileIcon} me-3`} />
                 <h1 className={`${styles.filename} mb-0 flex-grow-1`}>{filename}</h1>
             </div>
 

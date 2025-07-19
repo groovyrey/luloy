@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Navbar.module.css';
 import { useTheme } from '../context/ThemeContext';
 
+
 export default function Navbar() {
   const { user, userData, logout, loading } = useUser();
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);

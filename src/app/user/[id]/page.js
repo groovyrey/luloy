@@ -9,8 +9,9 @@ import { motion } from 'framer-motion';
 import { showToast } from '../../../app/utils/toast';
 
 import React from 'react';
-import { AUTH_LEVEL_RANKS } from '../../../app/utils/AuthRankSystem';
+import { BADGES } from '../../../app/utils/BadgeSystem';
 import Link from 'next/link';
+import ReactIconRenderer from '../../../app/components/ReactIconRenderer';
 
 export default function UserProfilePage({ params }) {
   const { id } = React.use(params);
@@ -19,8 +20,7 @@ export default function UserProfilePage({ params }) {
 
   useEffect(() => {
     if (profileData) {
-      const title = `${toTitleCase(profileData.firstName || '')} ${toTitleCase(profileData.lastName || '')}`;
-      document.title = `${title}'s Profile`;
+      document.title = `${toTitleCase(profileData.fullName || '')}'s Profile`;
     }
   }, [profileData]);
 
@@ -69,7 +69,7 @@ export default function UserProfilePage({ params }) {
 
   
 
-  const authLevelInfo = AUTH_LEVEL_RANKS[profileData.authLevel];
+  const userBadges = profileData.badges ? profileData.badges.map(badgeId => BADGES[badgeId]).filter(Boolean) : [];
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
@@ -107,29 +107,12 @@ export default function UserProfilePage({ params }) {
                 <i className="bi bi-person-fill" style={{ fontSize: '75px', color: 'var(--light-text-color)' }}></i>
               </div>
             )}
-            {authLevelInfo && (
-              <div
-                className="position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center shadow"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: 'var(--card-background-color)', /* Card background color */
-                  right: '15px', /* Adjust for overlap */
-                  bottom: '15px', /* Adjust for overlap */
-                  /* border: '2px solid var(--bs-primary)' */
-                }}
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title={authLevelInfo.title}
-              >
-                <i className={`${authLevelInfo.icon} ${authLevelInfo.color} fs-5`}></i>
-              </div>
-            )}
+            
           </div>
 
           <div className="col-12 text-center mb-3">
             <div className="d-flex justify-content-center align-items-baseline flex-wrap">
-              <h1 className="display-4 mb-0 me-2">{toTitleCase((profileData.firstName || '') + " " + (profileData.lastName || ''))}</h1>
+              <h1 className="mb-0 me-2" style={{ fontSize: '28px' }}>{toTitleCase(profileData.fullName || '')}</h1>
             </div>
             </div>
             {profileData.bio && (
@@ -137,6 +120,8 @@ export default function UserProfilePage({ params }) {
                 <p className="text-muted fst-italic">{profileData.bio}</p>
               </div>
             )}
+
+            
           <div className="row mb-3">
             <div className="col-12 col-md-6">
               <p className="mb-1"><strong>Email:</strong></p>
@@ -148,9 +133,33 @@ export default function UserProfilePage({ params }) {
                 <p className="text-muted mb-0 me-2" style={{ wordBreak: 'break-all' }}>{profileData.uid}</p>
                 <button
                   className="btn btn-sm btn-outline-secondary"
-                  onClick={() => {
-                    navigator.clipboard.writeText(profileData.uid);
-                    showToast('UID copied to clipboard!', 'success');
+                  onClick={async () => {
+                    if (!profileData.uid) {
+                      showToast("No UID to copy.", 'error');
+                      return;
+                    }
+
+                    try {
+                      if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(profileData.uid);
+                        showToast("UID copied to clipboard!", 'success');
+                      } else {
+                        // Fallback for non-secure contexts or older browsers
+                        const textArea = document.createElement("textarea");
+                        textArea.value = profileData.uid;
+                        textArea.style.position = "fixed"; // Avoid scrolling to bottom
+                        textArea.style.left = "-999999px"; // Move off-screen
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        document.execCommand('copy');
+                        textArea.remove();
+                        showToast("UID copied to clipboard! (Fallback)", 'success');
+                      }
+                    } catch (err) {
+                      showToast("Failed to copy UID.", 'error');
+                      console.error("Failed to copy UID:", err);
+                    }
                   }}
                   title="Copy UID"
                 >
@@ -163,6 +172,37 @@ export default function UserProfilePage({ params }) {
               <p className="text-muted">{profileData.age}</p>
             </div>
           </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="card m-2 mt-4 shadow-lg rounded-3"
+        style={{ maxWidth: '600px', width: '100%' }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <div className="card-body p-4">
+          <h5 className="card-title text-center mb-4">Badges</h5>
+          {userBadges.length > 0 ? (
+            <div className="d-flex flex-column align-items-center">
+              {userBadges.map(badge => (
+                <div key={badge.name} className="card shadow-sm mb-3" style={{ width: '100%', maxWidth: '300px' }}>
+                  <div className="card-body text-center p-3">
+                    <div className={`fs-2 ${badge.color}`}>
+                      <ReactIconRenderer IconComponent={badge.icon} size={24} color={badge.color} />
+                    </div>
+                    <h6 className="card-title mt-2 mb-1">{badge.name}</h6>
+                    <p className="card-text text-muted" style={{ fontSize: '0.85rem' }}>{badge.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-muted fst-italic">
+              <p className="mb-0">This user has not earned any badges yet.</p>
+            </div>
+          )}
         </div>
       </motion.div>
 

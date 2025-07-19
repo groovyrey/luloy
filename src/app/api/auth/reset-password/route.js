@@ -26,13 +26,13 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
     }
 
-    console.log(`Generating password reset link for: ${email}`);
+    
     const link = await auth.generatePasswordResetLink(email);
-    console.log(`Password reset link generated: ${link}`);
+    
 
-    console.log(`Sending password reset email to: ${email}`);
+    
     await sendPasswordResetEmail(email, link);
-    console.log('Password reset email sent successfully.');
+    
 
     return NextResponse.json({ message: 'Password reset email sent.' });
   } catch (error) {

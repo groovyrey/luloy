@@ -1,5 +1,6 @@
 
 import { NextResponse } from "next/server";
+import { getComputedPermissions } from "./src/app/utils/BadgeSystem";
 
 export async function middleware(request) {
   const session = request.cookies.get("session");
@@ -27,7 +28,11 @@ export async function middleware(request) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  const user = await responseAPI.json();
+  const userData = await responseAPI.json();
+  console.log("Middleware: User data from API auth:", userData);
+  const user = userData.user; // Extract user object from the response
+  console.log("Middleware: User object:", user);
+  console.log("Middleware: User badges:", user.badges);
 
   // Define paths that require authLevel 1
   const authLevel1Paths = ["/messages/private", "/user/update-authlevel"];
@@ -35,6 +40,16 @@ export async function middleware(request) {
   // Check if the current path requires authLevel 1 and if the user has it
   if (authLevel1Paths.some(path => request.nextUrl.pathname.startsWith(path)) && user.authLevel !== 1) {
     return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  // Check for canAssignBadges permission for /user/manage-badges
+  if (request.nextUrl.pathname.startsWith("/user/manage-badges")) {
+    const userPermissions = getComputedPermissions(user.badges || []);
+    console.log("Middleware: Computed user permissions for manage-badges:", userPermissions);
+    if (!userPermissions.canAssignBadges) {
+      console.log("Middleware: Unauthorized access to manage-badges.");
+      return NextResponse.redirect(new URL("/", request.url));
+    }
   }
 
   return NextResponse.next();

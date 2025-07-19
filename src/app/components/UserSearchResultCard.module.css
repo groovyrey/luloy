@@ -86,4 +86,5 @@
   font-size: 0.7rem;
   color: var(--light-text-color);
   margin-top: 2px;
+  word-break: break-all;
 }

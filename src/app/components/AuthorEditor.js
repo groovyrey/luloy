@@ -3,8 +3,12 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { capitalizeName } from '../utils/capitalizeName';
+import { useUser } from '../context/UserContext';
+import { getComputedPermissions } from '../utils/BadgeSystem';
 
-export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLevel, onRename, isLoading, loading }) {
+export default function AuthorEditor({ initialAuthor, authorDetails, onRename, isLoading, loading }) {
+    const { user } = useUser();
+    const userPermissions = getComputedPermissions(user?.badges);
     const [isEditing, setIsEditing] = useState(false);
     const [authorName, setAuthorName] = useState(initialAuthor);
 
@@ -60,7 +64,7 @@ export default function AuthorEditor({ initialAuthor, authorDetails, userAuthLev
             ) : (
                 <em>{initialAuthor}</em>
             )}
-            {userAuthLevel >= 1 && (
+            {userPermissions.canEditAuthor && (
                 <button className="btn btn-sm btn-outline-secondary ms-2" onClick={() => setIsEditing(true)}>
                     Rename Author
                 </button>

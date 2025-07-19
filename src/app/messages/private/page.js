@@ -75,7 +75,7 @@ export default function PrivateMessagesPage() {
   }, []);
 
   useEffect(() => {
-    if (!userLoading && user && userData && userData.authLevel === 1) {
+    if (!userLoading && user && user.permissions?.canViewPrivateMessages) {
       fetchMessages();
     }
   }, [page, user, userLoading, userData, refreshUserData]);
@@ -105,7 +105,7 @@ export default function PrivateMessagesPage() {
   }
 
   // If user is not authenticated or authLevel is not 1, display unauthorized message
-  if (!user || !userData || userData.authLevel !== 1) {
+  if (!user || !user.permissions?.canViewPrivateMessages) {
     return (
       <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
         <div className="card m-2 text-center" style={{ maxWidth: '400px', width: '100%' }}>
@@ -126,11 +126,15 @@ export default function PrivateMessagesPage() {
 
   return (
     <div className="container">
-      <h1 className="text-center my-4 text-primary"><i className="bi bi-lock me-2"></i>Private Messages</h1>
-      <div className="text-center my-4">
-        <Link href="/messages/public" className="btn btn-outline-primary m-2"><i className="bi bi-globe me-2"></i>Public</Link>
-        <Link href="/messages/private" className="btn btn-primary m-2"><i className="bi bi-lock me-2"></i>Private</Link>
-        <Link href="/messages/send" className="btn btn-outline-primary m-2"><i className="bi bi-send me-2"></i>Send a Message</Link>
+      <div className="card shadow-lg rounded-3 mb-3">
+        <div className="card-body p-2">
+          <h1 className="card-title text-center text-primary mb-2"><i className="bi bi-lock me-2"></i>Private Messages</h1>
+          <div className="d-flex justify-content-center flex-wrap">
+            <Link href="/messages/public" className="btn btn-outline-primary m-1"><i className="bi bi-globe me-2"></i>Public</Link>
+            <Link href="/messages/private" className="btn btn-primary m-1"><i className="bi bi-lock me-2"></i>Private</Link>
+            <Link href="/messages/send" className="btn btn-outline-primary m-1"><i className="bi bi-send me-2"></i>Send a Message</Link>
+          </div>
+        </div>
       </div>
       <AnimatePresence>
         {loading ? (

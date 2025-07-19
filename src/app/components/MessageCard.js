@@ -59,7 +59,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
       });
 
       if (response.ok) {
-        console.log('Message deleted successfully');
+        
         if (onDelete) {
           onDelete(message.id);
         }
@@ -113,7 +113,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
       initial="hidden"
       animate="visible"
       transition={{ duration: 0.5 }}
-      onClick={() => { if (user && userData && userData.authLevel === 1) setShowOptions(!showOptions); }}
+      onClick={() => { if (user && user.permissions?.canManageMessages) setShowOptions(!showOptions); }}
     >
       <div className="card-body">
         <div className={styles.cardHeader}>

@@ -33,7 +33,7 @@
   --warning-color: #ffc107;
 }
 
-[data-theme='dark'] {
+html.dark {
   --primary-color: #007bff;
   --primary-rgb: 0, 123, 255;
   --secondary-color: #6c757d;
@@ -284,11 +284,7 @@ a:hover, button:hover {
 }
 
 .text-lead-developer {
-  background: linear-gradient(90deg, #000000, #0000FF, #000000);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 600% 100%;
-  animation: gradient-animation 6s linear infinite;
+  color: #0000FF; /* A solid blue color */
 }
 
 @keyframes gradient-animation {

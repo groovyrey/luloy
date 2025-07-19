@@ -145,13 +145,13 @@ export default function Offcanvas({ isOpen, onClose }) {
                     </button>
                   </li>
                 </ul>
-                {userData?.authLevel === 1 && (
+                {user?.permissions?.canAssignBadges && (
                   <div className={styles.adminNav}>
                     <p className={styles.adminNavLabel}>Admin Navigation</p>
                     <ul>
                       <li>
-                        <Link href="/user/update-authlevel" onClick={onClose}>
-                          <i className="bi bi-person-badge me-2"></i>Update Auth Level
+                        <Link href="/user/manage-badges" onClick={onClose}>
+                          <i className="bi bi-person-badge me-2"></i>Manage Badges
                         </Link>
                       </li>
                       <li>

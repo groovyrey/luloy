@@ -49,7 +49,7 @@ export async function POST(request) {
       try {
         // Assuming public_id is the UID as set during upload
         await cloudinary.uploader.destroy(`profile_pictures/${uid}`);
-        console.log("Old profile picture deleted from Cloudinary for UID:", uid);
+        
       } catch (deleteError) {
         console.error("Error deleting old profile picture from Cloudinary:", deleteError);
         // Continue with upload even if old picture deletion fails
@@ -76,13 +76,13 @@ export async function POST(request) {
       ).end(buffer);
     });
 
-    console.log("Cloudinary upload successful. Secure URL:", uploadResult.secure_url);
+    
 
     await admin.firestore().collection("users").doc(uid).update({
       profilePictureUrl: uploadResult.secure_url,
     });
 
-    console.log("Profile picture URL saved to Firestore for UID:", uid);
+    
 
     revalidatePath('/');
     return NextResponse.json({ message: "Profile picture uploaded successfully.", url: uploadResult.secure_url }, { status: 200 });
@@ -104,7 +104,7 @@ export async function DELETE(request) {
     // Delete the profile picture from Cloudinary
     try {
       await cloudinary.uploader.destroy(`profile_pictures/${uid}`);
-      console.log("Profile picture deleted from Cloudinary for UID:", uid);
+      
     } catch (deleteError) {
       console.error("Error deleting profile picture from Cloudinary:", deleteError);
       // Continue to update Firestore even if Cloudinary deletion fails
@@ -115,7 +115,7 @@ export async function DELETE(request) {
       profilePictureUrl: admin.firestore.FieldValue.delete(),
     });
 
-    console.log("Profile picture URL removed from Firestore for UID:", uid);
+    
 
     revalidatePath('/');
     return NextResponse.json({ message: "Profile picture removed successfully." }, { status: 200 });

@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '/lib/firebase';
-import { showToast } from '../utils/toast';
+import { getComputedPermissions } from '../utils/BadgeSystem';
 
 const UserContext = createContext();
 
@@ -20,7 +20,7 @@ export function UserProvider({ children }) {
       const res = await fetch(`/api/user/${uid}`);
       if (res.ok) {
         const data = await res.json();
-        console.log("UserContext: Fetched user data:", data);
+        
         return data;
       } else {
         const errorText = await res.text();
@@ -106,17 +106,22 @@ export function UserProvider({ children }) {
             setUserData(null);
           }
 
-          // Construct the user object with authLevel from fetchedUserData
+          const userBadges = fetchedUserData ? fetchedUserData.badges || [] : [];
+          const userPermissions = getComputedPermissions(userBadges);
+
+          // Construct the user object with badges and permissions
           const userObject = {
             ...currentUser,
             idToken: await currentUser.getIdToken(), // Get the latest ID token
-            authLevel: fetchedUserData ? fetchedUserData.authLevel : 0, // Use authLevel from Firestore
+            badges: userBadges,
+            permissions: userPermissions,
           };
           setUser(userObject);
         } else {
           setUser(null);
           setUserData(null);
         }
+        setLoading(false);
         setLoading(false);
       });
       return () => unsubscribe();
@@ -131,5 +136,7 @@ export function UserProvider({ children }) {
 }
 
 export function useUser() {
-  return useContext(UserContext);
+  const context = useContext(UserContext);
+  
+  return context;
 }

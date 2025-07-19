@@ -5,92 +5,7 @@ import Link from 'next/link';
 import styles from './CodeStyles.module.css'; // Import the CSS module
 import FileCardSkeleton from '../components/FileCardSkeleton';
 import MotionWrapper from '../components/MotionWrapper';
-
-function getFileIcon(filename) {
-    if (!filename) return 'bi-file-earmark';
-    const extension = filename.split('.').pop();
-    switch (extension) {
-        case 'js':
-            return 'bi-filetype-js';
-        case 'py':
-            return 'bi-filetype-py';
-        case 'html':
-            return 'bi-filetype-html';
-        case 'css':
-            return 'bi-filetype-css';
-        case 'json':
-            return 'bi-filetype-json';
-        case 'md':
-            return 'bi-filetype-md';
-        
-        case 'svg':
-            return 'bi-filetype-svg';
-        case 'java':
-            return 'bi-filetype-java';
-        case 'ts':
-            return 'bi-filetype-typescript';
-        case 'tsx':
-            return 'bi-filetype-tsx';
-        case 'jsx':
-            return 'bi-filetype-jsx';
-        case 'xml':
-            return 'bi-filetype-xml';
-        case 'yml':
-        case 'yaml':
-            return 'bi-filetype-yml';
-        case 'php':
-            return 'bi-filetype-php';
-        case 'rb':
-            return 'bi-filetype-ruby';
-        case 'go':
-            return 'bi-filetype-go';
-        case 'swift':
-            return 'bi-filetype-swift';
-        case 'kt':
-            return 'bi-filetype-kotlin';
-        case 'c':
-            return 'bi-filetype-c';
-        case 'h':
-            return 'bi-filetype-h';
-        case 'hpp':
-            return 'bi-filetype-hpp';
-        case 'cs':
-            return 'bi-filetype-cs';
-        case 'sh':
-        case 'bat':
-        case 'cmd':
-            return 'bi-filetype-exe';
-        case 'sql':
-            return 'bi-filetype-sql';
-        case 'txt':
-        case 'log':
-            return 'bi-file-earmark-text';
-        case 'zip':
-        case 'rar':
-        case '7z':
-            return 'bi-file-earmark-zip';
-        case 'pdf':
-            return 'bi-filetype-pdf';
-        case 'doc':
-        case 'docx':
-            return 'bi-filetype-word';
-        case 'xls':
-        case 'xlsx':
-            return 'bi-filetype-excel';
-        case 'ppt':
-        case 'pptx':
-            return 'bi-filetype-ppt';
-        case 'png':
-        case 'jpg':
-        case 'jpeg':
-        case 'gif':
-        case 'bmp':
-        case 'webp':
-            return 'bi-file-earmark-image';
-        default:
-            return 'bi-file-earmark';
-    }
-}
+import FileIcon from '../components/FileIcon';
 
 export default function CodePage() {
   const [files, setFiles] = useState([]);
@@ -135,7 +50,7 @@ export default function CodePage() {
           {files.map(file => (
             file && file.filename && (
               <Link key={file.filename} href={`/code/view/${file.filename}`} className={styles.fileCard}>
-                <i className={`${styles.fileIcon} bi ${getFileIcon(file.filename)}`}></i>
+                <FileIcon filename={file.filename} className={styles.fileIcon} />
                 <span className={styles.fileName}>{file.filename}</span>
                 <div className={styles.fileMeta}>
                   <span>{file.size ? (file.size / 1024).toFixed(2) : '0'} KB</span>
