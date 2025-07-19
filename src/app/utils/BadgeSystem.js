@@ -14,10 +14,10 @@ import { MdCode, MdPeople, MdPalette, MdOutlineSecurity } from 'react-icons/md';
 import { IoMdTime } from 'react-icons/io';
 
 const BADGES = {
-  'lead-developer': {
-    name: 'Lead Developer',
-    description: 'Recognized as the primary architect and maintainer of the project.',
-    icon: FaStar,
+  'administrator': {
+    name: 'Administrator',
+    description: 'Full administrative control over the platform.',
+    icon: BsShieldCheck,
     color: 'text-warning',
     permissions: {
       canEditSettings: true,
@@ -91,7 +91,7 @@ const BADGES = {
   },
   'staff': {
     name: 'Staff',
-    description: 'A member of the Luloy staff.',
+    description: 'Official member of Luloy Team.',
     icon: FaUserTie,
     color: 'text-primary',
     permissions: {

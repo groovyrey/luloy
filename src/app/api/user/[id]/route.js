@@ -15,6 +15,18 @@ export async function GET(request, { params }) {
 
     let userData = userDoc.data();
 
+    // Convert Firestore Timestamps in lastFieldUpdates to milliseconds
+    const lastFieldUpdatesMillis = {};
+    if (userData.lastFieldUpdates) {
+      for (const key in userData.lastFieldUpdates) {
+        if (userData.lastFieldUpdates[key] && typeof userData.lastFieldUpdates[key].toMillis === 'function') {
+          lastFieldUpdatesMillis[key] = userData.lastFieldUpdates[key].toMillis();
+        } else if (userData.lastFieldUpdates[key]) {
+          lastFieldUpdatesMillis[key] = userData.lastFieldUpdates[key]; // Keep if already a number or other type
+        }
+      }
+    }
+
     // Check if the 'badges' field exists. If not, create it.
     if (userData.badges === undefined) {
       await userRef.update({ badges: [] });
@@ -33,6 +45,7 @@ export async function GET(request, { params }) {
       bio: userData.bio || null,
       profilePictureUrl: userData.profilePictureUrl || null,
       badges: userData.badges, // Send the badges array to the client
+      lastFieldUpdates: lastFieldUpdatesMillis, // Include lastFieldUpdates as milliseconds
     };
 
     return NextResponse.json(publicUserData, { status: 200 });

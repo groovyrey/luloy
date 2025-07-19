@@ -24,6 +24,22 @@ export async function POST(request) {
       return NextResponse.json({ error: "Missing or invalid user data." }, { status: 400 });
     }
 
+    // Backend Validations
+    const parsedAge = parseInt(age);
+    if (firstName.length < 2 || firstName.length > 50 || !/^[a-zA-Z]+$/.test(firstName)) {
+      return NextResponse.json({ error: "First name must be 2-50 alphabetic characters." }, { status: 400 });
+    }
+    if (lastName.length < 2 || lastName.length > 50 || !/^[a-zA-Z]+$/.test(lastName)) {
+      return NextResponse.json({ error: "Last name must be 2-50 alphabetic characters." }, { status: 400 });
+    }
+    if (isNaN(parsedAge) || parsedAge < 13 || parsedAge > 120) {
+      return NextResponse.json({ error: "Age must be a number between 13 and 120." }, { status: 400 });
+    }
+    // Email validation is handled by Firebase Auth, but we can add a basic check here if needed.
+    // if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(decodedToken.email)) {
+    //   return NextResponse.json({ error: "Invalid email format." }, { status: 400 });
+    // }
+
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     const uid = decodedToken.uid;
 

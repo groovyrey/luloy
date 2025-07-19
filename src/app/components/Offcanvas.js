@@ -150,8 +150,8 @@ export default function Offcanvas({ isOpen, onClose }) {
                     <p className={styles.adminNavLabel}>Admin Navigation</p>
                     <ul>
                       <li>
-                        <Link href="/user/manage-badges" onClick={onClose}>
-                          <i className="bi bi-person-badge me-2"></i>Manage Badges
+                        <Link href="/user/manage" onClick={onClose}>
+                          <i className="bi bi-person-badge me-2"></i>Manage Users
                         </Link>
                       </li>
                       <li>

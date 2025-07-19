@@ -44,6 +44,10 @@ export default function UserProfilePage({ params }) {
     }
   }, [id]);
 
+  
+
+  
+
   useEffect(() => {
     // Initialize tooltips after component mounts and data is loaded
     if (typeof document !== 'undefined') {
@@ -55,8 +59,6 @@ export default function UserProfilePage({ params }) {
       })
     }
   }, [profileData]); // Re-initialize when profileData changes
-
-  
 
   const toTitleCase = (str) => {
     if (!str) return '';
@@ -185,15 +187,18 @@ export default function UserProfilePage({ params }) {
         <div className="card-body p-4">
           <h5 className="card-title text-center mb-4">Badges</h5>
           {userBadges.length > 0 ? (
-            <div className="d-flex flex-column align-items-center">
+            <div className="d-flex flex-wrap justify-content-center">
               {userBadges.map(badge => (
-                <div key={badge.name} className="card shadow-sm mb-3" style={{ width: '100%', maxWidth: '300px' }}>
-                  <div className="card-body text-center p-3">
-                    <div className={`fs-2 ${badge.color}`}>
-                      <ReactIconRenderer IconComponent={badge.icon} size={24} color={badge.color} />
-                    </div>
-                    <h6 className="card-title mt-2 mb-1">{badge.name}</h6>
-                    <p className="card-text text-muted" style={{ fontSize: '0.85rem' }}>{badge.description}</p>
+                <div 
+                  key={badge.name} 
+                  className="me-2 mb-2"
+                  data-bs-toggle="tooltip"
+                  data-bs-html="true"
+                  title={`<strong>${badge.name}</strong><br>${badge.description}`}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className={`fs-2 ${badge.color}`}>
+                    <ReactIconRenderer IconComponent={badge.icon} size={32} color={badge.color} />
                   </div>
                 </div>
               ))}

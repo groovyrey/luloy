@@ -35,6 +35,35 @@ export default function SignupPage() {
         return;
       }
 
+      // Frontend Validations
+      if (firstName.length < 2 || firstName.length > 50 || !/^[a-zA-Z]+$/.test(firstName)) {
+        showToast("First name must be 2-50 alphabetic characters.", 'error');
+        setIsSigningUp(false);
+        return;
+      }
+      if (lastName.length < 2 || lastName.length > 50 || !/^[a-zA-Z]+$/.test(lastName)) {
+        showToast("Last name must be 2-50 alphabetic characters.", 'error');
+        setIsSigningUp(false);
+        return;
+      }
+      const parsedAge = parseInt(age);
+      if (isNaN(parsedAge) || parsedAge < 13 || parsedAge > 120) {
+        showToast("Age must be a number between 13 and 120.", 'error');
+        setIsSigningUp(false);
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast("Please enter a valid email address.", 'error');
+        setIsSigningUp(false);
+        return;
+      }
+      if (password.length < 8) {
+        showToast("Password must be at least 8 characters long.", 'error');
+        setIsSigningUp(false);
+        return;
+      }
+      // You can add more complex password validation (e.g., requiring numbers, symbols) here if needed.
+
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(user, {
         displayName: `${firstName} ${lastName}`

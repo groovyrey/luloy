@@ -8,16 +8,17 @@ import LoadingMessage from '@/app/components/LoadingMessage';
 import { BADGES, getComputedPermissions } from '@/app/utils/BadgeSystem';
 import ReactIconRenderer from '@/app/components/ReactIconRenderer';
 
-export default function ManageBadgesPage() {
+export default function UserManagementPage() {
   const { user, loading: userLoading } = useUser();
   
   const [searchUid, setSearchUid] = useState("");
   const [targetUser, setTargetUser] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
 
   useEffect(() => {
-    document.title = "Manage User Badges";
+    document.title = "User Management";
   }, []);
 
   if (userLoading) {
@@ -26,7 +27,7 @@ export default function ManageBadgesPage() {
 
   const userPermissions = user && Array.isArray(user.badges) ? getComputedPermissions(user.badges) : {};
 
-  if (!user || !userPermissions.canAssignBadges) {
+  if (!user || !userPermissions.canManageUsers) { // Updated permission check
     return (
       <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
         <div className="card m-2 text-center" style={{ maxWidth: '400px', width: '100%' }}>
@@ -114,6 +115,41 @@ export default function ManageBadgesPage() {
     }
   };
 
+  const handleForcePasswordReset = async () => {
+    if (!targetUser || !targetUser.uid) {
+      showToast("No user selected for password reset.", 'error');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to force a password reset for ${targetUser.fullName}?`)) {
+      return;
+    }
+
+    setIsResettingPassword(true);
+    try {
+      const response = await fetch("/api/user/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user.idToken}`,
+        },
+        body: JSON.stringify({ uid: targetUser.uid }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showToast(`Password reset successfully! New temporary password: ${data.newPassword}`, 'success', 10000); // Show for longer
+      } else {
+        showToast(data.error || "Failed to reset password.", 'error');
+      }
+    } catch (err) {
+      showToast("An unexpected error occurred during password reset.", 'error');
+    } finally {
+      setIsResettingPassword(false);
+    }
+  };
+
   const allBadgeIds = Object.keys(BADGES);
 
   return (
@@ -122,7 +158,7 @@ export default function ManageBadgesPage() {
         <div className="card-body">
           <div className="text-center mb-4">
             <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '3em', marginBottom: '1em' }} />
-            <h2 className="card-title text-center">Manage User Badges</h2>
+            <h2 className="card-title text-center">User Management</h2>
           </div>
           
           <form onSubmit={handleSearch} className="mb-4">
@@ -162,6 +198,21 @@ export default function ManageBadgesPage() {
           <div className="card-body">
             <p className="mb-2"><strong>UID:</strong> <span className="text-muted" style={{ wordBreak: 'break-all' }}>{targetUser.uid}</span></p>
 
+            {/* Password Reset Section */}
+            <h6 className="mt-4 mb-2 border-bottom pb-2">Actions:</h6>
+            <button
+              className="btn btn-warning me-2"
+              onClick={handleForcePasswordReset}
+              disabled={isResettingPassword}
+            >
+              {isResettingPassword ? (
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              ) : (
+                <i className="bi bi-key me-2"></i>
+              )}{' '}{isResettingPassword ? 'Resetting...' : 'Force Password Reset'}
+            </button>
+
+            {/* Existing Badge Management Section */}
             <h6 className="mt-4 mb-2 border-bottom pb-2">Current Badges:</h6>
             {targetUser.badges && targetUser.badges.length > 0 ? (
               <div className="d-flex flex-wrap gap-2 mb-3">

@@ -22,6 +22,23 @@ export default function EditUserPage() {
   const [isFetchingUserData, setIsFetchingUserData] = useState(true); // New state for data fetching
   const [isUpdating, setIsUpdating] = useState(false); // New state for update loading
 
+  // Rate limiting states for individual fields
+  const [firstNameDisabled, setFirstNameDisabled] = useState(false);
+  const [lastNameDisabled, setLastNameDisabled] = useState(false);
+  const [ageDisabled, setAgeDisabled] = useState(false);
+
+  // Remaining time messages
+  const [firstNameRemainingTime, setFirstNameRemainingTime] = useState('');
+  const [lastNameRemainingTime, setLastNameRemainingTime] = useState('');
+  const [ageRemainingTime, setAgeRemainingTime] = useState('');
+
+  // Timestamps for last updates
+  const [lastFirstNameUpdate, setLastFirstNameUpdate] = useState(0);
+  const [lastLastNameUpdate, setLastLastNameUpdate] = useState(0);
+  const [lastAgeUpdate, setLastAgeUpdate] = useState(0);
+
+  const COOLDOWN_PERIOD = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
   useEffect(() => {
     document.title = "User Settings";
     if (!loading && !user) {
@@ -35,8 +52,78 @@ export default function EditUserPage() {
       }
       setBio(userData.bio || '');
       setIsFetchingUserData(false);
+
+      // Load timestamps from userData (Firestore) and set disabled states
+      const now = Date.now();
+
+      const lastFieldUpdates = userData.lastFieldUpdates || {};
+
+      const getMillis = (field) => {
+        if (field) {
+          if (typeof field.toMillis === 'function') {
+            return field.toMillis();
+          } else if (typeof field === 'number') {
+            return field;
+          }
+        }
+        return 0; // Default to 0 if not a valid timestamp or number
+      };
+
+      let lastFirstNameUpdateMillis = getMillis(lastFieldUpdates.firstName);
+      const firstNameTimeElapsed = now - lastFirstNameUpdateMillis;
+      if (firstNameTimeElapsed < COOLDOWN_PERIOD) {
+        setFirstNameDisabled(true);
+        const remaining = COOLDOWN_PERIOD - firstNameTimeElapsed;
+        setFirstNameRemainingTime(formatTimeRemaining(remaining));
+        setTimeout(() => {
+          setFirstNameDisabled(false);
+          setFirstNameRemainingTime('');
+        }, remaining);
+      }
+      setLastFirstNameUpdate(lastFirstNameUpdateMillis);
+
+      let lastLastNameUpdateMillis = getMillis(lastFieldUpdates.lastName);
+      const lastNameTimeElapsed = now - lastLastNameUpdateMillis;
+      if (lastNameTimeElapsed < COOLDOWN_PERIOD) {
+        setLastNameDisabled(true);
+        const remaining = COOLDOWN_PERIOD - lastNameTimeElapsed;
+        setLastNameRemainingTime(formatTimeRemaining(remaining));
+        setTimeout(() => {
+          setLastNameDisabled(false);
+          setLastNameRemainingTime('');
+        }, remaining);
+      }
+      setLastLastNameUpdate(lastLastNameUpdateMillis);
+
+      let lastAgeUpdateMillis = getMillis(lastFieldUpdates.age);
+      const ageTimeElapsed = now - lastAgeUpdateMillis;
+      if (ageTimeElapsed < COOLDOWN_PERIOD) {
+        setAgeDisabled(true);
+        const remaining = COOLDOWN_PERIOD - ageTimeElapsed;
+        setAgeRemainingTime(formatTimeRemaining(remaining));
+        setTimeout(() => {
+          setAgeDisabled(false);
+          setAgeRemainingTime('');
+        }, remaining);
+      }
+      setLastAgeUpdate(lastAgeUpdateMillis);
     }
   }, [user, loading, router, userData]);
+
+  const formatTimeRemaining = (ms) => {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    let parts = [];
+    if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+    if (hours % 24 > 0) parts.push(`${hours % 24} hour${hours % 24 > 1 ? 's' : ''}`);
+    if (minutes % 60 > 0) parts.push(`${minutes % 60} minute${minutes % 60 > 1 ? 's' : ''}`);
+    if (seconds % 60 > 0) parts.push(`${seconds % 60} second${seconds % 60 > 1 ? 's' : ''}`);
+
+    return parts.join(', ') || 'less than a second';
+  };
 
   const handleUpdate = async () => {
     // Client-side validation
@@ -54,18 +141,76 @@ export default function EditUserPage() {
     }
 
     setIsUpdating(true);
+
+    const updatedFields = {
+      firstName: capitalizeName(firstName),
+      lastName: capitalizeName(lastName),
+      age: parseInt(age),
+    };
+
+    if (bio !== userData.bio) updatedFields.bio = bio;
+
+    // Check if any of the core fields (firstName, lastName, age) have actually changed
+    // or if bio has changed. If not, show info toast and return.
+    if (firstName === userData.firstName &&
+        lastName === userData.lastName &&
+        age === userData.age &&
+        bio === userData.bio) {
+      showToast('No changes to update.', 'info');
+      setIsUpdating(false);
+      return;
+    }
+
+    // Determine if firstName, lastName, or age were actually changed for rate limiting
+    let firstNameChanged = firstName !== userData.firstName;
+    let lastNameChanged = lastName !== userData.lastName;
+    let ageChanged = age !== userData.age;
+
     try {
       const res = await fetch('/api/user/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid: user.uid, firstName: capitalizeName(firstName), lastName: capitalizeName(lastName), age: parseInt(age), bio }),
+        body: JSON.stringify({ uid: user.uid, ...updatedFields }),
       });
 
       if (res.ok) {
         showToast('Profile updated successfully!', 'success');
         await refreshUserData();
+
+        const now = Date.now();
+        if (firstNameChanged) {
+          setLastFirstNameUpdate(now);
+          setFirstNameDisabled(true);
+          console.log('firstNameDisabled set to true after update.');
+          setTimeout(() => {
+            setFirstNameDisabled(false);
+            setFirstNameRemainingTime('');
+            console.log('firstName re-enabled after timeout.');
+          }, COOLDOWN_PERIOD);
+        }
+        if (lastNameChanged) {
+          setLastLastNameUpdate(now);
+          setLastNameDisabled(true);
+          console.log('lastNameDisabled set to true after update.');
+          setTimeout(() => {
+            setLastNameDisabled(false);
+            setLastNameRemainingTime('');
+            console.log('lastName re-enabled after timeout.');
+          }, COOLDOWN_PERIOD);
+        }
+        if (ageChanged) {
+          setLastAgeUpdate(now);
+          setAgeDisabled(true);
+          console.log('ageDisabled set to true after update.');
+          setTimeout(() => {
+            setAgeDisabled(false);
+            setAgeRemainingTime('');
+            console.log('age re-enabled after timeout.');
+          }, COOLDOWN_PERIOD);
+        }
+
       } else {
         let errorData = {};
         try {
@@ -244,15 +389,24 @@ export default function EditUserPage() {
           </div>
           <div className="mb-3">
             <label htmlFor="firstName" className="form-label">First Name</label>
-            <input type="text" id="firstName" className="form-control" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} disabled={isUpdating} />
+            <input type="text" id="firstName" className="form-control" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} disabled={isUpdating || firstNameDisabled} />
+            {firstNameDisabled && firstNameRemainingTime && (
+              <small className="text-warning">Can change in: {firstNameRemainingTime}</small>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="lastName" className="form-label">Last Name</label>
-            <input type="text" id="lastName" className="form-control" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} disabled={isUpdating} />
+            <input type="text" id="lastName" className="form-control" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} disabled={isUpdating || lastNameDisabled} />
+            {lastNameDisabled && lastNameRemainingTime && (
+              <small className="text-warning">Can change in: {lastNameRemainingTime}</small>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="age" className="form-label">Age</label>
-            <input type="number" id="age" className="form-control" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} disabled={isUpdating} />
+            <input type="number" id="age" className="form-control" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} disabled={isUpdating || ageDisabled} />
+            {ageDisabled && ageRemainingTime && (
+              <small className="text-warning">Can change in: {ageRemainingTime}</small>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="bio" className="form-label">Bio</label>
