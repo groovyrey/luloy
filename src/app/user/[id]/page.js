@@ -81,7 +81,6 @@ export default function UserProfilePage({ params }) {
         transition={{ duration: 0.5 }}
       >
         <div className="card-body p-4">
-          <h2 className="card-title text-center mb-4 display-6 fw-bold text-primary"><span className="bi-person-fill me-2"></span>User Profile</h2>
           
           <div className="position-relative mx-auto mb-4" style={{ width: '150px', height: '150px' }}>
             {profileData.profilePictureUrl ? (
@@ -163,9 +162,6 @@ export default function UserProfilePage({ params }) {
               <p className="mb-1"><strong>Age:</strong></p>
               <p className="text-muted">{profileData.age}</p>
             </div>
-          </div>
-          <div className="text-center mt-4 pt-3 border-top">
-            <Link href="/" className="btn btn-primary btn-lg"><i className="bi-house-door me-2"></i>Back to Home</Link>
           </div>
         </div>
       </motion.div>

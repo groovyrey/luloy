@@ -74,19 +74,54 @@ export default function HomePageContent() {
         </div>
       </div>
 
-      {/* New Section: Recent Activity (Placeholder) */}
-      <div className="mt-5 text-center w-100" style={{ maxWidth: '800px' }}>
-        <h2 className="h3 fw-semibold text-secondary mb-3">Your Recent Activity</h2>
-        <div className="card p-4">
-          <p className="text-muted">
-            (This section could display your latest messages, interactions, or notifications.
-            You would fetch this data from your database.)
-          </p>
-          {/* Example: Display a few recent messages */}
-          {/* <div className="text-start mt-4">
-            <p><strong>Message 1:</strong> "Hello world!" - 2 hours ago</p>
-            <p><strong>Message 2:</strong> "Checking in." - 1 day ago</p>
-          </div> */}
+      {/* New Section: Learning Zone */}
+      <div className="mt-5 w-100" style={{ maxWidth: '800px' }}>
+        <h2 className="h3 fw-semibold text-secondary mb-4 text-center">Learning Zone</h2>
+        <div className="row g-4">
+          <div className="col-md-6">
+            <div className="card h-100 shadow-sm">
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title text-primary">Introduction to Data Structures & Algorithms</h5>
+                <p className="card-text text-muted flex-grow-1">Get started with the fundamental concepts of data structures and algorithms.</p>
+                <Link href="/learn/data-structures-algorithms-introduction" className="btn btn-outline-primary mt-auto">
+                  Read More <i className="bi bi-arrow-right"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="card h-100 shadow-sm">
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title text-primary">Object-Oriented Programming in Java</h5>
+                <p className="card-text text-muted flex-grow-1">Explore the core principles of OOP using Java with real-world examples.</p>
+                <Link href="/learn/object-oriented-programming-java" className="btn btn-outline-primary mt-auto">
+                  Read More <i className="bi bi-arrow-right"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="card h-100 shadow-sm">
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title text-primary">Introduction to SQL</h5>
+                <p className="card-text text-muted flex-grow-1">Learn the basics of SQL for managing and querying relational databases.</p>
+                <Link href="/learn/introduction-to-sql" className="btn btn-outline-primary mt-auto">
+                  Read More <i className="bi bi-arrow-right"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="card h-100 shadow-sm text-center">
+              <div className="card-body d-flex flex-column justify-content-center">
+                 <h5 className="card-title">Explore More</h5>
+                 <p className="card-text text-muted">Visit the learn page for more articles.</p>
+                <Link href="/learn" className="btn btn-primary mt-3">
+                  Go to Learn Page <i className="bi bi-book"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

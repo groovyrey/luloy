@@ -7,7 +7,7 @@ export default function NotFound() {
         <div className="card-body">
           <div className="text-center mb-4">
             <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '3em', marginBottom: '1em' }} />
-            <h2 className="card-title text-center" style={{ color: 'var(--text-color)' }}>Page Not Found</h2>
+            <h2 className="card-title text-center text-danger"><i className="bi bi-exclamation-triangle me-2"></i>Page Not Found</h2>
           </div>
           <p className="text-lg text-muted mb-8">Could not find the requested resource.</p>
           <Link href="/" className="btn btn-primary">

@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
             <main className="main-content">
               {children}
             </main>
-            <footer className="mt-5 pt-4 pb-5 border-top text-center">
+            <footer className="mt-5 pt-4 pb-5 text-center">
               <div className="d-flex justify-content-center gap-4 mb-4">
                 <a href="mailto:luloyapp@gmail.com" className="text-muted"><i className="bi bi-envelope-fill fs-4"></i></a>
                 <a href="https://www.facebook.com/groovyrey" target="_blank" rel="noopener noreferrer" className="text-muted"><i className="bi bi-facebook fs-4"></i></a>
