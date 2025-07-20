@@ -79,7 +79,7 @@ export default function HomePageContent() {
         <h2 className="h3 fw-semibold text-secondary mb-4 text-center">Learning Zone</h2>
         <div className="row g-4">
           <div className="col-md-6">
-            <div className="card h-100 shadow-sm">
+            <div className="card h-100">
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-primary">Introduction to Data Structures & Algorithms</h5>
                 <p className="card-text text-muted flex-grow-1">Get started with the fundamental concepts of data structures and algorithms.</p>
@@ -90,7 +90,7 @@ export default function HomePageContent() {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="card h-100 shadow-sm">
+            <div className="card h-100">
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-primary">Object-Oriented Programming in Java</h5>
                 <p className="card-text text-muted flex-grow-1">Explore the core principles of OOP using Java with real-world examples.</p>
@@ -101,7 +101,7 @@ export default function HomePageContent() {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="card h-100 shadow-sm">
+            <div className="card h-100">
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-primary">Introduction to SQL</h5>
                 <p className="card-text text-muted flex-grow-1">Learn the basics of SQL for managing and querying relational databases.</p>
@@ -112,7 +112,7 @@ export default function HomePageContent() {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="card h-100 shadow-sm text-center">
+            <div className="card h-100 text-center">
               <div className="card-body d-flex flex-column justify-content-center">
                  <h5 className="card-title">Explore More</h5>
                  <p className="card-text text-muted">Visit the learn page for more articles.</p>

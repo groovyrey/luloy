@@ -4,11 +4,15 @@ import { getComputedPermissions } from "@/app/utils/BadgeSystem";
 
 export async function POST(request) {
   try {
-    const { uid } = await request.json();
+    const { uid, newPassword } = await request.json();
     const authorization = request.headers.get('authorization');
 
     if (!authorization || !authorization.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      return NextResponse.json({ error: 'New password must be at least 6 characters long.' }, { status: 400 });
     }
 
     const idToken = authorization.split(' ')[1];
@@ -29,16 +33,13 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Forbidden: Insufficient permissions.' }, { status: 403 });
     }
 
-    // Generate a strong, random temporary password
-    const newPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
-
     await admin.auth().updateUser(uid, {
       password: newPassword,
     });
 
-    console.log(`Password for user ${uid} reset by admin ${requestingUserUid}. New temporary password: ${newPassword}`);
+    console.log(`Password for user ${uid} reset by admin ${requestingUserUid}.`);
 
-    return NextResponse.json({ message: 'Password reset successfully.', newPassword }, { status: 200 });
+    return NextResponse.json({ message: 'Password reset successfully.' }, { status: 200 });
   } catch (error) {
     console.error("Error forcing password reset:", error);
     let errorMessage = "Failed to force password reset.";

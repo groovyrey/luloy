@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Lottie from 'react-lottie';
 import { motion } from 'framer-motion';
 import animationData from '../../../public/loading_animation.json'; // Adjust path as needed
-import styles from './LoadingMessage.module.css';
+
 import { useTheme } from '../context/ThemeContext'; // Import useTheme
 
 const LoadingMessage = () => {
@@ -78,7 +78,7 @@ const LoadingMessage = () => {
 
   return (
     <motion.div
-      className={`${styles.loadingMessageContainer} d-flex justify-content-center align-items-center`}
+      className="d-flex justify-content-center align-items-center"
       style={{ height: '100vh' }}
       variants={containerVariants}
       initial="hidden"
@@ -89,7 +89,7 @@ const LoadingMessage = () => {
         variants={lottieVariants}
         animate="pulse"
       >
-        <Lottie options={defaultOptions} className={styles.lottieAnimation} />
+        <Lottie options={defaultOptions} style={{ width: 200, height: 200 }} />
       </motion.div>
     </motion.div>
   );

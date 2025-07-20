@@ -41,10 +41,12 @@ const renderAuthor = (author, authorDetails) => {
 
 export default function LearnPostClient({ postData }) {
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
-      <h1>{postData.title}</h1>
-      <p><em>By {renderAuthor(postData.author, postData.authorDetails)} on {new Date(postData.date).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}</em></p>
-      <div className={styles.markdownBody}>
+    <div className="container py-5">
+      <div className="card">
+        <div className="card-body">
+          <h1 className="card-title text-center mb-4">{postData.title}</h1>
+          <p className="text-center text-muted mb-4"><em>By {renderAuthor(postData.author, postData.authorDetails)} on {new Date(postData.date).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}</em></p>
+          <div className={styles.markdownBody}>
         <ReactMarkdown
           components={{
             code({ node, inline, className, children, ...props }) {
@@ -67,6 +69,8 @@ export default function LearnPostClient({ postData }) {
       >
         {postData.content}
       </ReactMarkdown>
+      </div>
+        </div>
       </div>
     </div>
   );

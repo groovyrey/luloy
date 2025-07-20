@@ -55,12 +55,13 @@ export default function LoginPage() {
       transition={{ duration: 0.5 }}
       className="d-flex flex-column align-items-center justify-content-center px-3" style={{ minHeight: '80vh' }}
     >
-      <div className="card m-2" style={{ maxWidth: '400px', width: '100%' }}>
+      <div className="card" style={{ maxWidth: '400px', width: '100%' }}>
+        <div className="card-header">
+          <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
+          <h2 className="card-title fw-bold mb-0 fs-3">Login</h2>
+          <p className="mb-0 opacity-75">Sign in to your account</p>
+        </div>
         <div className="card-body">
-          <div className="text-center mb-4">
-            <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '3em', marginBottom: '1em' }} />
-            <h2 className="card-title text-center"><i className="bi bi-person-circle me-2"></i>Login</h2>
-          </div>
           
           <div className="form-floating mb-3">
             <input type="email" className="form-control" id="emailInput" onChange={e => setEmail(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') handleLogin(); }} />

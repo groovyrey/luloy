@@ -43,9 +43,13 @@ export default function SendMessage() {
       transition={{ duration: 0.5 }}
       style={{ minHeight: '80vh' }}
     >
-      <div className="card m-2" style={{ maxWidth: '600px', width: '100%' }}>
+      <div className="card" style={{ maxWidth: '600px', width: '100%' }}>
+        <div className="card-header">
+          <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
+          <h2 className="card-title fw-bold mb-0 fs-3"><i className="bi bi-send me-2"></i>Send a Message</h2>
+          <p className="mb-0 opacity-75">Send a public or private message.</p>
+        </div>
         <div className="card-body">
-          <h2 className="card-title text-primary text-center mb-4"><i className="bi bi-send me-2"></i>Send a Message</h2>
           
           <form onSubmit={handleSubmit}>
             <div className="mb-3">

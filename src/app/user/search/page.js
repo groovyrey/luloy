@@ -46,58 +46,64 @@ export default function UserSearchPage() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
-      <motion.div
-        className="card m-2 shadow-lg rounded-3"
-        style={{ maxWidth: '600px', width: '100%' }}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="card-body p-4">
-          <h2 className="card-title text-center mb-4 display-6 fw-bold text-primary"><span className="bi-search me-2"></span>Search Users</h2>
-          
-          <form onSubmit={handleSearch} className="mb-4">
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search by full name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                disabled={loading}
-              />
-              <button className="btn btn-primary" type="submit" disabled={loading}>
-                {loading ? (
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                ) : (
-                  <i className="bi-search"></i>
-                )}
-                <span className="ms-2">Search</span>
-              </button>
+    <div className="container py-5 animated fadeIn">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-7">
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="card-header">
+              <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
+              <h2 className="card-title fw-bold mb-0 fs-3">Search Users</h2>
+              <p className="mb-0 opacity-75">Find user accounts by name.</p>
             </div>
-          </form>
+            <div className="card-body p-4 p-md-5">
+              <form onSubmit={handleSearch} className="mb-4">
+                <div className="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border border-primary">
+                  <input
+                    type="text"
+                    className="form-control border-0 ps-4"
+                    placeholder="Search by full name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    disabled={loading}
+                  />
+                  <button className="btn btn-primary px-4" type="submit" disabled={loading}>
+                    {loading ? (
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    ) : (
+                      <i className="bi bi-search"></i>
+                    )}
+                    <span className="ms-2 d-none d-sm-inline">Search</span>
+                  </button>
+                </div>
+              </form>
 
-          {loading && <LoadingMessage message="Searching..." />}
+              {loading && <LoadingMessage message="Searching..."/>}
 
-          {!loading && hasSearched && searchResults.length === 0 && (
-            <div className="alert alert-info text-center" role="alert">
-              No users found matching your query.
+              {!loading && hasSearched && searchResults.length === 0 && (
+                <div className="alert alert-info text-center animated fadeIn" role="alert">
+                  No users found matching your query.
+                </div>
+              )}
+
+              {!loading && searchResults.length > 0 && (
+                <div className="mt-4 animated fadeIn">
+                  <h3 className="mb-3 text-primary">Search Results:</h3>
+                  <div className="list-group shadow-sm">
+                    {searchResults.map((user) => (
+                      <UserSearchResultCard key={user.id} user={user} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-
-          {!loading && searchResults.length > 0 && (
-            <div className="mt-4">
-              <h3 className="mb-3">Search Results:</h3>
-              <div className="list-group">
-                {searchResults.map((user) => (
-                  <UserSearchResultCard key={user.id} user={user} />
-                ))}
-              </div>
-            </div>
-          )}
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

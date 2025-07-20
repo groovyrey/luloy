@@ -76,13 +76,13 @@ export default function UserProfilePage({ params }) {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
       <motion.div
-        className="card m-2 shadow-lg rounded-3"
+        className="card"
         style={{ maxWidth: '600px', width: '100%' }}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="card-body p-4">
+        <div className="card-body">
           
           <div className="position-relative mx-auto mb-4" style={{ width: '150px', height: '150px' }}>
             {profileData.profilePictureUrl ? (
@@ -178,13 +178,13 @@ export default function UserProfilePage({ params }) {
       </motion.div>
 
       <motion.div
-        className="card m-2 mt-4 shadow-lg rounded-3"
+        className="card mt-4"
         style={{ maxWidth: '600px', width: '100%' }}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="card-body p-4">
+        <div className="card-body">
           <h5 className="card-title text-center mb-4">Badges</h5>
           {userBadges.length > 0 ? (
             <div className="d-flex flex-wrap justify-content-center">

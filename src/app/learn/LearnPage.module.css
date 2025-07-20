@@ -49,6 +49,7 @@
 
 .markdownBody li {
   margin-bottom: 0.5rem;
+  color: var(--text-color); /* Ensure list item text respects theme */
 }
 
 .markdownBody a {

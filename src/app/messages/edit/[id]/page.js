@@ -70,9 +70,13 @@ export default function EditMessagePage() {
 
   return (
     <div className="container py-5">
-      <div className="card p-4 shadow-sm">
-        <h1 className="card-title text-center mb-4">Edit Message</h1>
-        <p className="text-center text-muted mb-4">Editing message with ID: {id}</p>
+      <div className="card">
+        <div className="card-header">
+          <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
+          <h1 className="card-title fw-bold mb-0 fs-3">Edit Message</h1>
+          <p className="mb-0 opacity-75">Editing message with ID: {id}</p>
+        </div>
+        <div className="card-body">
         
         <form onSubmit={handleSave}>
           <div className="mb-3">
@@ -101,10 +105,11 @@ export default function EditMessagePage() {
             {isSaving ? (
               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             ) : (
-              ''
+              null
             )}{' '}{isSaving ? 'Saving...' : 'Save Changes'}
           </button>
         </form>
+        </div>
       </div>
     </div>
   );

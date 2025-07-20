@@ -16,9 +16,11 @@
   --card-border-color: #dee2e6;
   --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --box-shadow-hover: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-  --border-radius-base: 0.5rem;
+  --border-radius-base: 1rem; /* Changed from 0.5rem to 1rem for rounded-4 */
   --transition-base: all 0.2s ease-in-out;
   --navbar-background-color: #ffffff;
+  --card-header-background-color: transparent; /* New variable for header background */
+  --card-header-text-color: #ffffff; /* White text for header */
   
   --my-message-gradient-start: #66b3ff;
   --my-message-gradient-end: #3385ff;
@@ -43,9 +45,11 @@ html.dark {
   --light-text-color: #cccccc; /* Light Grey */
   --card-background-color: #181818; /* Darker Almost Black */
   --card-border-color: #333333; /* Lighter Darker Grey */
-  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  --box-shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.8);
+  --box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175); /* Adjusted for shadow-lg */
+  --box-shadow-hover: 0 1.5rem 4rem rgba(0, 0, 0, 0.225); /* Adjusted for shadow-lg */
   --navbar-background-color: #181818; /* Slightly Lighter Black */
+  --card-header-background-color: transparent; /* Darker header for dark theme */
+  --card-header-text-color: #ffffff; /* White text for header */
   
   --my-message-gradient-start: #333333; /* Dark Grey */
   
@@ -93,11 +97,28 @@ p {
 
 .card {
   background-color: var(--card-background-color);
-  border: 1px solid var(--card-border-color);
+  border: none; /* Equivalent to Bootstrap's border-0 */
   border-radius: var(--border-radius-base);
   box-shadow: var(--box-shadow);
   transition: var(--transition-base);
-  padding: 1rem;
+  overflow: hidden; /* Equivalent to Bootstrap's overflow-hidden */
+}
+
+.card-header {
+  background-color: var(--card-header-background-color);
+  color: var(--card-header-text-color);
+  text-align: center;
+  padding: 1.5rem; /* Equivalent to Bootstrap's py-4 */
+}
+
+.card-body {
+  padding: 1.5rem; /* Equivalent to Bootstrap's p-4 */
+}
+
+@media (min-width: 768px) {
+  .card-body {
+    padding: 3rem; /* Equivalent to Bootstrap's p-md-5 */
+  }
 }
 
 .card:hover {

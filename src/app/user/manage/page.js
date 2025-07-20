@@ -16,6 +16,7 @@ export default function UserManagementPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
 
   useEffect(() => {
     document.title = "User Management";
@@ -34,7 +35,7 @@ export default function UserManagementPage() {
           <div className="card-body">
             <div className="text-center mb-4">
               <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '3em', marginBottom: '1em' }} />
-              <h2 className="card-title text-center text-danger"><i className="bi bi-exclamation-triangle me-2"></i>Unauthorized Access</h2>
+              <h2 className="card-title text-danger"><i className="bi bi-exclamation-triangle me-2"></i>Unauthorized Access</h2>
             </div>
             <p className="text-lg text-muted mb-8">You are not authorized to view this page.</p>
             <Link href="/" className="btn btn-primary">
@@ -121,7 +122,7 @@ export default function UserManagementPage() {
       return;
     }
 
-    if (!confirm(`Are you sure you want to force a password reset for ${targetUser.fullName}?`)) {
+    if (!confirm(`Are you sure you want to force a password reset for ${targetUser.fullName}? This will set their password to the one you entered.`)) {
       return;
     }
 
@@ -133,13 +134,14 @@ export default function UserManagementPage() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${user.idToken}`,
         },
-        body: JSON.stringify({ uid: targetUser.uid }),
+        body: JSON.stringify({ uid: targetUser.uid, newPassword }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        showToast(`Password reset successfully! New temporary password: ${data.newPassword}`, 'success', 10000); // Show for longer
+        showToast(`Password for ${targetUser.fullName} reset successfully!`, 'success');
+        setNewPassword(""); // Clear the password field
       } else {
         showToast(data.error || "Failed to reset password.", 'error');
       }
@@ -153,109 +155,140 @@ export default function UserManagementPage() {
   const allBadgeIds = Object.keys(BADGES);
 
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
-      <div className="card m-2" style={{ maxWidth: '800px', width: '100%' }}>
-        <div className="card-body">
-          <div className="text-center mb-4">
-            <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '3em', marginBottom: '1em' }} />
-            <h2 className="card-title text-center">User Management</h2>
-          </div>
-          
-          <form onSubmit={handleSearch} className="mb-4">
-            <div className="mb-3">
-              <label htmlFor="searchUid" className="form-label">Search User by UID:</label>
-              <input
-                type="text"
-                id="searchUid"
-                className="form-control"
-                value={searchUid}
-                onChange={(e) => setSearchUid(e.target.value)}
-                placeholder="Enter user UID"
-                required
-              />
+    <div className="container py-5 animated fadeIn">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-7">
+          <div className="card">
+            <div className="card-header">
+              <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
+              <h2 className="card-title fw-bold mb-0 fs-3">User Management</h2>
+              <p className="mb-0 opacity-75">Search and manage user accounts.</p>
             </div>
-            <button
-              type="submit"
-              className="btn btn-primary w-100"
-              disabled={isSearching}
-            >
-              {isSearching ? (
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              ) : (
-                ''
-              )}{' '}{isSearching ? 'Searching...' : 'Search User'}
-            </button>
-          </form>
+            <div className="card-body">
+              <form onSubmit={handleSearch} className="mb-4">
+                <div className="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border border-primary">
+                  <input
+                    type="text"
+                    id="searchUid"
+                    className="form-control border-0 ps-4"
+                    value={searchUid}
+                    onChange={(e) => setSearchUid(e.target.value)}
+                    placeholder="Enter user UID to search..."
+                    aria-label="User UID"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="btn btn-primary px-4"
+                    disabled={isSearching}
+                  >
+                    {isSearching ? (
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    ) : (
+                      <i className="bi bi-search"></i>
+                    )}
+                    <span className="ms-2 d-none d-sm-inline">{isSearching ? 'Searching...' : 'Search User'}</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
 
       {targetUser && (
-        <div className="card mt-4 shadow-lg rounded-3" style={{ maxWidth: '800px', width: '100%' }}>
-          <div className="card-header bg-primary text-white">
-            <h5 className="mb-0">User: {targetUser.fullName}</h5>
-                <p className="mb-0 text-white-50">{targetUser.email}</p>
-          </div>
-          <div className="card-body">
-            <p className="mb-2"><strong>UID:</strong> <span className="text-muted" style={{ wordBreak: 'break-all' }}>{targetUser.uid}</span></p>
-
-            {/* Password Reset Section */}
-            <h6 className="mt-4 mb-2 border-bottom pb-2">Actions:</h6>
-            <button
-              className="btn btn-warning me-2"
-              onClick={handleForcePasswordReset}
-              disabled={isResettingPassword}
-            >
-              {isResettingPassword ? (
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              ) : (
-                <i className="bi bi-key me-2"></i>
-              )}{' '}{isResettingPassword ? 'Resetting...' : 'Force Password Reset'}
-            </button>
-
-            {/* Existing Badge Management Section */}
-            <h6 className="mt-4 mb-2 border-bottom pb-2">Current Badges:</h6>
-            {targetUser.badges && targetUser.badges.length > 0 ? (
-              <div className="d-flex flex-wrap gap-2 mb-3">
-                {targetUser.badges.map(badgeId => {
-                  const badge = BADGES[badgeId];
-                  return badge ? (
-                    <span key={badgeId} className={`badge d-flex align-items-center p-2 ${badge.color}`}>
-                      <ReactIconRenderer IconComponent={badge.icon} size={16} className="me-2" />
-                      {badge.name}
-                      <button
-                        type="button"
-                        className="btn-close btn-close-white ms-2"
-                        aria-label="Remove badge"
-                        onClick={() => handleRemoveBadge(badgeId)}
-                        disabled={isUpdating}
-                      ></button>
-                    </span>
-                  ) : null;
-                })}
+        <div className="row justify-content-center mt-4 animated fadeIn delay-1s">
+          <div className="col-md-8 col-lg-7">
+            <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
+              <div className="card-header">
+                <h5 className="mb-0 fs-4"><i className="bi bi-person-circle me-2"></i>User Profile: {targetUser.fullName}</h5>
+                <p className="mb-0 opacity-75">{targetUser.email}</p>
               </div>
-            ) : (
-              <p className="text-muted">No badges assigned.</p>
-            )}
+              <div className="card-body">
+                <div className="mb-4">
+                  <p className="mb-1"><strong>UID:</strong> <span className="text-muted user-select-all small" style={{ wordBreak: 'break-all' }}>{targetUser.uid}</span></p>
+                  {targetUser.metadata && (
+                    <>
+                      <p className="mb-1"><strong>Account Created:</strong> <span className="text-muted small">{new Date(targetUser.metadata.creationTime).toLocaleDateString()}</span></p>
+                      <p className="mb-1"><strong>Last Sign-in:</strong> <span className="text-muted small">{new Date(targetUser.metadata.lastSignInTime).toLocaleDateString()}</span></p>
+                    </>
+                  )}
+                </div>
 
-            <h6 className="mt-4 mb-2 border-bottom pb-2">Available Badges:</h6>
-            <div className="d-flex flex-wrap gap-2">
-              {allBadgeIds.map(badgeId => {
-                const badge = BADGES[badgeId];
-                const hasBadge = targetUser.badges && targetUser.badges.includes(badgeId);
-                return badge ? (
-                  <button
-                    key={badgeId}
-                    type="button"
-                    className={`btn btn-sm ${hasBadge ? 'btn-secondary' : 'btn-outline-primary'}`}
-                    onClick={() => hasBadge ? handleRemoveBadge(badgeId) : handleAddBadge(badgeId)}
-                    disabled={isUpdating}
-                  >
-                    <ReactIconRenderer IconComponent={badge.icon} size={16} className="me-2" />
-                    {badge.name}
-                    {hasBadge ? ' (Remove)' : ' (Add)'}
-                  </button>
-                ) : null;
-              })}
+                <h6 className="border-bottom pb-2 mb-3 text-primary fw-bold">Actions:</h6>
+                <div className="mb-3">
+                  <label htmlFor="newPassword" className="form-label">New Password:</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    className="form-control"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new password"
+                  />
+                </div>
+                <button
+                  className="btn btn-warning w-100 mb-3 d-flex align-items-center justify-content-center animate__animated animate__fadeInUp"
+                  onClick={handleForcePasswordReset}
+                  disabled={isResettingPassword || !newPassword}
+                >
+                  {isResettingPassword ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Resetting Password...
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-key me-2"></i>Force Password Reset
+                    </>
+                  )}
+                </button>
+
+                <h6 className="border-bottom pb-2 mb-3 text-primary fw-bold mt-4">Current Badges:</h6>
+                {targetUser.badges && targetUser.badges.length > 0 ? (
+                  <div className="d-flex flex-wrap gap-2 mb-3 animate__animated animate__fadeInUp">
+                    {targetUser.badges.map(badgeId => {
+                      const badge = BADGES[badgeId];
+                      return badge ? (
+                        <span key={badgeId} className={`badge d-flex align-items-center p-2 rounded-pill ${badge.color} shadow-sm`}>
+                          <ReactIconRenderer IconComponent={badge.icon} size={16} className="me-2" />
+                          {badge.name}
+                          <button
+                            type="button"
+                            className="btn-close btn-close-white ms-2 opacity-75"
+                            aria-label="Remove badge"
+                            onClick={() => handleRemoveBadge(badgeId)}
+                            disabled={isUpdating}
+                          ></button>
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-muted fst-italic">No badges assigned.</p>
+                )}
+
+                <h6 className="border-bottom pb-2 mb-3 text-primary fw-bold mt-4">Available Badges:</h6>
+                <div className="d-flex flex-wrap gap-2 animate__animated animate__fadeInUp">
+                  {allBadgeIds.map(badgeId => {
+                    const badge = BADGES[badgeId];
+                    const hasBadge = targetUser.badges && targetUser.badges.includes(badgeId);
+                    return badge ? (
+                      <button
+                        key={badgeId}
+                        type="button"
+                        className={`btn btn-sm rounded-pill shadow-sm ${hasBadge ? 'btn-secondary' : 'btn-outline-primary'}`}
+                        onClick={() => hasBadge ? handleRemoveBadge(badgeId) : handleAddBadge(badgeId)}
+                        disabled={isUpdating}
+                      >
+                        <ReactIconRenderer IconComponent={badge.icon} size={16} className="me-2" />
+                        {badge.name}
+                        {hasBadge ? ' (Remove)' : ' (Add)'}
+                      </button>
+                    ) : null;
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </div>

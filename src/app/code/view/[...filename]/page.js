@@ -167,12 +167,12 @@ export default function CodeViewer({ params }) {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                    <div className="card-header d-flex justify-content-end align-items-center bg-transparent border-bottom-0 p-3">
+                    <div className="card-header d-flex justify-content-end align-items-center">
                         <button className="btn btn-sm btn-outline-secondary" onClick={handleCopy}>
                             {copied ? <><i className="bi bi-check me-1"></i>Copied!</> : <><i className="bi bi-clipboard me-1"></i>Copy Code</>}
                         </button>
                     </div>
-                    <div className="card-body p-0">
+                    <div className="card-body">
                         <SyntaxHighlighter 
                             language={lang} 
                             style={vscDarkPlus} 
