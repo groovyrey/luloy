@@ -316,7 +316,7 @@ a:hover, button:hover {
 
 /* Custom Badge Colors */
 .badge-administrator {
-  color: #FFD700; /* Gold */
+  color: #C0C0C0; /* Silver */
 }
 
 .badge-developer {
@@ -340,7 +340,7 @@ a:hover, button:hover {
 }
 
 .badge-top-contributor {
-  color: #FF69B4; /* Hot Pink */
+  color: #FFD700; /* Gold */
 }
 
 .badge-designer {
