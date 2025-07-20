@@ -97,7 +97,27 @@ export default function SignupPage() {
         showToast(errorData.error || 'Failed to save user data.', 'error');
       }
     } catch (err) {
-      showToast("Signup failed: " + err.message, 'error');
+      let errorMessage = 'Signup failed. Please try again.';
+      if (err.code) {
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'The email address is already in use by another account.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'The email address is not valid.';
+            break;
+          case 'auth/operation-not-allowed':
+            errorMessage = 'Email/password accounts are not enabled. Enable email/password in the Firebase console.';
+            break;
+          case 'auth/weak-password':
+            errorMessage = 'The password is too weak.';
+            break;
+          default:
+            errorMessage = `Signup failed: ${err.message}`;
+            break;
+        }
+      }
+      showToast(errorMessage, 'error');
     } finally {
       setIsSigningUp(false);
     }
