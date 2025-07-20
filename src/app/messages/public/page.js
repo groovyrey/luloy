@@ -106,6 +106,7 @@ export default function PublicMessagesPage() {
             <Link href="/messages/public" className="btn btn-primary m-1"><i className="bi bi-globe me-2"></i>Public</Link>
             <Link href="/messages/private" className="btn btn-outline-primary m-1"><i className="bi bi-lock me-2"></i>Private</Link>
             <Link href="/messages/send" className="btn btn-outline-primary m-1"><i className="bi bi-send me-2"></i>Send a Message</Link>
+            
           </div>
         </div>
       </div>
@@ -124,8 +125,16 @@ export default function PublicMessagesPage() {
                 className="col-md-6 col-lg-4"
                 key={message.id}
                 variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 }
+                  hidden: { y: 20, opacity: 0 },
+                  visible: {
+                    y: 0,
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 10,
+                    },
+                  },
                 }}
               >
                 <MessageCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />

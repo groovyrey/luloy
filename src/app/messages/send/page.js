@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../../../lib/firebase';
 import { motion } from 'framer-motion';
+import styles from './SendMessage.module.css';
 import { showToast } from '../../utils/toast';
+import Link from 'next/link';
 
 export default function SendMessage() {
   useEffect(() => {
@@ -48,6 +50,9 @@ export default function SendMessage() {
           <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
           <h2 className="card-title fw-bold mb-0 fs-3"><i className="bi bi-send me-2"></i>Send a Message</h2>
           <p className="mb-0 opacity-75">Send a public or private message.</p>
+          <div className="text-center mt-3">
+            
+          </div>
         </div>
         <div className="card-body">
           
@@ -79,16 +84,20 @@ export default function SendMessage() {
               ></textarea>
               <small className="form-text text-muted">{message.length}/100</small>
             </div>
-            <div className="form-check form-switch mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="privateSwitch"
-                checked={isPrivate}
-                onChange={(e) => setIsPrivate(e.target.checked)}
-              />
-              <label className="form-check-label" htmlFor="privateSwitch"><i className="bi bi-eye-slash me-2"></i>Private Message</label>
+            <div className={`${styles.sendMessagePrivateToggleCard} mb-3`} onClick={() => setIsPrivate(!isPrivate)}>
+              <div className={styles.sendMessagePrivateToggleContent}>
+                <i className={`bi ${isPrivate ? 'bi-eye-slash' : 'bi-eye'} me-2`}></i>
+                <span className={styles.sendMessagePrivateToggleLabel}>
+                  {isPrivate ? 'Private' : 'Public'} Message
+                </span>
+              </div>
+              <div className={styles.sendMessagePrivateToggleSwitch} data-private={isPrivate}>
+                <motion.div
+                  className={styles.sendMessagePrivateToggleHandle}
+                  layout
+                  transition={{ type: 'spring', stiffness: 700, damping: 30 }}
+                />
+              </div>
             </div>
             <div className="d-grid gap-2">
               <motion.button

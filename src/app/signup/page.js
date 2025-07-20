@@ -8,6 +8,7 @@ import { useUser } from '../context/UserContext';
 import LoadingMessage from '../components/LoadingMessage';
 import { motion } from "framer-motion";
 import { showToast } from '../utils/toast';
+import Link from 'next/link';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -177,6 +178,7 @@ export default function SignupPage() {
             </button>
           </div>
           <p className="mt-3 text-center">Already have an account? <a className="text-primary" href="/login"><i className="bi bi-box-arrow-in-right me-2"></i>Login</a></p>
+          
         </div>
       </div>
     </motion.div>

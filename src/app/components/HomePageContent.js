@@ -60,17 +60,7 @@ export default function HomePageContent() {
           <Link href="/messages/public" className="btn btn-outline-primary">
             <i className="bi bi-globe me-2"></i> View Public Messages
           </Link>
-          {user?.permissions?.canManageUsers && (
-            <>
-              <Link href="/user/search" className="btn btn-outline-info">
-                <i className="bi bi-people me-2"></i> Manage Users
-              </Link>
-              <Link href="/messages/private" className="btn btn-outline-info">
-                <i className="bi bi-lock me-2"></i> Review Private Messages
-              </Link>
-              {/* Add more admin-specific links here */}
-            </>
-          )}
+          
         </div>
       </div>
 

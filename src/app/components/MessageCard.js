@@ -109,10 +109,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
   return (
     <motion.div
       className={`${styles.messageCardContainer} card mb-4`}
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      transition={{ duration: 0.5 }}
+      
       onClick={() => { if (user && user.permissions?.canManageMessages) setShowOptions(!showOptions); }}
     >
       <div className="card-body">

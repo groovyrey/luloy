@@ -16,12 +16,12 @@
   --card-border-color: #dee2e6;
   --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --box-shadow-hover: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-  --border-radius-base: 1rem; /* Changed from 0.5rem to 1rem for rounded-4 */
+  --navbar-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --border-radius-base: 1rem; /* Default border-radius */
   --transition-base: all 0.2s ease-in-out;
   --navbar-background-color: #ffffff;
-  --card-header-background-color: transparent; /* New variable for header background */
-  --card-header-text-color: #ffffff; /* White text for header */
-  
+  --card-header-background-color: transparent;
+  --card-header-text-color: #ffffff;
   --my-message-gradient-start: #66b3ff;
   --my-message-gradient-end: #3385ff;
   --other-message-gradient-start: #f0f0f0;
@@ -35,6 +35,27 @@
   --warning-color: #ffc107;
 }
 
+[data-theme="dark"] {
+  --box-shadow: none;
+  --box-shadow-hover: none;
+  --navbar-box-shadow: none;
+  --border-radius-base: 1rem; /* Override for dark theme */
+  --navbar-background-color: #181818; /* Slightly Lighter Black */
+  --card-header-background-color: transparent; /* Darker header for dark theme */
+  --card-header-text-color: #ffffff; /* White text for header */
+  --my-message-gradient-start: #333333; /* Dark Grey */
+  --other-message-gradient-start: #222222; /* Darker Grey */
+  --other-message-gradient-end: #000000; /* Pure Black */
+}
+
+[data-theme="dark"] .card {
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] .card:hover {
+  box-shadow: none !important;
+}
+
 html.dark {
   --primary-color: #007bff;
   --primary-rgb: 0, 123, 255;
@@ -45,8 +66,8 @@ html.dark {
   --light-text-color: #cccccc; /* Light Grey */
   --card-background-color: #181818; /* Darker Almost Black */
   --card-border-color: #333333; /* Lighter Darker Grey */
-  --box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175); /* Adjusted for shadow-lg */
-  --box-shadow-hover: 0 1.5rem 4rem rgba(0, 0, 0, 0.225); /* Adjusted for shadow-lg */
+  --box-shadow: none;
+  --box-shadow-hover: none;
   --navbar-background-color: #181818; /* Slightly Lighter Black */
   --card-header-background-color: transparent; /* Darker header for dark theme */
   --card-header-text-color: #ffffff; /* White text for header */
@@ -109,6 +130,7 @@ p {
   color: var(--card-header-text-color);
   text-align: center;
   padding: 1.5rem; /* Equivalent to Bootstrap's py-4 */
+  border-bottom: none;
 }
 
 .card-body {
@@ -368,6 +390,14 @@ a:hover, button:hover {
   color: #40E0D0; /* Turquoise */
 }
 
-.badge-staff {
-  color: #6A5ACD; /* Slate Blue */
-}
+  .badge-staff {
+    color: #6A5ACD; /* Slate Blue */
+  }
+
+  .profile-thumbnail {
+    width: 2rem; /* Equivalent to w-8 (32px) */
+    height: 2rem; /* Equivalent to h-8 (32px) */
+    border-radius: 50%; /* Equivalent to rounded-full */
+    margin-right: 0.5rem; /* Equivalent to mr-2 (8px) */
+    object-fit: cover;
+  }

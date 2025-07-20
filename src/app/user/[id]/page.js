@@ -151,6 +151,7 @@ export default function UserProfilePage({ params }) {
                         textArea.value = profileData.uid;
                         textArea.style.position = "fixed"; // Avoid scrolling to bottom
                         textArea.style.left = "-999999px"; // Move off-screen
+                        textArea.style.left = "-999999px"; // Move off-screen
                         document.body.appendChild(textArea);
                         textArea.focus();
                         textArea.select();
@@ -185,22 +186,20 @@ export default function UserProfilePage({ params }) {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div className="card-body">
-          <h5 className="card-title text-center mb-4">Badges</h5>
+          <h5 className="card-title text-center mb-4">Luloy Badges</h5>
           {userBadges.length > 0 ? (
-            <div className="d-flex flex-wrap justify-content-center">
+            <div className="d-flex flex-wrap justify-content-start">
               {userBadges.map(badge => (
-                <div 
-                  key={badge.name} 
-                  className="me-2 mb-2"
-                  data-bs-toggle="tooltip"
-                  data-bs-html="true"
-                  title={`<strong>${badge.name}</strong><br>${badge.description}`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className={`fs-2 ${badge.color}`}>
-                    <ReactIconRenderer IconComponent={badge.icon} size={32} color={badge.color} />
+                <Link href="/badges" key={badge.name}>
+                  <div 
+                    className="me-2 mb-2"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className={`fs-1 ${badge.color}`}>
+                      <ReactIconRenderer IconComponent={badge.icon} size={48} color={badge.color} />
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (

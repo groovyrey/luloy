@@ -5,7 +5,7 @@
   padding: 1rem 2rem;
   background-color: var(--navbar-background-color);
   color: var(--navbar-text-color);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--navbar-box-shadow);
   position: sticky;
   top: 0;
   z-index: 1060;

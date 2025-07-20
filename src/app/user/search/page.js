@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { showToast } from '../../utils/toast';
 import LoadingMessage from '../../components/LoadingMessage';
 import UserSearchResultCard from '../../components/UserSearchResultCard';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function UserSearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -91,14 +91,44 @@ export default function UserSearchPage() {
               )}
 
               {!loading && searchResults.length > 0 && (
-                <div className="mt-4 animated fadeIn">
+                <motion.div
+                  className="mt-4 animated fadeIn"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.1,
+                        delayChildren: 0.2,
+                      },
+                    },
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                >
                   <h3 className="mb-3 text-primary">Search Results:</h3>
                   <div className="list-group shadow-sm">
                     {searchResults.map((user) => (
-                      <UserSearchResultCard key={user.id} user={user} />
+                      <motion.div
+                        key={user.id}
+                        variants={{
+                          hidden: { y: 20, opacity: 0 },
+                          visible: {
+                            y: 0,
+                            opacity: 1,
+                            transition: {
+                              type: "spring",
+                              stiffness: 200,
+                              damping: 10,
+                            },
+                          },
+                        }}
+                      >
+                        <UserSearchResultCard user={user} />
+                      </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               )}
             </div>
           </motion.div>
