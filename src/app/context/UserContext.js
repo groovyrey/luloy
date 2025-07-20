@@ -1,9 +1,10 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, signOut, signInWithEmailAndPassword, FacebookAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '/lib/firebase';
 import { getComputedPermissions } from '../utils/BadgeSystem';
+import { showToast } from '../utils/toast';
 
 const UserContext = createContext();
 
@@ -78,7 +79,30 @@ export function UserProvider({ children }) {
       }
       showToast('Logged in successfully!', 'success');
     } catch (error) {
-      showToast(`Login failed: ${error instanceof Error ? error.message : String(error)}`, 'error');
+      let errorMessage = 'Login failed. Please try again.';
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email address.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'Your account has been disabled.';
+            break;
+          case 'auth/user-not-found':
+            errorMessage = 'No user found with this email.';
+            break;
+          case 'auth/wrong-password':
+            errorMessage = 'Incorrect password.';
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = 'Too many login attempts. Please try again later.';
+            break;
+          default:
+            errorMessage = `Login failed: ${error.message}`;
+            break;
+        }
+      }
+      showToast(errorMessage, 'error');
       throw error;
     }
   };
@@ -89,6 +113,69 @@ export function UserProvider({ children }) {
       await signOut(auth);
     } catch (error) {
       showToast(`Logout failed: ${error instanceof Error ? error.message : String(error)}`, 'error');
+      throw error;
+    }
+  };
+
+  const loginWithFacebook = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      // You can add more scopes here if needed, for example:
+      // provider.addScope('user_likes');
+      // provider.addScope('user_friends');
+      // For a full list of available scopes, refer to Facebook's Graph API documentation.
+      const userCredential = await signInWithPopup(auth, provider);
+      const idToken = await userCredential.user.getIdToken();
+
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create session after Facebook login.');
+      }
+      showToast('Logged in successfully with Facebook!', 'success');
+    } catch (error) {
+      let errorMessage = 'Facebook login failed. Please try again.';
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/account-exists-with-different-credential':
+            errorMessage = 'An account with this email already exists using a different sign-in method.';
+            break;
+          case 'auth/auth-domain-config-required':
+            errorMessage = 'Authentication domain configuration is required.';
+            break;
+          case 'auth/cancelled-popup-request':
+            errorMessage = 'Popup window was closed before completing the authentication.';
+            break;
+          case 'auth/operation-not-allowed':
+            errorMessage = 'Facebook sign-in is not enabled. Please enable it in Firebase console.';
+            break;
+          case 'auth/popup-blocked':
+            errorMessage = 'Popup window blocked by browser. Please allow popups for this site.';
+            break;
+          case 'auth/popup-closed-by-user':
+            errorMessage = 'Popup window closed by user.';
+            break;
+          case 'auth/unauthorized-domain':
+            errorMessage = 'Unauthorized domain. Please add your domain to the Firebase console.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'Your account has been disabled.';
+            break;
+          case 'auth/credential-already-in-use':
+            errorMessage = 'This Facebook account is already linked to another user.';
+            break;
+          default:
+            errorMessage = `Facebook login failed: ${error.message}`;
+            break;
+        }
+      }
+      showToast(errorMessage, 'error');
       throw error;
     }
   };
@@ -129,7 +216,7 @@ export function UserProvider({ children }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, userData, allUsersData, loading, login, logout, refreshUserData, fetchAndStoreUserData }}>
+    <UserContext.Provider value={{ user, userData, allUsersData, loading, login, logout, refreshUserData, fetchAndStoreUserData, loginWithFacebook }}>
       {children}
     </UserContext.Provider>
   );

@@ -15,7 +15,7 @@ export default function LoginPage() {
 	const [error, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 	const router = useRouter();
-  const { user, loading, login } = useUser();
+  const { user, loading, login, loginWithFacebook } = useUser();
 
   useEffect(() => {
     document.title = "Login";
@@ -31,7 +31,19 @@ export default function LoginPage() {
       await login(email, password);
       router.push('/');
     } catch (err) {
-      
+      // Error handling is now done in UserContext.js
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    setIsLoggingIn(true);
+    try {
+      await loginWithFacebook();
+      router.push('/');
+    } catch (err) {
+      // Error handling is now done in UserContext.js
     } finally {
       setIsLoggingIn(false);
     }
@@ -76,6 +88,9 @@ export default function LoginPage() {
                 <i className="bi-box-arrow-in-right me-2"></i>
               )}{' '}
               {isLoggingIn ? 'Logging in...' : 'Login'}
+            </button>
+            <button className="btn btn-outline-primary mt-2" onClick={handleFacebookLogin} disabled={isLoggingIn}>
+              <i className="bi bi-facebook me-2"></i>Login with Facebook
             </button>
           </div>
           <p className="mt-3 text-center">Don't have an account? <a className="text-primary" href="/signup"><i className="bi bi-person-plus me-2"></i>Sign up</a></p>
