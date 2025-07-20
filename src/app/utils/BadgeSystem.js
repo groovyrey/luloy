@@ -1,24 +1,12 @@
-import {
-  BsStarFill,
-  BsCodeSlash,
-  BsShieldCheck,
-  BsBugFill,
-  BsPeopleFill,
-  BsHourglassSplit,
-  BsTrophyFill,
-  BsPaletteFill,
-  BsPersonVcardFill,
-} from 'react-icons/bs';
-import { FaGem, FaBug, FaTrophy, FaUserTie, FaStar } from 'react-icons/fa';
-import { MdCode, MdPeople, MdPalette, MdOutlineSecurity } from 'react-icons/md';
-import { IoMdTime } from 'react-icons/io';
+import { FaBug, FaTrophy, FaUserTie, FaStar, FaGem } from 'react-icons/fa';
+import { BsShieldCheck, BsCodeSlash } from 'react-icons/bs';
 
 const BADGES = {
   'administrator': {
     name: 'Administrator',
     description: 'Full administrative control over the platform.',
     icon: BsShieldCheck,
-    color: 'text-warning',
+    color: 'badge-administrator',
     permissions: {
       canEditSettings: true,
       canDeleteUsers: true,
@@ -32,8 +20,8 @@ const BADGES = {
   'developer': {
     name: 'Developer',
     description: 'A core contributor to the development and maintenance of the application.',
-    icon: MdCode,
-    color: 'text-info',
+    icon: BsCodeSlash,
+    color: 'badge-developer',
     permissions: {
       canEditSettings: false,
       canDeleteUsers: false,
@@ -44,8 +32,8 @@ const BADGES = {
   'content-moderator': {
     name: 'Content Moderator',
     description: 'Ensures that community content is appropriate and follows guidelines.',
-    icon: MdOutlineSecurity,
-    color: 'text-success',
+    icon: FaUserTie,
+    color: 'badge-content-moderator',
     permissions: {
       canEditSettings: false,
       canDeleteUsers: false,
@@ -58,42 +46,42 @@ const BADGES = {
     name: 'Bug Hunter',
     description: 'Awarded for actively finding and reporting significant bugs.',
     icon: FaBug,
-    color: 'text-danger',
+    color: 'badge-bug-hunter',
     permissions: {},
   },
   'community-helper': {
     name: 'Community Helper',
     description: 'Recognized for consistently providing helpful answers and support to other users.',
-    icon: MdPeople,
-    color: 'text-primary',
+    icon: FaUserTie,
+    color: 'badge-community-helper',
     permissions: {},
   },
   'early-adopter': {
     name: 'Early Adopter',
     description: 'Granted to users who joined the platform during its initial phases.',
-    icon: IoMdTime,
-    color: 'text-secondary',
+    icon: FaStar,
+    color: 'badge-early-adopter',
     permissions: {},
   },
   'top-contributor': {
     name: 'Top Contributor',
     description: 'Awarded to users with a high volume of valuable contributions (e.g., code, content).',
     icon: FaTrophy,
-    color: 'text-warning',
+    color: 'badge-top-contributor',
     permissions: {},
   },
   'designer': {
     name: 'Designer',
     description: 'For users who contribute to the visual design or user experience of the platform.',
-    icon: MdPalette,
-    color: 'text-info',
+    icon: FaGem,
+    color: 'badge-designer',
     permissions: {},
   },
   'staff': {
     name: 'Staff',
     description: 'Official member of Luloy Team.',
     icon: FaUserTie,
-    color: 'text-primary',
+    color: 'badge-staff',
     permissions: {
       canEditAuthor: true,
     },

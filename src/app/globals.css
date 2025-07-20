@@ -313,3 +313,40 @@ a:hover, button:hover {
   position: absolute;
   left: 0;
 }
+
+/* Custom Badge Colors */
+.badge-administrator {
+  color: #FFD700; /* Gold */
+}
+
+.badge-developer {
+  color: #00BFFF; /* Deep Sky Blue */
+}
+
+.badge-content-moderator {
+  color: #32CD32; /* Lime Green */
+}
+
+.badge-bug-hunter {
+  color: #FF4500; /* Orange Red */
+}
+
+.badge-community-helper {
+  color: #8A2BE2; /* Blue Violet */
+}
+
+.badge-early-adopter {
+  color: #DAA520; /* Goldenrod */
+}
+
+.badge-top-contributor {
+  color: #FF69B4; /* Hot Pink */
+}
+
+.badge-designer {
+  color: #40E0D0; /* Turquoise */
+}
+
+.badge-staff {
+  color: #6A5ACD; /* Slate Blue */
+}
