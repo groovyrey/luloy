@@ -1,4 +1,4 @@
-import { FaBug, FaTrophy, FaUserTie, FaStar, FaGem } from 'react-icons/fa';
+import { FaBug, FaTrophy, FaUserTie, FaStar, FaGem, FaHandsHelping, FaGavel } from 'react-icons/fa';
 import { BsShieldCheck, BsCodeSlash } from 'react-icons/bs';
 
 const BADGES = {
@@ -32,7 +32,7 @@ const BADGES = {
   'content-moderator': {
     name: 'Content Moderator',
     description: 'Ensures that community content is appropriate and follows guidelines.',
-    icon: FaUserTie,
+    icon: FaGavel,
     color: 'badge-content-moderator',
     permissions: {
       canEditSettings: false,
@@ -52,7 +52,7 @@ const BADGES = {
   'community-helper': {
     name: 'Community Helper',
     description: 'Recognized for consistently providing helpful answers and support to other users.',
-    icon: FaUserTie,
+    icon: FaHandsHelping,
     color: 'badge-community-helper',
     permissions: {},
   },
