@@ -37,6 +37,7 @@ export default function RootLayout({ children }) {
           </UserProvider>
         <ToastProvider />
         </ThemeProvider>
+        <div id="modal-root"></div>
         <BootstrapClient />
       </body>
     </html>

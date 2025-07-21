@@ -70,7 +70,7 @@ export default function PrivateMessagesPage() {
     fetchMessages();
   };
 
-  useEffect(() => {
+    useEffect(() => {
     document.title = "Private Messages";
   }, []);
 
@@ -128,7 +128,7 @@ export default function PrivateMessagesPage() {
     <div className="container">
       <div className="card mb-3">
         <div className="card-body">
-          <h1 className="card-title text-primary mb-2"><i className="bi bi-lock me-2"></i>Private Messages</h1>
+          <h1 className="card-title text-primary mb-2 text-center"><i className="bi bi-lock me-2"></i>Private Messages</h1>
           <div className="d-flex justify-content-center flex-wrap">
             <Link href="/messages/public" className="btn btn-outline-primary m-1"><i className="bi bi-globe me-2"></i>Public</Link>
             <Link href="/messages/private" className="btn btn-primary m-1"><i className="bi bi-lock me-2"></i>Private</Link>

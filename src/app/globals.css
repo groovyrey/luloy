@@ -134,7 +134,7 @@ p {
 }
 
 .card-body {
-  padding: 1.5rem; /* Equivalent to Bootstrap's p-4 */
+  padding: 2rem; /* Equivalent to Bootstrap's p-4 */
 }
 
 @media (min-width: 768px) {
@@ -401,3 +401,8 @@ a:hover, button:hover {
     margin-right: 0.5rem; /* Equivalent to mr-2 (8px) */
     object-fit: cover;
   }
+
+/* Dark theme specific styles for btn-close */
+[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%); /* Makes the SVG white */
+}

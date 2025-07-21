@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import LoadingMessage from '../../../app/components/LoadingMessage';
 import { CldImage } from 'next-cloudinary';
-import ProfilePictureModal from '../../../app/components/ProfilePictureModal';
+import Modal from '../../../app/components/Modal';
 import { motion } from 'framer-motion';
 import { showToast } from '../../../app/utils/toast';
 
@@ -16,7 +16,9 @@ import ReactIconRenderer from '../../../app/components/ReactIconRenderer';
 export default function UserProfilePage({ params }) {
   const { id } = React.use(params);
   const [profileData, setProfileData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProfilePictureModalOpen, setIsProfilePictureModalOpen] = useState(false);
+  const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false);
+  const [selectedBadge, setSelectedBadge] = useState(null);
 
   useEffect(() => {
     if (profileData) {
@@ -94,7 +96,7 @@ export default function UserProfilePage({ params }) {
                 crop="fill"
                 className="rounded-circle border border-primary border-3"
                 style={{ objectFit: 'cover', cursor: 'pointer' }}
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setIsProfilePictureModalOpen(true)}
               />
             ) : (
               <div
@@ -190,16 +192,19 @@ export default function UserProfilePage({ params }) {
           {userBadges.length > 0 ? (
             <div className="d-flex flex-wrap justify-content-start">
               {userBadges.map(badge => (
-                <Link href="/badges" key={badge.name}>
-                  <div 
-                    className="me-2 mb-2"
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className={`fs-1 ${badge.color}`}>
-                      <ReactIconRenderer IconComponent={badge.icon} size={48} color={badge.color} />
-                    </div>
+                <div 
+                  key={badge.name}
+                  className="me-2 mb-2"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setSelectedBadge(badge);
+                    setIsBadgeModalOpen(true);
+                  }}
+                >
+                  <div className={`fs-1 ${badge.color}`}>
+                    <ReactIconRenderer IconComponent={badge.icon} size={48} color={badge.color} />
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           ) : (
@@ -213,11 +218,34 @@ export default function UserProfilePage({ params }) {
       
 
       {profileData.profilePictureUrl && (
-        <ProfilePictureModal
-          imageUrl={profileData.profilePictureUrl}
-          onClose={() => setIsModalOpen(false)}
-          isOpen={isModalOpen}
-        />
+        <Modal
+          isOpen={isProfilePictureModalOpen}
+          onClose={() => setIsProfilePictureModalOpen(false)}
+        >
+          <h2 className="text-center mb-4">Profile Picture</h2>
+          <CldImage
+            src={profileData.profilePictureUrl}
+            alt="Profile"
+            width={500}
+            height={500}
+            crop="fill"
+            className="img-fluid mx-auto d-block"
+            style={{ borderRadius: 'var(--border-radius-base)' }}
+          />
+        </Modal>
+      )}
+
+      {selectedBadge && (
+        <Modal
+          isOpen={isBadgeModalOpen}
+          onClose={() => setIsBadgeModalOpen(false)}
+        >
+          <h2 className="text-center mb-4">{selectedBadge.name}</h2>
+          <div className={`text-center mb-4 ${selectedBadge.color}`}>
+            <ReactIconRenderer IconComponent={selectedBadge.icon} size={64} />
+          </div>
+          <p className="text-center text-muted">{selectedBadge.description}</p>
+        </Modal>
       )}
     </div>
   );

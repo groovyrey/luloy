@@ -1,16 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link'; // Import Link for navigation
+import Modal from './Modal'; // Import the Modal component
 
 import { useUser } from '../context/UserContext';
 import { motion } from 'framer-motion';
 import LoadingMessage from '../components/LoadingMessage';
+
 import { gsap } from 'gsap';
 
 
 export default function HomePageContent() {
   const { user, loading, userData } = useUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
   
   const welcomeRef = useRef(null);
 
@@ -60,8 +64,7 @@ export default function HomePageContent() {
           <Link href="/messages/public" className="btn btn-outline-primary">
             <i className="bi bi-globe me-2"></i> View Public Messages
           </Link>
-          
-        </div>
+          </div>
       </div>
 
       {/* New Section: Learning Zone */}
@@ -115,6 +118,7 @@ export default function HomePageContent() {
         </div>
       </div>
 
+      
     </motion.div>
   );
 }
