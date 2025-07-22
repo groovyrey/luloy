@@ -56,8 +56,8 @@ export async function POST(request) {
         description: description,
         markdownBlobUrl: blob.url,
         filename: filename,
-        fileType: blob.contentType,
-        size: blob.size,
+        fileType: blob.contentType || '',
+        size: blob.size || 0,
         uploadedBy: userId,
         uploadedAt: admin.firestore.FieldValue.serverTimestamp(),
       };
