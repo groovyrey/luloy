@@ -171,7 +171,7 @@ export default function CodeSnippetPage() {
     <div className={styles.snippetContainer}>
       <div className={styles.snippetHeader}>
         <FileIcon filename={snippetData.filename} className="me-3" style={{ fontSize: '2.5rem' }} />
-        <h2 className={styles.cardTitle}>{snippetData.filename}</h2>
+        <h2 className={`${styles.cardTitle} text-truncate`}>{snippetData.filename}</h2>
       </div>
       {snippetData.description && (
         <p className={styles.snippetDescription}>{snippetData.description}</p>
