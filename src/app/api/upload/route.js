@@ -88,6 +88,11 @@ export async function POST(request) {
     await docRef.set(metadata);
     console.log(`Successfully saved to Firestore with ID: ${docRef.id}`);
 
+    // Revalidate the /learn path if a new post was added
+    if (type === 'post') {
+      revalidatePath('/learn');
+    }
+
     return NextResponse.json({ ...blob, firestoreDocId: docRef.id });
   } catch (error) {
     console.error('Error uploading blob or saving to Firestore:', error);
