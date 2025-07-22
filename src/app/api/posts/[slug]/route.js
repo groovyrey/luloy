@@ -4,7 +4,10 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export async function DELETE(request, { params }) {
-  const session = cookies().get('session')?.value || '';
+  const cookieStore = await cookies(); // Await the cookies() function
+  console.log('DEBUG: cookieStore (after await): ', cookieStore); // Log the awaited cookie store
+  const session = cookieStore.get('session')?.value || '';
+  console.log('DEBUG: session value from cookieStore:', session); // Log the session value
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized: No session found' }, { status: 401 });

@@ -23,13 +23,17 @@ export async function POST(request) {
   const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
 
   const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
+  console.log('DEBUG: Session cookie created:', sessionCookie);
 
-  (await cookies()).set("session", sessionCookie, {
+  const cookieOptions = {
     maxAge: expiresIn,
     httpOnly: true,
     secure: true,
     sameSite: 'Lax',
-  });
+  };
+  console.log('DEBUG: Setting session cookie with options:', cookieOptions);
+
+  (await cookies()).set("session", sessionCookie, cookieOptions);
 
   return NextResponse.json({ status: "success" });
 }

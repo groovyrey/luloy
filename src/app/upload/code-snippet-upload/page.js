@@ -104,6 +104,8 @@ export default function CodeSnippetUploadPage() {
       }
 
       const newBlob = await response.json();
+      console.log('DEBUG: newBlob object after upload:', newBlob);
+      console.log('DEBUG: newBlob.firestoreDocId:', newBlob.firestoreDocId);
       setSnippetId(newBlob.firestoreDocId);
       toast.success('Code snippet uploaded and saved successfully!');
 

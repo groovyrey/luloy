@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Modal from '../../../app/components/Modal';
 import { useParams, useRouter } from 'next/navigation'; // useRouter for navigation
 import { toast } from 'react-hot-toast';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -63,6 +64,7 @@ export default function CodeSnippetPage() {
   const { theme } = useTheme();
   const { user } = useUser(); // Get the current logged-in user
   const [uploaderName, setUploaderName] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // State for modal visibility
 
   useEffect(() => {
     if (snippetId) {
@@ -104,9 +106,12 @@ export default function CodeSnippetPage() {
     }
   }, [snippetId]);
 
-  const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this snippet?')) return;
+  const handleDelete = () => {
+    setShowDeleteModal(true);
+  };
 
+  const confirmDelete = async () => {
+    setShowDeleteModal(false);
     try {
       const res = await fetch(`/api/code-snippets/${snippetId}`, {
         method: 'DELETE',
@@ -218,6 +223,15 @@ export default function CodeSnippetPage() {
           {codeContent}
         </SyntaxHighlighter>
       </div>
+
+      <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+        <h3>Confirm Deletion</h3>
+        <p>Are you sure you want to delete this snippet? This action cannot be undone.</p>
+        <div className="d-flex justify-content-end gap-2">
+          <button className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+          <button className="btn btn-danger" onClick={confirmDelete}>Delete</button>
+        </div>
+      </Modal>
     </div>
   );
 }
