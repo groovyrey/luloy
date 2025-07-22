@@ -6,6 +6,7 @@ import FileIcon from './FileIcon';
 
 export default function CodeSnippetCard({ snippet, className }) {
   return (
+    <Link href={`/code-snippets/${snippet.id}`} className="text-decoration-none text-dark">
     <motion.div
       className={`card mb-3 ${className}`}
       initial={{ opacity: 0, y: 20 }}
@@ -21,12 +22,11 @@ export default function CodeSnippetCard({ snippet, className }) {
               <small className="text-muted text-truncate">{snippet.language}</small>
             </div>
           </div>
-          <Link href={`/code-snippets/${snippet.id}`} className="btn btn-sm btn-primary">
-            View
-          </Link>
+          
         </div>
         {snippet.description && <p className="card-text mt-2">{snippet.description}</p>}
       </div>
     </motion.div>
+</Link>
   );
 }
