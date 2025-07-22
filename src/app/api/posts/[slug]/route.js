@@ -2,6 +2,7 @@ import { firestore, auth } from '/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { del } from '@vercel/blob';
 
 export async function DELETE(request, { params }) {
   const cookieStore = await cookies(); // Await the cookies() function
@@ -49,6 +50,19 @@ export async function DELETE(request, { params }) {
     }
 
     const docId = snapshot.docs[0].id;
+    const postData = snapshot.docs[0].data();
+    const blobUrl = postData.blobUrl;
+
+    if (blobUrl) {
+      try {
+        await del(blobUrl);
+        console.log(`Successfully deleted blob: ${blobUrl}`);
+      } catch (blobError) {
+        console.error(`Error deleting blob ${blobUrl}:`, blobError);
+        // Continue with Firestore deletion even if blob deletion fails
+      }
+    }
+
     await firestore.collection('posts').doc(docId).delete();
 
     // Revalidate the /learn path to clear Next.js cache
