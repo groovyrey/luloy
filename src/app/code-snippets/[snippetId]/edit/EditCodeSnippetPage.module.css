@@ -31,8 +31,8 @@
   padding: 0.75rem;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-base);
-  background-color: var(--input-background-color);
-  color: var(--text-color);
+  background-color: var(--background-color); /* Use theme variable */
+  color: var(--text-color); /* Use theme variable */
   font-size: 1em;
 }
 
@@ -47,6 +47,8 @@
   font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
   font-size: 0.9em;
   min-height: 300px; /* Ensure enough space for code */
+  background-color: var(--background-color); /* Ensure it respects theme */
+  color: var(--text-color); /* Ensure it respects theme */
 }
 
 .disabledInput {

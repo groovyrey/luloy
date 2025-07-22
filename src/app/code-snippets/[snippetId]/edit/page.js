@@ -15,6 +15,7 @@ export default function EditCodeSnippetPage() {
   const [filename, setFilename] = useState('');
   const [description, setDescription] = useState('');
   const [codeContent, setCodeContent] = useState('');
+  const [originalCodeBlobUrl, setOriginalCodeBlobUrl] = useState(null);
   const [language, setLanguage] = useState(''); // Language will be displayed but not editable directly
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -65,6 +66,7 @@ export default function EditCodeSnippetPage() {
           setLanguage(data.language || 'unknown');
 
           if (data.codeBlobUrl) {
+            setOriginalCodeBlobUrl(data.codeBlobUrl); // Store the original blob URL
             const codeRes = await fetch(data.codeBlobUrl);
             if (!codeRes.ok) {
               throw new Error(`Failed to fetch code content: ${codeRes.status}`);
@@ -93,7 +95,9 @@ export default function EditCodeSnippetPage() {
     try {
       // Step 1: If code content changed, re-upload to Vercel Blob
       let newCodeBlobUrl = null;
-      const originalCodeContent = await (await fetch(`/api/code-snippets/${snippetId}`)).json().then(data => fetch(data.codeBlobUrl).then(res => res.text()));
+      // Fetch original code content for comparison
+      const originalSnippetData = await (await fetch(`/api/code-snippets/${snippetId}`)).json();
+      const originalCodeContent = await fetch(originalSnippetData.codeBlobUrl).then(res => res.text());
 
       if (codeContent !== originalCodeContent) {
         // Create a Blob from the updated code content
@@ -119,11 +123,8 @@ export default function EditCodeSnippetPage() {
       const updateData = {
         filename,
         description,
+        codeBlobUrl: newCodeBlobUrl || originalCodeBlobUrl, // Always include codeBlobUrl
       };
-
-      if (newCodeBlobUrl) {
-        updateData.codeBlobUrl = newCodeBlobUrl;
-      }
 
       const metadataResponse = await fetch(`/api/code-snippets/${snippetId}`, {
         method: 'PUT',

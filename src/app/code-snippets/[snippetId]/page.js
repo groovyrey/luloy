@@ -165,7 +165,7 @@ export default function CodeSnippetPage() {
   }
 
   const isOwner = user && user.uid === snippetData.userId;
-  const syntaxHighlighterStyle = theme === 'dark' ? vscDarkPlus : vs;
+  const syntaxHighlighterStyle = vscDarkPlus;
 
   return (
     <div className={styles.snippetContainer}>
