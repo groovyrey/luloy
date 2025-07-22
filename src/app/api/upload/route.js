@@ -10,8 +10,9 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Unauthorized: No session found' }, { status: 401 });
   }
 
+  let decodedClaims;
   try {
-    await auth.verifySessionCookie(session, true); // Verify session, checkRevoked true
+    decodedClaims = await auth.verifySessionCookie(session, true); // Verify session, checkRevoked true
   } catch (error) {
     console.error('Error verifying session cookie for upload:', error);
     return NextResponse.json({ error: 'Unauthorized: Invalid session' }, { status: 401 });
@@ -38,19 +39,19 @@ export async function POST(request) {
     // Save metadata to Firestore
     const postRef = firestore.collection('posts').doc(); // Auto-generate ID
     await postRef.set({
-      title: filename, // Use filename as title for now, can be updated later
+      title: title, // Use title from searchParams
+      description: description, // Use description from searchParams
       markdownBlobUrl: blob.url,
       filename: filename,
       fileType: blob.contentType,
       size: blob.size,
       uploadedBy: userId,
       uploadedAt: admin.firestore.FieldValue.serverTimestamp(),
-      // Add other relevant metadata as needed, e.g., description, tags
     });
 
     return NextResponse.json({ ...blob, firestoreDocId: postRef.id });
   } catch (error) {
-    console.error('Error uploading blob:', error);
-    return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
+    console.error('Error uploading blob or saving to Firestore:', error);
+    return NextResponse.json({ error: 'Failed to upload file or save metadata', details: error.message }, { status: 500 });
   }
 }
