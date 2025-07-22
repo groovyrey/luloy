@@ -3,6 +3,14 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { auth, firestore, admin } from '/lib/firebase-admin.js';
 
+function generateSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove non-alphanumeric characters except spaces and hyphens
+    .trim()
+    .replace(/\s+/g, '-'); // Replace spaces with hyphens
+}
+
 export async function POST(request) {
   const session = cookies().get('session')?.value || '';
 
@@ -51,6 +59,7 @@ export async function POST(request) {
     const userId = decodedClaims.uid; // decodedClaims is already available from session verification
 
     if (type === 'post') {
+      const slug = generateSlug(title);
       metadata = {
         title: title,
         description: description,
@@ -60,6 +69,7 @@ export async function POST(request) {
         size: blob.size || 0,
         uploadedBy: userId,
         uploadedAt: admin.firestore.FieldValue.serverTimestamp(),
+        slug: slug, // Add the generated slug
       };
     } else if (type === 'code') {
       metadata = {
