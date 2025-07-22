@@ -2,10 +2,14 @@
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.editCard {
+  background-color: var(--card-background-color);
   border-radius: var(--border-radius-base);
   box-shadow: var(--box-shadow);
-  color: var(--text-color);
+  padding: 30px;
 }
 
 .editContainer h2 {
@@ -15,25 +19,27 @@
 }
 
 .formGroup {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .formGroup label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   font-weight: bold;
   color: var(--text-color);
+  font-size: 1.05em;
 }
 
 .formGroup input[type="text"],
 .formGroup textarea {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.85rem;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-base);
-  background-color: var(--background-color); /* Use theme variable */
-  color: var(--text-color); /* Use theme variable */
+  background-color: var(--background-color);
+  color: var(--text-color);
   font-size: 1em;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .formGroup input[type="text"]:focus,
@@ -45,10 +51,11 @@
 
 .formGroup textarea.codeContentInput {
   font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
-  font-size: 0.9em;
-  min-height: 300px; /* Ensure enough space for code */
-  background-color: var(--background-color); /* Ensure it respects theme */
-  color: var(--text-color); /* Ensure it respects theme */
+  font-size: 0.95em;
+  min-height: 350px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  resize: vertical;
 }
 
 .disabledInput {
@@ -57,17 +64,22 @@
   cursor: not-allowed;
 }
 
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 2rem;
+}
+
 .saveButton,
 .cancelButton {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.8rem;
   border: none;
   border-radius: var(--border-radius-base);
   cursor: pointer;
-  font-size: 1em;
-  font-weight: bold;
-  transition: background-color 0.2s ease-in-out;
-  margin-right: 10px; /* Space between buttons */
+  font-size: 1.05em;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 
 .saveButton {
@@ -77,6 +89,7 @@
 
 .saveButton:hover:not(:disabled) {
   background-color: var(--primary-hover-color);
+  transform: translateY(-1px);
 }
 
 .cancelButton {
@@ -86,10 +99,12 @@
 
 .cancelButton:hover:not(:disabled) {
   background-color: var(--secondary-hover-color);
+  transform: translateY(-1px);
 }
 
 .saveButton:disabled,
 .cancelButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }

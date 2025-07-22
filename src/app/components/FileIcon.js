@@ -29,25 +29,19 @@ import {
   DiDatabase,
 } from 'react-icons/di';
 
-const getFileExtension = (filename) => {
-  return filename.split('.').pop().toLowerCase();
-};
-
 const FileIcon = ({ filename, className, style }) => {
-  const extension = getFileExtension(filename);
+  const language = filename.toLowerCase();
 
   let IconComponent = FaFile;
 
-  switch (extension) {
-    case 'js':
-    case 'jsx':
+  switch (language) {
+    case 'javascript':
       IconComponent = DiJavascript;
       break;
-    case 'ts':
-    case 'tsx':
+    case 'typescript':
       IconComponent = FaFileCode;
       break;
-    case 'py':
+    case 'python':
       IconComponent = DiPython;
       break;
     case 'html':
@@ -59,7 +53,7 @@ const FileIcon = ({ filename, className, style }) => {
     case 'json':
       IconComponent = FaFileAlt;
       break;
-    case 'md':
+    case 'markdown':
       IconComponent = DiMarkdown;
       break;
     case 'java':
@@ -67,15 +61,12 @@ const FileIcon = ({ filename, className, style }) => {
       break;
     case 'c':
     case 'cpp':
-    case 'h':
-    case 'hpp':
-    case 'cxx':
       IconComponent = FaFileCode;
       break;
     case 'php':
       IconComponent = DiPhp;
       break;
-    case 'rb':
+    case 'ruby':
       IconComponent = DiRuby;
       break;
     case 'go':
@@ -84,12 +75,11 @@ const FileIcon = ({ filename, className, style }) => {
     case 'swift':
       IconComponent = DiSwift;
       break;
-    case 'kt':
+    case 'kotlin':
       IconComponent = DiScala; // Kotlin icon not directly available in Di, using Scala as a placeholder
       break;
-    case 'sh':
-    case 'bat':
-    case 'cmd':
+    case 'bash':
+    case 'batch':
       IconComponent = DiTerminal;
       break;
     case 'sql':

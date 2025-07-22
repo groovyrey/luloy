@@ -14,7 +14,7 @@ export default function CodeSnippetCard({ snippet, className }) {
       <div className="card-body">
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
-            <FileIcon filename={snippet.filename} className="me-3" style={{ fontSize: '2.5rem' }} />
+            <FileIcon filename={snippet.language} className="me-3" style={{ fontSize: '2.5rem' }} />
             <div className="flex-grow-1 me-2" style={{ minWidth: 0 }}>
               <h5 className={`${styles.cardTitle} card-title mb-0 text-truncate`}>{snippet.filename}</h5>
               <small className="text-muted text-truncate">{snippet.language}</small>

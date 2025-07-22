@@ -155,58 +155,62 @@ export default function EditCodeSnippetPage() {
   return (
     <div className={styles.editContainer}>
       <h2>Edit Code Snippet</h2>
-      <form onSubmit={handleSave}>
-        <div className={styles.formGroup}>
-          <label htmlFor="filename-input">Filename:</label>
-          <input
-            id="filename-input"
-            type="text"
-            value={filename}
-            onChange={(e) => setFilename(e.target.value)}
-            required
-            disabled={saving}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="language-display">Language:</label>
-          <input
-            id="language-display"
-            type="text"
-            value={language}
-            disabled // Language is not directly editable
-            className={styles.disabledInput}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="description-input">Description:</label>
-          <textarea
-            id="description-input"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Brief description of the code"
-            rows="3"
-            disabled={saving}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="code-content-input">Code Content:</label>
-          <textarea
-            id="code-content-input"
-            value={codeContent}
-            onChange={(e) => setCodeContent(e.target.value)}
-            rows="20"
-            required
-            disabled={saving}
-            className={styles.codeContentInput}
-          />
-        </div>
-        <button type="submit" disabled={saving} className={styles.saveButton}>
-          {saving ? 'Saving...' : 'Save Changes'}
-        </button>
-        <button type="button" onClick={() => router.push(`/code-snippets/${snippetId}`)} disabled={saving} className={styles.cancelButton}>
-          Cancel
-        </button>
-      </form>
+      <div className={styles.editCard}>
+        <form onSubmit={handleSave}>
+          <div className={styles.formGroup}>
+            <label htmlFor="filename-input">Filename:</label>
+            <input
+              id="filename-input"
+              type="text"
+              value={filename}
+              onChange={(e) => setFilename(e.target.value)}
+              required
+              disabled={saving}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="language-display">Language:</label>
+            <input
+              id="language-display"
+              type="text"
+              value={language}
+              disabled // Language is not directly editable
+              className={styles.disabledInput}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="description-input">Description:</label>
+            <textarea
+              id="description-input"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief description of the code"
+              rows="3"
+              disabled={saving}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="code-content-input">Code Content:</label>
+            <textarea
+              id="code-content-input"
+              value={codeContent}
+              onChange={(e) => setCodeContent(e.target.value)}
+              rows="20"
+              required
+              disabled={saving}
+              className={styles.codeContentInput}
+            />
+          </div>
+          <div className={styles.buttonGroup}>
+            <button type="submit" disabled={saving} className={styles.saveButton}>
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+            <button type="button" onClick={() => router.push(`/code-snippets/${snippetId}`)} disabled={saving} className={styles.cancelButton}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
