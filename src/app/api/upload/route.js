@@ -1,7 +1,7 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { auth } from '/lib/firebase-admin.js';
+import { auth, firestore, admin } from '/lib/firebase-admin.js';
 
 export async function POST(request) {
   const session = cookies().get('session')?.value || '';
@@ -19,6 +19,8 @@ export async function POST(request) {
 
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get('filename');
+  const title = searchParams.get('title') || filename; // Use filename as title if not provided
+  const description = searchParams.get('description') || '';
 
   if (!filename) {
     return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
@@ -29,7 +31,24 @@ export async function POST(request) {
       access: 'public', // or 'private' if you want to generate signed URLs
     });
 
-    return NextResponse.json(blob);
+    // Get user ID from verified session
+    const decodedClaims = await auth.verifySessionCookie(session, true);
+    const userId = decodedClaims.uid;
+
+    // Save metadata to Firestore
+    const postRef = firestore.collection('posts').doc(); // Auto-generate ID
+    await postRef.set({
+      title: filename, // Use filename as title for now, can be updated later
+      markdownBlobUrl: blob.url,
+      filename: filename,
+      fileType: blob.contentType,
+      size: blob.size,
+      uploadedBy: userId,
+      uploadedAt: admin.firestore.FieldValue.serverTimestamp(),
+      // Add other relevant metadata as needed, e.g., description, tags
+    });
+
+    return NextResponse.json({ ...blob, firestoreDocId: postRef.id });
   } catch (error) {
     console.error('Error uploading blob:', error);
     return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
