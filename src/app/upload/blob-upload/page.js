@@ -50,7 +50,7 @@ export default function BlobUploadPage() {
     setUploading(true);
     try {
       const response = await fetch(
-        `/api/upload?filename=${encodeURIComponent(file.name)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
+        `/api/upload?filename=${encodeURIComponent(file.name)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&type=post`,
         {
           method: 'POST',
           body: file,

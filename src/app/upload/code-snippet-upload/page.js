@@ -91,42 +91,20 @@ export default function CodeSnippetUploadPage() {
 
     setUploading(true);
     try {
-      // Step 1: Upload file to Vercel Blob
-      const blobResponse = await fetch(
-        `/api/upload?filename=${encodeURIComponent(file.name)}`,
+      const response = await fetch(
+        `/api/upload?filename=${encodeURIComponent(file.name)}&title=${encodeURIComponent(file.name)}&description=${encodeURIComponent(description)}&language=${encodeURIComponent(language)}&type=code`,
         {
           method: 'POST',
           body: file,
         }
       );
 
-      if (!blobResponse.ok) {
-        throw new Error(`Blob upload failed: ${blobResponse.statusText}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const newBlob = await blobResponse.json();
-      const codeBlobUrl = newBlob.url;
-
-      // Step 2: Save snippet metadata to Firestore
-      const metadataResponse = await fetch('/api/code-snippets', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          filename: file.name,
-          language,
-          description,
-          codeBlobUrl,
-        }),
-      });
-
-      if (!metadataResponse.ok) {
-        throw new Error(`Metadata save failed: ${metadataResponse.statusText}`);
-      }
-
-      const metadataResult = await metadataResponse.json();
-      setSnippetId(metadataResult.snippetId);
+      const newBlob = await response.json();
+      setSnippetId(newBlob.firestoreDocId);
       toast.success('Code snippet uploaded and saved successfully!');
 
       // Clear form

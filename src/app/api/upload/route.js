@@ -20,36 +20,62 @@ export async function POST(request) {
 
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get('filename');
-  const title = searchParams.get('title') || filename; // Use filename as title if not provided
+  const type = searchParams.get('type'); // 'post' or 'code'
+  const title = searchParams.get('title') || filename;
   const description = searchParams.get('description') || '';
+  const language = searchParams.get('language') || 'unknown'; // For code snippets
 
-  if (!filename) {
-    return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
+  if (!filename || !type) {
+    return NextResponse.json({ error: 'Filename and type are required' }, { status: 400 });
+  }
+
+  let blobPath;
+  let collectionName;
+  let metadata = {};
+
+  if (type === 'post') {
+    blobPath = `posts/${filename}`;
+    collectionName = 'posts';
+  } else if (type === 'code') {
+    blobPath = `userCodes/${filename}`;
+    collectionName = 'codes';
+  } else {
+    return NextResponse.json({ error: 'Invalid upload type' }, { status: 400 });
   }
 
   try {
-    const blob = await put(filename, request.body, {
-      access: 'public', // or 'private' if you want to generate signed URLs
+    const blob = await put(blobPath, request.body, {
+      access: 'public',
     });
 
-    // Get user ID from verified session
-    const decodedClaims = await auth.verifySessionCookie(session, true);
-    const userId = decodedClaims.uid;
+    const userId = decodedClaims.uid; // decodedClaims is already available from session verification
 
-    // Save metadata to Firestore
-    const postRef = firestore.collection('posts').doc(); // Auto-generate ID
-    await postRef.set({
-      title: title, // Use title from searchParams
-      description: description, // Use description from searchParams
-      markdownBlobUrl: blob.url,
-      filename: filename,
-      fileType: blob.contentType,
-      size: blob.size,
-      uploadedBy: userId,
-      uploadedAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
+    if (type === 'post') {
+      metadata = {
+        title: title,
+        description: description,
+        markdownBlobUrl: blob.url,
+        filename: filename,
+        fileType: blob.contentType,
+        size: blob.size,
+        uploadedBy: userId,
+        uploadedAt: admin.firestore.FieldValue.serverTimestamp(),
+      };
+    } else if (type === 'code') {
+      metadata = {
+        userId: userId,
+        filename: filename,
+        language: language,
+        description: description,
+        codeBlobUrl: blob.url,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      };
+    }
 
-    return NextResponse.json({ ...blob, firestoreDocId: postRef.id });
+    const docRef = firestore.collection(collectionName).doc();
+    await docRef.set(metadata);
+
+    return NextResponse.json({ ...blob, firestoreDocId: docRef.id });
   } catch (error) {
     console.error('Error uploading blob or saving to Firestore:', error);
     return NextResponse.json({ error: 'Failed to upload file or save metadata', details: error.message }, { status: 500 });
