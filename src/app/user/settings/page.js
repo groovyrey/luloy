@@ -8,8 +8,10 @@ import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { showToast } from '../../../app/utils/toast';
 import { capitalizeName } from '../../../app/utils/capitalizeName';
+import Modal from '../../../app/components/Modal';
 
 export default function EditUserPage() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { user, userData, loading, refreshUserData } = useUser();
   const router = useRouter();
   const [firstName, setFirstName] = useState('');
@@ -290,7 +292,12 @@ export default function EditUserPage() {
     }
   };
 
-  const handleRemoveProfilePicture = async () => {
+  const handleRemoveProfilePicture = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmRemoveProfilePicture = async () => {
+    setIsDeleteModalOpen(false);
     setIsUpdating(true);
 
     try {
@@ -434,6 +441,15 @@ export default function EditUserPage() {
           </div>
         </div>
       </div>
+
+      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
+        <h5 className="mb-3">Confirm Profile Picture Removal</h5>
+        <p>Are you sure you want to remove your profile picture? This action cannot be undone.</p>
+        <div className="d-flex justify-content-center gap-2 mt-4">
+          <button className="btn btn-danger" onClick={confirmRemoveProfilePicture}>Yes, Remove</button>
+          <button className="btn btn-secondary" onClick={() => setIsDeleteModalOpen(false)}>Cancel</button>
+        </div>
+      </Modal>
     </div>
   );
 }

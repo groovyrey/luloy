@@ -136,7 +136,6 @@ export default function LandingPageContent() {
               options={particlesOptions}
               style={{
                 width: '100%',
-                height: '500px',
                 border: '1px solid red'
               }}
             />
@@ -159,30 +158,30 @@ export default function LandingPageContent() {
       </div>
 
       {/* Feature Highlights */}
-      <motion.div variants={itemVariants} className="row my-5">
+      <motion.div variants={itemVariants} className="row my-5 g-4">
         <div className="col-md-4 mb-4">
-          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100">
+          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100 p-4">
             <i className="bi bi-chat-dots display-4 mb-3 text-success"></i>
             <h3 className="card-title">Share Thoughts</h3>
             <p className="card-text text-muted">Share your thoughts anonymously or publicly through messages.</p>
           </motion.div>
         </div>
         <div className="col-md-4 mb-4">
-          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100">
+          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100 p-4">
             <i className="bi bi-code-slash display-4 mb-3 text-info"></i>
             <h3 className="card-title">Share Code</h3>
             <p className="card-text text-muted">Show and discuss code with other developers.</p>
           </motion.div>
         </div>
         <div className="col-md-4 mb-4">
-          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100">
+          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100 p-4">
             <i className="bi bi-book-half display-4 mb-3 text-primary"></i>
             <h3 className="card-title">Learn</h3>
             <p className="card-text text-muted">Explore possible useful learning resources for various fields.</p>
           </motion.div>
         </div>
         <div className="col-md-4 mb-4">
-          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100">
+          <motion.div whileHover={{ scale: 1.05, y: -10 }} className="card h-100 p-4">
             <i className="bi bi-people display-4 mb-3 text-warning"></i>
             <h3 className="card-title">Community</h3>
             <p className="card-text text-muted">Connect with people, make friends, and learn new things.</p>

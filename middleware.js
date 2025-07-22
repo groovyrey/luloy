@@ -57,5 +57,5 @@ export async function middleware(request) {
 
 //Add your protected routes
 export const config = {
-  matcher: ["/home", "/messages/:path*", "/user/:path*", "/chat"],
+  matcher: ["/home"],
 };

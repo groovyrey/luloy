@@ -70,7 +70,7 @@ export default function HomePageContent() {
       {/* New Section: Learning Zone */}
       <div className="mt-5 w-100" style={{ maxWidth: '800px' }}>
         <h2 className="h3 fw-semibold text-secondary mb-4 text-center">Learning Zone</h2>
-        <div className="row g-4">
+        <div className="row g-5">
           <div className="col-md-6">
             <div className="card h-100">
               <div className="card-body d-flex flex-column">

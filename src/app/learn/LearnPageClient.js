@@ -33,27 +33,29 @@ export default function LearnPageClient({ allOfficialPostsData, userPostsData: i
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mt-8 mb-4">Official Learning Resources</h2>
-      <motion.ul
+      <h2 className="text-2xl font-bold mt-8 mb-4 text-primary">Official Learning Resources</h2>
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        style={{ listStyle: 'none', padding: 0, margin: 0 }}
+        className="row g-4"
       >
         {allOfficialPostsData.map(({ slug, title, date, description }) => (
-          <motion.li key={slug} className="learn-list-item" variants={itemVariants}>
+          <div key={slug} className="col-md-6 mb-4">
+            <motion.div variants={itemVariants}>
             <Link href={`/learn/${slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <div className="card mb-3">
                 <div className="card-body">
-                  <h5 className="card-title mb-2">{title}</h5>
+                  <h5 className="card-title mb-2 text-primary">{title}</h5>
                   <p className="mb-1">{description}</p>
                   <small className="text-muted">{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}</small>
                 </div>
               </div>
             </Link>
-          </motion.li>
+          </motion.div>
+          </div>
         ))}
-      </motion.ul>
+      </motion.div>
     </div>
   );
 }
