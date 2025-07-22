@@ -12,42 +12,75 @@ export default function CodeSnippetUploadPage() {
   const [snippetId, setSnippetId] = useState(null);
   const { theme } = useTheme();
 
-  const containerStyle = {
-    padding: '20px',
-    maxWidth: '600px',
-    margin: '20px auto',
-    textAlign: 'center',
-    color: theme === 'dark' ? '#eee' : '#333',
+  const getFileExtension = (filename) => {
+    return filename.split('.').pop().toLowerCase();
   };
 
-  const inputStyle = {
-    width: '100%',
-    padding: '8px',
-    boxSizing: 'border-box',
-    backgroundColor: theme === 'dark' ? '#555' : '#fff',
-    color: theme === 'dark' ? '#eee' : '#333',
-    border: theme === 'dark' ? '1px solid #666' : '1px solid #ccc',
-    borderRadius: '4px',
+  const languageMap = {
+    js: 'javascript',
+    jsx: 'javascript',
+    ts: 'typescript',
+    tsx: 'typescript',
+    py: 'python',
+    html: 'markup',
+    css: 'css',
+    json: 'json',
+    md: 'markdown',
+    java: 'java',
+    c: 'c',
+    cpp: 'cpp',
+    h: 'c',
+    hpp: 'cpp',
+    cxx: 'cpp',
+    php: 'php',
+    rb: 'ruby',
+    go: 'go',
+    swift: 'swift',
+    kt: 'kotlin',
+    sh: 'bash',
+    bat: 'batch',
+    cmd: 'batch',
+    sql: 'sql',
+    xml: 'markup',
+    yml: 'yaml',
+    yaml: 'yaml',
+    txt: 'text',
   };
 
-  const buttonStyle = {
-    padding: '10px 20px',
-    backgroundColor: '#28a745',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    opacity: uploading ? 0.7 : 1
-  };
-
-  const linkStyle = {
-    color: theme === 'dark' ? '#90caf9' : '#0070f3',
-    wordBreak: 'break-all'
-  };
+  const MAX_FILE_SIZE_BYTES = 1024 * 1024; // 1MB
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setSnippetId(null);
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) {
+      setFile(null);
+      setLanguage('');
+      setSnippetId(null);
+      return;
+    }
+
+    // File size validation
+    if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
+      toast.error('File size exceeds the 1MB limit.');
+      setFile(null);
+      setLanguage('');
+      setSnippetId(null);
+      return;
+    }
+
+    // Automatic language detection and file type validation
+    const extension = getFileExtension(selectedFile.name);
+    const detectedLanguage = languageMap[extension];
+
+    if (detectedLanguage) {
+      setLanguage(detectedLanguage);
+      setFile(selectedFile);
+      setSnippetId(null);
+    } else {
+      toast.error('Unsupported file type. Please upload a common code file (e.g., .js, .py, .java).');
+      setFile(null);
+      setLanguage('');
+      setSnippetId(null);
+    }
   };
 
   const handleUpload = async () => {
@@ -109,58 +142,61 @@ export default function CodeSnippetUploadPage() {
     }
   };
 
-  const fileInputStyle = {
-    marginBottom: '10px',
-    width: '100%',
-    boxSizing: 'border-box',
-    display: 'block',
-    backgroundColor: theme === 'dark' ? '#555' : '#fff',
-    color: theme === 'dark' ? '#eee' : '#333',
-    border: theme === 'dark' ? '1px solid #666' : '1px solid #ccc',
-    borderRadius: '4px',
-  };
-
   return (
-    <div className="card" style={containerStyle}>
-      <h2>Upload Code Snippet</h2>
-      <div style={{ marginBottom: '10px' }}>
-        <label htmlFor="file-input" style={{ display: 'block', marginBottom: '5px' }}>Select Code File:</label>
-        <input id="file-input" type="file" onChange={handleFileChange} disabled={uploading} style={fileInputStyle} />
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <label htmlFor="description-input" style={{ display: 'block', marginBottom: '5px' }}>Description:</label>
-        <textarea
-          id="description-input"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Brief description of the code"
-          rows="3"
-          style={inputStyle}
-          disabled={uploading}
-        />
-      </div>
-      <div style={{ marginBottom: '20px' }}>
-        <label htmlFor="language-input" style={{ display: 'block', marginBottom: '5px' }}>Language (e.g., javascript, python):</label>
-        <input
-          id="language-input"
-          type="text"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-          placeholder="e.g., javascript, python, java"
-          style={inputStyle}
-          disabled={uploading}
-        />
-      </div>
-      <button onClick={handleUpload} disabled={uploading || !file} style={buttonStyle}>
-        {uploading ? 'Uploading...' : 'Upload Snippet'}
-      </button>
-      {snippetId && (
-        <div style={{ marginTop: '20px' }}>
-          <p>Snippet uploaded! ID:</p>
-          <p style={{ fontWeight: 'bold' }}>{snippetId}</p>
-          {/* You might want to add a link to view the snippet here later */}
+    <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
+      <div className="card" style={{ maxWidth: '600px', width: '100%' }}>
+        <div className="card-header">
+          <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
+          <h2 className="card-title fw-bold mb-0 fs-3"><span className="bi-code-slash"></span>{" "}Upload Code Snippet</h2>
+          <p className="mb-0 opacity-75">Share your code snippets with the community.</p>
         </div>
-      )}
+        <div className="card-body">
+          <div className="mb-3">
+            <label htmlFor="file-input" className="form-label">Select Code File:</label>
+            <input id="file-input" type="file" className="form-control" onChange={handleFileChange} disabled={uploading} />
+            <p className="text-muted mt-2" style={{ fontSize: '0.85rem' }}>Max file size: 1MB</p>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="description-input" className="form-label">Description:</label>
+            <textarea
+              id="description-input"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief description of the code"
+              rows="3"
+              className="form-control"
+              disabled={uploading}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="language-input" className="form-label">Language (auto-detected):</label>
+            <input
+              id="language-input"
+              type="text"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              placeholder="e.g., javascript, python, java"
+              className="form-control"
+              disabled={uploading}
+            />
+          </div>
+          <button onClick={handleUpload} disabled={uploading || !file} className="btn btn-primary w-100">
+            {uploading ? (
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            ) : (
+              <i className="bi-upload"></i>
+            )}{' '}{uploading ? 'Uploading...' : 'Upload Snippet'}
+          </button>
+          {snippetId && (
+            <div className="text-center mt-3">
+              <p className="mb-0">Snippet uploaded! You can view it here:</p>
+              <Link href={`/code-snippets/${snippetId}`} className="btn btn-link">
+                {`/code-snippets/${snippetId}`}
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

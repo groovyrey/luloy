@@ -12,6 +12,7 @@ import React from 'react';
 import { BADGES } from '../../../app/utils/BadgeSystem';
 import Link from 'next/link';
 import ReactIconRenderer from '../../../app/components/ReactIconRenderer';
+import CodeSnippetCard from '../../../app/components/CodeSnippetCard'; // Import CodeSnippetCard
 
 export default function UserProfilePage({ params }) {
   const { id } = React.use(params);
@@ -233,37 +234,19 @@ export default function UserProfilePage({ params }) {
         </div>
       </motion.div>
 
-      {/* New Card for Code Snippets */}
-      <motion.div
-        className="card mt-4"
-        style={{ maxWidth: '600px', width: '100%' }}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }} // Increased delay
-      >
-        <div className="card-body">
-          <h5 className="card-title text-center mb-4">Code Snippets</h5>
-          {userSnippets && userSnippets.length > 0 ? (
-            <ul className="list-group list-group-flush">
-              {userSnippets.map(snippet => (
-                <li key={snippet.id} className="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <strong>{snippet.filename}</strong> ({snippet.language})
-                    {snippet.description && <p className="text-muted mb-0">{snippet.description}</p>}
-                  </div>
-                  <Link href={`/code-snippets/${snippet.snippetId}`} className="btn btn-sm btn-primary">
-                    View
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="text-center text-muted fst-italic">
-              <p className="mb-0">This user has not uploaded any code snippets yet.</p>
-            </div>
-          )}
-        </div>
-      </motion.div>
+      {/* New Section for Code Snippets */}
+      <div className="mt-4 w-100" style={{ maxWidth: '600px' }}>
+        <h5 className="text-center mb-4">Code Snippets</h5>
+        {userSnippets && userSnippets.length > 0 ? (
+          userSnippets.map(snippet => (
+            <CodeSnippetCard key={snippet.id} snippet={snippet} />
+          ))
+        ) : (
+          <div className="text-center text-muted fst-italic">
+            <p className="mb-0">This user has not uploaded any code snippets yet.</p>
+          </div>
+        )}
+      </div>
 
       {profileData.profilePictureUrl && (
         <Modal

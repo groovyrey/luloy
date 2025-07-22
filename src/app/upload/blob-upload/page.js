@@ -1,44 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTheme } from '../../context/ThemeContext';
+import Link from 'next/link';
+import { useUser } from '../../context/UserContext';
+import { useRouter } from 'next/navigation';
+import LoadingMessage from '../../../app/components/LoadingMessage';
 
 export default function BlobUploadPage() {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [blobUrl, setBlobUrl] = useState(null);
   const { theme } = useTheme();
+  const { user, userData, loading } = useUser();
+  const router = useRouter();
 
-  const containerStyle = {
-    padding: '20px',
-    maxWidth: '500px',
-    margin: '20px auto',
-    textAlign: 'center',
-    color: theme === 'dark' ? '#eee' : '#333',
-  };
+  useEffect(() => {
+    if (!loading) {
+      // If user is not logged in, redirect to login
+      if (!user) {
+        router.push('/login');
+        toast.error('You must be logged in to upload resources.');
+        return;
+      }
 
-  const fileInputStyle = {
-    marginBottom: '10px',
-    width: '100%',
-    boxSizing: 'border-box',
-    display: 'block',
-  };
-
-  const buttonStyle = {
-    padding: '10px 20px',
-    backgroundColor: '#0070f3',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    opacity: uploading ? 0.7 : 1
-  };
-
-  const linkStyle = {
-    color: theme === 'dark' ? '#90caf9' : '#0070f3',
-    wordBreak: 'break-all'
-  };
+      // If user data is loaded and they don't have the staff badge, redirect
+      if (userData && (!userData.badges || !userData.badges.includes('staff'))) {
+        router.push('/'); // Redirect to home page
+        toast.error('Only staff members can upload learning resources.');
+      }
+    }
+  }, [loading, user, userData, router]);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -76,21 +69,45 @@ export default function BlobUploadPage() {
     }
   };
 
+  if (loading || (user && !userData)) {
+    return <LoadingMessage />;
+  }
+
+  // Only render the page content if the user is staff
+  if (!user || !userData || !userData.badges || !userData.badges.includes('staff')) {
+    return null; // Or a simple access denied message if preferred
+  }
+
   return (
-    <div className="card" style={containerStyle}>
-      <h2>Upload Learning Resources</h2>
-      <input type="file" onChange={handleFileChange} disabled={uploading} style={fileInputStyle} />
-      <button onClick={handleUpload} disabled={uploading || !file} style={buttonStyle}>
-        {uploading ? 'Uploading...' : 'Upload File'}
-      </button>
-      {blobUrl && (
-        <div style={{ marginTop: '20px' }}>
-          <p>File uploaded to:</p>
-          <a href={blobUrl} target="_blank" rel="noopener noreferrer" style={linkStyle}>
-            {blobUrl}
-          </a>
+    <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
+      <div className="card" style={{ maxWidth: '600px', width: '100%' }}>
+        <div className="card-header">
+          <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
+          <h2 className="card-title fw-bold mb-0 fs-3"><span className="bi-cloud-arrow-up"></span>{" "}Upload Learning Resources</h2>
+          <p className="mb-0 opacity-75">Upload documents, images, or other files for learning.</p>
         </div>
-      )}
+        <div className="card-body">
+          <div className="mb-3">
+            <label htmlFor="file-input" className="form-label">Select File:</label>
+            <input type="file" id="file-input" className="form-control" onChange={handleFileChange} disabled={uploading} />
+          </div>
+          <button onClick={handleUpload} disabled={uploading || !file} className="btn btn-primary w-100">
+            {uploading ? (
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            ) : (
+              <i className="bi-upload"></i>
+            )}{' '}{uploading ? 'Uploading...' : 'Upload File'}
+          </button>
+          {blobUrl && (
+            <div className="text-center mt-3">
+              <p className="mb-0">File uploaded to:</p>
+              <Link href={blobUrl} target="_blank" rel="noopener noreferrer" className="btn btn-link">
+                {blobUrl}
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

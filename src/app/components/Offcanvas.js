@@ -121,11 +121,13 @@ export default function Offcanvas({ isOpen, onClose }) {
                       </Link>
                     </li>
                     
-                    <li>
-                      <Link href="/user/my-snippets" onClick={onClose}>
-                        <i className="bi bi-file-earmark-code me-2"></i>My Snippets
-                      </Link>
-                    </li>
+                    {user && (
+                      <li>
+                        <Link href="/user/my-snippets" onClick={onClose}>
+                          <i className="bi bi-file-earmark-code me-2"></i>My Snippets
+                        </Link>
+                      </li>
+                    )}
                     
                     <li>
                       <div className={styles.offcanvasThemeToggleCard}>

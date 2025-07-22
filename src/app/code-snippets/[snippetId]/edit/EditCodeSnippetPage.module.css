@@ -1,0 +1,93 @@
+.editContainer {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--box-shadow);
+  color: var(--text-color);
+}
+
+.editContainer h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.formGroup input[type="text"],
+.formGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  background-color: var(--input-background-color);
+  color: var(--text-color);
+  font-size: 1em;
+}
+
+.formGroup input[type="text"]:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+}
+
+.formGroup textarea.codeContentInput {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  min-height: 300px; /* Ensure enough space for code */
+}
+
+.disabledInput {
+  background-color: var(--disabled-background-color);
+  color: var(--disabled-text-color);
+  cursor: not-allowed;
+}
+
+.saveButton,
+.cancelButton {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+  margin-right: 10px; /* Space between buttons */
+}
+
+.saveButton {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+.saveButton:hover:not(:disabled) {
+  background-color: var(--primary-hover-color);
+}
+
+.cancelButton {
+  background-color: var(--secondary-color);
+  color: var(--button-text-color);
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: var(--secondary-hover-color);
+}
+
+.saveButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

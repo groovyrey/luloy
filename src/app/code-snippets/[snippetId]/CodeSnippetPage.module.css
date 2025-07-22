@@ -1,0 +1,126 @@
+.snippetContainer {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--box-shadow);
+  color: var(--text-color);
+}
+
+.snippetHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.snippetHeader h2 {
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+.snippetDescription {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-color-secondary);
+  font-size: 1.1em;
+}
+
+.snippetMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.snippetMeta .badge {
+  font-size: 1em;
+  padding: 0.6em 1em;
+}
+
+.languageCode {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  background-color: var(--accent-color);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25em;
+  font-size: 0.9em;
+}
+
+.actionsContainer {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.actionsTitle {
+  font-size: 1.4em;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.actionsButtons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.codeBlockContainer {
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius-base);
+  overflow: hidden; /* Ensures content respects border-radius */
+  box-shadow: var(--box-shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.codeBlockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--card-header-background-color); /* Use a theme variable */
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+.codeBlockActions {
+  display: flex;
+  gap: 10px;
+}
+
+.codeBlockHeader button {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--border-radius-sm);
+  transition: all 0.2s ease-in-out;
+}
+
+.codeBlockHeader button:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.markdownBody pre {
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius-base);
+  overflow-x: auto;
+  padding: 1em;
+}
+
+.markdownBody code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+}

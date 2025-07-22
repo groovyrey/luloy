@@ -33,7 +33,7 @@ const getFileExtension = (filename) => {
   return filename.split('.').pop().toLowerCase();
 };
 
-const FileIcon = ({ filename, className }) => {
+const FileIcon = ({ filename, className, style }) => {
   const extension = getFileExtension(filename);
 
   let IconComponent = FaFile;
@@ -142,7 +142,7 @@ const FileIcon = ({ filename, className }) => {
       IconComponent = FaFile;
   }
 
-  return <IconComponent className={className} />;
+  return <IconComponent className={className} style={{ ...style, color: 'var(--text-color)' }} />;
 };
 
 export default FileIcon;

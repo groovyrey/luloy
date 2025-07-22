@@ -1,0 +1,20 @@
+.codeSnippetCard {
+  position: relative;
+  overflow: hidden; /* Ensures the icon doesn't spill out */
+}
+
+.backgroundIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem; /* Large size for background */
+  color: var(--text-color); /* Use theme-aware color */
+  opacity: 0.05; /* Very subtle */
+  z-index: 0; /* Ensure it's behind content */
+}
+
+.codeSnippetCard .card-body > div:not(.backgroundIcon) {
+  position: relative; /* Ensure content is above the background icon */
+  z-index: 1;
+}

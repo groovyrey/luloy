@@ -33,6 +33,10 @@
   --success-color: #28a745;
   --info-color: #17a2b8;
   --warning-color: #ffc107;
+  --input-background-color: #ffffff;
+  --button-text-color: #ffffff;
+  --button-disabled-background: #cccccc;
+  --primary-color-dark: #0056b3;
 }
 
 [data-theme="dark"] {

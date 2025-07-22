@@ -6,6 +6,7 @@ import LoadingMessage from '../../../app/components/LoadingMessage';
 import { showToast } from '../../../app/utils/toast';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import CodeSnippetCard from '../../../app/components/CodeSnippetCard';
 
 export default function MySnippetsPage() {
   const { user, loading: userLoading } = useUser();
@@ -90,55 +91,46 @@ export default function MySnippetsPage() {
     );
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
-      <motion.div
-        className="card"
-        style={{ maxWidth: '800px', width: '100%' }}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="card-body">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1 className="card-title mb-0">My Code Snippets</h1>
-            <Link href="/upload/code-snippet-upload" className="btn btn-primary btn-sm">
-              <i className="bi bi-plus-lg me-2"></i>Upload New Snippet
-            </Link>
-          </div>
-          {userSnippets && userSnippets.length > 0 ? (
-            <ul className="list-group list-group-flush">
-              {userSnippets.map(snippet => (
-                <li key={snippet.snippetId} className="list-group-item d-flex justify-content-between align-items-center">
-                  <div>
-                    <strong>{snippet.filename}</strong> ({snippet.language})
-                    {snippet.description && <p className="text-muted mb-0">{snippet.description}</p>}
-                    <small className="text-muted">Uploaded: {new Date(snippet.createdAt).toLocaleDateString()}</small>
-                  </div>
-                  <div>
-                    <Link href={`/code-snippets/${snippet.snippetId}`} className="btn btn-sm btn-primary me-2">
-                      View
-                    </Link>
-                    <button
-                      onClick={() => handleDeleteSnippet(snippet.snippetId)}
-                      className="btn btn-sm btn-danger"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="text-center text-muted fst-italic">
-              <p className="mb-0">You have not uploaded any code snippets yet.</p>
-              <Link href="/upload/code-snippet-upload" className="btn btn-primary mt-3">
-                Upload Your First Snippet
-              </Link>
+    <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="text-primary">My Code Snippets</h1>
+        <Link href="/upload/code-snippet-upload" className="btn btn-primary btn-sm">
+          <i className="bi bi-plus-lg me-2"></i>Upload New Snippet
+        </Link>
+      </div>
+      {userSnippets && userSnippets.length > 0 ? (
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="row g-4"
+        >
+          {userSnippets.map(snippet => (
+            <div key={snippet.snippetId} className="col-md-6 mb-4">
+              <CodeSnippetCard snippet={snippet} onDelete={handleDeleteSnippet} />
             </div>
-          )}
+          ))}
+        </motion.div>
+      ) : (
+        <div className="text-center text-muted fst-italic">
+          <p className="mb-0">You have not uploaded any code snippets yet.</p>
+          <Link href="/upload/code-snippet-upload" className="btn btn-primary mt-3">
+            Upload Your First Snippet
+          </Link>
         </div>
-      </motion.div>
+      )}
     </div>
   );
 }
