@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { firestore } from '/lib/firebase-admin';
 import { useParams, useRouter } from 'next/navigation'; // useRouter for navigation
 import { toast } from 'react-hot-toast';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -69,14 +68,11 @@ export default function CodeSnippetPage() {
     if (snippetId) {
       const fetchSnippet = async () => {
         try {
-          const docRef = firestore.collection('codes').doc(snippetId);
-          const docSnap = await docRef.get();
-
-          if (!docSnap.exists) {
-            throw new Error('Snippet not found.');
+          const res = await fetch(`/api/code-snippets/${snippetId}`);
+          if (!res.ok) {
+            throw new Error(`Failed to fetch snippet metadata: ${res.status}`);
           }
-
-          const data = docSnap.data();
+          const data = await res.json();
           setSnippetData(data);
 
           // Fetch user data
@@ -112,17 +108,20 @@ export default function CodeSnippetPage() {
     if (!confirm('Are you sure you want to delete this snippet?')) return;
 
     try {
-      // Delete from Firestore
-      await firestore.collection('codes').doc(snippetId).delete();
+      const res = await fetch(`/api/code-snippets/${snippetId}`, {
+        method: 'DELETE',
+      });
 
-      // Optionally, delete from Vercel Blob if needed (requires a separate API route or direct call)
-      // For now, we'll just delete the Firestore metadata.
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to delete snippet');
+      }
 
       toast.success('Snippet deleted successfully!');
       router.push('/user/my-snippets'); // Redirect to a relevant page
     } catch (err) {
       console.error('Error deleting snippet:', err);
-      toast.error(err.message || 'Failed to delete snippet.');
+      toast.error(err.message);
     }
   };
 
