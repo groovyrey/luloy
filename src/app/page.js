@@ -5,7 +5,6 @@ import HomePageContent from './components/HomePageContent';
 import LandingPageContent from './components/LandingPageContent';
 import LoadingMessage from './components/LoadingMessage';
 
-
 export default function Home() {
   const { user, loading } = useUser();
   
