@@ -91,6 +91,6 @@ export async function POST(request) {
     return NextResponse.json({ ...blob, firestoreDocId: docRef.id });
   } catch (error) {
     console.error('Error uploading blob or saving to Firestore:', error);
-    return NextResponse.json({ error: 'Failed to upload file or save metadata', details: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to upload file or save metadata', details: error.message, stack: error.stack }, { status: 500 });
   }
 }

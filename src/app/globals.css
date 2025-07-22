@@ -410,3 +410,9 @@ a:hover, button:hover {
 [data-theme="dark"] .btn-close {
   filter: invert(1) grayscale(100%) brightness(200%); /* Makes the SVG white */
 }
+
+.text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

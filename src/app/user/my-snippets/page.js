@@ -118,9 +118,7 @@ export default function MySnippetsPage() {
           className="row g-4"
         >
           {userSnippets.map(snippet => (
-            <div key={snippet.snippetId} className="col-md-6 mb-4">
-              <CodeSnippetCard snippet={snippet} onDelete={handleDeleteSnippet} />
-            </div>
+            <CodeSnippetCard key={snippet.snippetId} snippet={snippet} onDelete={handleDeleteSnippet} className="col-md-6 mb-4" />
           ))}
         </motion.div>
       ) : (
