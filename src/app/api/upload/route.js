@@ -73,7 +73,10 @@ export async function POST(request) {
     }
 
     const docRef = firestore.collection(collectionName).doc();
+    console.log(`Attempting to save to Firestore collection: ${collectionName}`);
+    console.log('Metadata to save:', JSON.stringify(metadata, null, 2));
     await docRef.set(metadata);
+    console.log(`Successfully saved to Firestore with ID: ${docRef.id}`);
 
     return NextResponse.json({ ...blob, firestoreDocId: docRef.id });
   } catch (error) {
