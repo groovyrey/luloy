@@ -3,6 +3,7 @@ import LearnPageClient from './LearnPageClient';
 
 export default async function LearnPage() {
   const allOfficialPostsData = await getSortedPostsData();
+  console.log('Data fetched for LearnPage:', allOfficialPostsData); // Re-adding this log
 
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
