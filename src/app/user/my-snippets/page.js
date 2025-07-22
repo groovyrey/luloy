@@ -61,7 +61,7 @@ export default function MySnippetsPage() {
         setUserSnippets(prevSnippets => prevSnippets.filter(snippet => snippet.snippetId !== snippetId));
       } else {
         const errorData = await res.json();
-        showToast(errorData.error || 'Failed to delete snippet.', 'error');
+        showToast(`Failed to delete snippet: ${errorData.error || 'Unknown error'}`, 'error');
       }
     } catch (err) {
       showToast('An unexpected error occurred during deletion.', 'error');
@@ -102,6 +102,11 @@ export default function MySnippetsPage() {
     },
   };
 
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -117,8 +122,10 @@ export default function MySnippetsPage() {
           animate="visible"
           className="row g-4"
         >
-          {userSnippets.map(snippet => (
-            <CodeSnippetCard key={snippet.snippetId} snippet={snippet} onDelete={handleDeleteSnippet} className="col-md-6 mb-4" />
+          {userSnippets.map((snippet, index) => (
+            <motion.div key={`${snippet.snippetId}-${index}`} variants={itemVariants} className="col-md-6 mb-4">
+              <CodeSnippetCard snippet={snippet} onDelete={handleDeleteSnippet} />
+            </motion.div>
           ))}
         </motion.div>
       ) : (

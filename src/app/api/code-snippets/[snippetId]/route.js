@@ -2,8 +2,10 @@ import { firestore } from '/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { auth } from '/lib/firebase-admin';
+import { del } from '@vercel/blob';
 
-export async function GET(request, { params }) {
+export async function GET(request, context) {
+  const { params } = context;
   const { snippetId } = params;
 
   if (!snippetId) {
@@ -25,8 +27,10 @@ export async function GET(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
-  const session = cookies().get('session')?.value || '';
+export async function DELETE(request, context) {
+  const { params } = context;
+  const { snippetId } = params;
+  const session = (await cookies()).get('session')?.value || '';
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized: No session found' }, { status: 401 });
@@ -40,7 +44,6 @@ export async function DELETE(request, { params }) {
     return NextResponse.json({ error: 'Unauthorized: Invalid session' }, { status: 401 });
   }
 
-  const { snippetId } = params;
   const userId = decodedClaims.uid;
 
   if (!snippetId) {
@@ -57,6 +60,19 @@ export async function DELETE(request, { params }) {
 
     if (docSnap.data().userId !== userId) {
       return NextResponse.json({ error: 'Forbidden: You do not own this snippet' }, { status: 403 });
+    }
+
+    const snippetData = docSnap.data();
+    const blobUrl = snippetData.codeBlobUrl;
+
+    if (blobUrl) {
+      try {
+        await del(blobUrl);
+        console.log(`Successfully deleted blob: ${blobUrl}`);
+      } catch (blobError) {
+        console.error(`Error deleting blob ${blobUrl}:`, blobError);
+        // Continue with Firestore deletion even if blob deletion fails
+      }
     }
 
     await docRef.delete();

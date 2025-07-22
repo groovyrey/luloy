@@ -18,3 +18,8 @@
   position: relative; /* Ensure content is above the background icon */
   z-index: 1;
 }
+
+.cardTitle {
+  word-break: break-all;
+  white-space: normal;
+}

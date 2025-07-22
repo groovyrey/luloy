@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -100,7 +101,8 @@ export default function CodeSnippetUploadPage() {
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(`HTTP error! status: ${response.status}. Details: ${errorData.details || 'No details provided.'}`);
       }
 
       const newBlob = await response.json();
