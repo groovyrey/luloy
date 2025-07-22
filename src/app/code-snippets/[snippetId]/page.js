@@ -170,7 +170,7 @@ export default function CodeSnippetPage() {
   return (
     <div className={styles.snippetContainer}>
       <div className={styles.snippetHeader}>
-        <FileIcon filename={snippetData.filename} className="me-3" style={{ fontSize: '2.5rem' }} />
+        <FileIcon filename={snippetData.language} className="me-3" style={{ fontSize: '2.5rem' }} />
         <h2 className={`${styles.cardTitle} text-truncate`}>{snippetData.filename}</h2>
       </div>
       {snippetData.description && (
