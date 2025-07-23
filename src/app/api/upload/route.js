@@ -75,10 +75,12 @@ export async function POST(request) {
       console.log(`Existing document found. Attempting to update Firestore document with ID: ${existingDocId}`);
     }
 
-    const blob = await put(blobPath, request.body, {
+    const blob = await put(filename, null, {
       access: 'public',
-      force: true, // Overwrite if file exists
+      contentType,
     });
+
+    return NextResponse.json({ url: blob.url, downloadUrl: blob.downloadUrl });
 
     if (type === 'post') {
       const slug = generateSlug(title);

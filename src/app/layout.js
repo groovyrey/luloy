@@ -6,6 +6,7 @@ import ToastProvider from "./components/ToastProvider";
 import { ThemeProvider } from "./context/ThemeContext";
 
 import Navbar from "./components/Navbar";
+import NavigationButtons from "./components/NavigationButtons";
 import BootstrapClient from "./BootstrapClient";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
             <main className="main-content">
               {children}
             </main>
+            <NavigationButtons />
             <footer className="mt-5 pt-4 pb-5 text-center">
               <div className="d-flex justify-content-center gap-4 mb-4">
                 <a href="mailto:luloyapp@gmail.com" className="text-muted"><i className="bi bi-envelope-fill fs-4"></i></a>

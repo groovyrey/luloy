@@ -3,53 +3,45 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { useTheme } from '../../../context/ThemeContext';
-import styles from './EditCodeSnippetPage.module.css'; // Assuming a new CSS module for this page
+import { useUser } from '../../../context/UserContext';
+import LoadingMessage from '../../../components/LoadingMessage';
+import styles from './EditCodeSnippet.module.css';
+import AceEditor from 'react-ace';
+
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-typescript';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-css';
+import 'ace-builds/src-noconflict/mode-json';
+import 'ace-builds/src-noconflict/mode-markdown';
+import 'ace-builds/src-noconflict/mode-ruby';
+import 'ace-builds/src-noconflict/mode-php';
+import 'ace-builds/src-noconflict/mode-golang';
+import 'ace-builds/src-noconflict/mode-swift';
+import 'ace-builds/src-noconflict/mode-kotlin';
+import 'ace-builds/src-noconflict/mode-sql';
+import 'ace-builds/src-noconflict/mode-sh';
+
+
+import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/theme-github';
+
 
 export default function EditCodeSnippetPage() {
   const params = useParams();
   const router = useRouter();
   const { snippetId } = params;
-  const { theme } = useTheme();
+  const { user } = useUser();
 
+  const [snippetData, setSnippetData] = useState(null);
   const [filename, setFilename] = useState('');
   const [description, setDescription] = useState('');
-  const [codeContent, setCodeContent] = useState('');
-  const [originalCodeBlobUrl, setOriginalCodeBlobUrl] = useState(null);
-  const [language, setLanguage] = useState(''); // Language will be displayed but not editable directly
+  const [code, setCode] = useState('');
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
-  const languageMap = {
-    js: 'javascript',
-    jsx: 'javascript',
-    ts: 'typescript',
-    tsx: 'typescript',
-    py: 'python',
-    html: 'markup',
-    css: 'css',
-    json: 'json',
-    md: 'markdown',
-    java: 'java',
-    c: 'c',
-    cpp: 'cpp',
-    h: 'c',
-    hpp: 'cpp',
-    cxx: 'cpp',
-    php: 'php',
-    rb: 'ruby',
-    go: 'go',
-    swift: 'swift',
-    kt: 'kotlin',
-    sh: 'bash',
-    bat: 'batch',
-    cmd: 'batch',
-    sql: 'sql',
-    xml: 'markup',
-    yml: 'yaml',
-    yaml: 'yaml',
-    txt: 'text',
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (snippetId) {
@@ -57,160 +49,192 @@ export default function EditCodeSnippetPage() {
         try {
           const res = await fetch(`/api/code-snippets/${snippetId}`);
           if (!res.ok) {
-            throw new Error(`Failed to fetch snippet: ${res.status}`);
+            throw new Error('Failed to fetch snippet data');
           }
           const data = await res.json();
+          setSnippetData(data);
+          setFilename(data.filename);
+          setDescription(data.description);
 
-          setFilename(data.filename || '');
-          setDescription(data.description || '');
-          setLanguage(data.language || 'unknown');
+          if (!user || user.uid !== data.userId) {
+            toast.error('You are not authorized to edit this snippet.');
+            router.push(`/code-snippets/${snippetId}`);
+            return;
+          }
 
           if (data.codeBlobUrl) {
-            setOriginalCodeBlobUrl(data.codeBlobUrl); // Store the original blob URL
             const codeRes = await fetch(data.codeBlobUrl);
             if (!codeRes.ok) {
-              throw new Error(`Failed to fetch code content: ${codeRes.status}`);
+              throw new Error('Failed to fetch code content');
             }
             const content = await codeRes.text();
-            setCodeContent(content);
-          } else {
-            toast.error('Code content URL not found for this snippet.');
+            setCode(content);
           }
+
         } catch (err) {
-          console.error('Error fetching code snippet for editing:', err);
-          toast.error(err.message || 'Failed to load snippet for editing.');
-          router.push(`/code-snippets/${snippetId}`); // Redirect back if fetch fails
+          console.error('Error fetching snippet:', err);
+          toast.error(err.message || 'Failed to load snippet data.');
+          router.push('/user/my-snippets');
         } finally {
           setLoading(false);
         }
       };
       fetchSnippet();
     }
-  }, [snippetId, router]);
+  }, [snippetId, user, router]);
 
-  const handleSave = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSaving(true);
+    setIsSubmitting(true);
 
     try {
-      // Step 1: If code content changed, re-upload to Vercel Blob
-      let newCodeBlobUrl = null;
-      // Fetch original code content for comparison
-      const originalSnippetData = await (await fetch(`/api/code-snippets/${snippetId}`)).json();
-      const originalCodeContent = await fetch(originalSnippetData.codeBlobUrl).then(res => res.text());
+        // Create a blob from the code content
+        const blob = new Blob([code], { type: 'text/plain' });
+        const file = new File([blob], filename, { type: 'text/plain' });
 
-      if (codeContent !== originalCodeContent) {
-        // Create a Blob from the updated code content
-        const codeBlob = new Blob([codeContent], { type: 'text/plain' });
-        const fileToUpload = new File([codeBlob], filename, { type: 'text/plain' });
-
-        const blobResponse = await fetch(
-          `/api/upload?filename=${encodeURIComponent(filename)}`,
-          {
+        // Upload the new file to Vercel Blob
+        const uploadResponse = await fetch('/api/upload', {
             method: 'POST',
-            body: fileToUpload,
-          }
-        );
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                filename: `userCodes/${user.uid}/${filename}`,
+                contentType: file.type,
+            }),
+        });
 
-        if (!blobResponse.ok) {
-          throw new Error(`Blob re-upload failed: ${blobResponse.statusText}`);
+        if (!uploadResponse.ok) {
+            throw new Error('Failed to get upload URL.');
         }
-        const newBlob = await blobResponse.json();
-        newCodeBlobUrl = newBlob.url;
-      }
 
-      // Step 2: Update snippet metadata in Firestore
-      const updateData = {
-        filename,
-        description,
-        codeBlobUrl: newCodeBlobUrl || originalCodeBlobUrl, // Always include codeBlobUrl
-      };
+        const { url, downloadUrl } = await uploadResponse.json();
 
-      const metadataResponse = await fetch(`/api/code-snippets/${snippetId}`, {
+        const uploadResult = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': file.type,
+            },
+            body: file,
+        });
+
+        if (!uploadResult.ok) {
+            throw new Error('Failed to upload code to blob storage.');
+        }
+
+
+      const res = await fetch(`/api/code-snippets/${snippetId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updateData),
+        body: JSON.stringify({
+          filename,
+          description,
+          codeBlobUrl: downloadUrl,
+        }),
       });
 
-      if (!metadataResponse.ok) {
-        throw new Error(`Metadata update failed: ${metadataResponse.statusText}`);
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to update snippet');
       }
 
-      toast.success('Code snippet updated successfully!');
-      router.push(`/code-snippets/${snippetId}`); // Redirect to view page
-    } catch (error) {
-      console.error('Error saving snippet:', error);
-      toast.error(`Failed to save snippet: ${error.message}`);
+      toast.success('Snippet updated successfully!');
+      router.push(`/code-snippets/${snippetId}`);
+    } catch (err) {
+      console.error('Error updating snippet:', err);
+      toast.error(err.message);
     } finally {
-      setSaving(false);
+      setIsSubmitting(false);
     }
   };
 
   if (loading) {
-    return <div className="text-center mt-5">Loading snippet for editing...</div>;
+    return <LoadingMessage />;
+  }
+
+  if (!snippetData) {
+    return <div className="text-center mt-5">Snippet not found.</div>;
   }
 
   return (
     <div className={styles.editContainer}>
-      <h2>Edit Code Snippet</h2>
-      <div className={styles.editCard}>
-        <form onSubmit={handleSave}>
-          <div className={styles.formGroup}>
-            <label htmlFor="filename-input">Filename:</label>
-            <input
-              id="filename-input"
-              type="text"
-              value={filename}
-              onChange={(e) => setFilename(e.target.value)}
-              required
-              disabled={saving}
+      <h2 className={styles.title}>Edit Snippet</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className="mb-3">
+          <label htmlFor="filename" className="form-label">Filename</label>
+          <input
+            type="text"
+            id="filename"
+            className="form-control"
+            value={filename}
+            onChange={(e) => setFilename(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="language" className="form-label">Language</label>
+          <input
+            type="text"
+            id="language"
+            className="form-control"
+            value={snippetData.language || ''}
+            disabled
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">Description</label>
+          <textarea
+            id="description"
+            className="form-control"
+            rows="3"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+        </div>
+        <div className="mb-3">
+            <label htmlFor="code" className="form-label">Code</label>
+            <AceEditor
+                mode={snippetData.language?.toLowerCase() || 'javascript'}
+                theme="monokai"
+                onChange={setCode}
+                name="code-editor"
+                editorProps={{ $blockScrolling: true }}
+                value={code}
+                width="100%"
+                height="400px"
+                fontSize={14}
+                showPrintMargin={true}
+                showGutter={true}
+                highlightActiveLine={true}
+                setOptions={{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    tabSize: 2,
+                }}
             />
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="language-display">Language:</label>
-            <input
-              id="language-display"
-              type="text"
-              value={language}
-              disabled // Language is not directly editable
-              className={styles.disabledInput}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="description-input">Description:</label>
-            <textarea
-              id="description-input"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief description of the code"
-              rows="3"
-              disabled={saving}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="code-content-input">Code Content:</label>
-            <textarea
-              id="code-content-input"
-              value={codeContent}
-              onChange={(e) => setCodeContent(e.target.value)}
-              rows="20"
-              required
-              disabled={saving}
-              className={styles.codeContentInput}
-            />
-          </div>
-          <div className={styles.buttonGroup}>
-            <button type="submit" disabled={saving} className={styles.saveButton}>
-              {saving ? 'Saving...' : 'Save Changes'}
-            </button>
-            <button type="button" onClick={() => router.push(`/code-snippets/${snippetId}`)} disabled={saving} className={styles.cancelButton}>
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div className="d-flex justify-content-end gap-2">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => router.back()}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
