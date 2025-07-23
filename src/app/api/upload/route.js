@@ -1,6 +1,7 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 import { auth, firestore, admin } from '/lib/firebase-admin.js';
 
 function generateSlug(title) {
