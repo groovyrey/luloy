@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import Lottie from 'react-lottie';
 import { motion } from 'framer-motion';

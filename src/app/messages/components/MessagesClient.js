@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { db } from '../../../lib/firebase';
+import { db } from '../../../../lib/firebase';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, addDoc } from 'firebase/firestore';
 import MessageCard from '@/app/components/MessageCard';
 import LoadingMessage from '@/app/components/LoadingMessage';
 import { useUser } from '@/app/context/UserContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { showToast } from '../utils/toast';
+import { showToast } from '../../utils/toast';
 import styles from '../SendMessage.module.css';
 
 export default function MessagesClient() {
