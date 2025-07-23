@@ -29,12 +29,20 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Unauthorized: Invalid session' }, { status: 401 });
   }
 
-  // Parse the request body for filename, contentType, type, title, description, language
-  const { filename, contentType, type, title, description, language } = await request.json();
+  const formData = await request.formData();
+  const file = formData.get('file');
+  const filename = formData.get('filename');
+  const title = formData.get('title');
+  const description = formData.get('description');
+  const language = formData.get('language');
+  const type = formData.get('type');
 
-  if (!filename || !type || !contentType) {
-    return NextResponse.json({ error: 'Filename, content type, and type are required' }, { status: 400 });
+  if (!file || !filename || !type) {
+    return NextResponse.json({ error: 'File, filename, and type are required' }, { status: 400 });
   }
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const contentType = file.type;
 
   let blobPath;
   let collectionName;

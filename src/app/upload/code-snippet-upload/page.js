@@ -92,13 +92,18 @@ export default function CodeSnippetUploadPage() {
 
     setUploading(true);
     try {
-      const response = await fetch(
-        `/api/upload?filename=${encodeURIComponent(file.name)}&title=${encodeURIComponent(file.name)}&description=${encodeURIComponent(description)}&language=${encodeURIComponent(language)}&type=code`,
-        {
-          method: 'POST',
-          body: file,
-        }
-      );
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('filename', file.name);
+      formData.append('title', file.name); // Using file name as title for code snippets
+      formData.append('description', description);
+      formData.append('language', language);
+      formData.append('type', 'code');
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
