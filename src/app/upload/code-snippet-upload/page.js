@@ -127,7 +127,7 @@ export default function CodeSnippetUploadPage() {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
       <div className="card" style={{ maxWidth: '600px', width: '100%' }}>
-        <div className="card-header">
+        <div className="card-header" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--card-header-text-color)' }}>
           <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
           <h2 className="card-title fw-bold mb-0 fs-3"><span className="bi-code-slash"></span>{" "}Upload Code Snippet</h2>
           <p className="mb-0 opacity-75">Share your code snippets with the community.</p>
@@ -156,7 +156,7 @@ export default function CodeSnippetUploadPage() {
               id="language-select"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="form-select"
+              className="form-select themedSelect"
               disabled={uploading}
             >
               <option value="">Select Language</option>

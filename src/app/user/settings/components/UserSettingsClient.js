@@ -404,7 +404,7 @@ export default function UserSettingsClient() {
           <p className="mb-0 text-muted text-xs">Manage your profile and account settings.</p>
           <div className="d-flex justify-content-center mt-3">
             <button
-              className={`btn btn-sm ${activeSection === 'information' ? 'btn-primary' : 'btn-outline-primary'} me-2`}
+              className={`btn btn-sm ${activeSection === 'information' ? 'btn-light text-primary' : 'btn-outline-light'} me-2`}
               onClick={() => {
                 router.push(`/user/settings?tab=information`, undefined, { shallow: true });
                 setActiveSection('information');
@@ -413,7 +413,7 @@ export default function UserSettingsClient() {
               Information
             </button>
             <button
-              className={`btn btn-sm ${activeSection === 'security' ? 'btn-primary' : 'btn-outline-primary'}`}
+              className={`btn btn-sm ${activeSection === 'security' ? 'btn-light text-primary' : 'btn-outline-light'}`}
               onClick={() => {
                 router.push(`/user/settings?tab=security`, undefined, { shallow: true });
                 setActiveSection('security');

@@ -3,7 +3,7 @@
   align-items: center;
   padding: 10px; /* Reduced padding */
   border: 1px solid var(--card-border-color);
-  border-radius: 8px; /* Slightly less rounded corners */
+  border-radius: var(--border-radius-base);
   box-shadow: var(--box-shadow);
   background-color: var(--card-background-color);
   transition: all 0.3s ease-in-out;
@@ -34,7 +34,7 @@
   align-items: center;
   justify-content: center;
   background-color: var(--background-color);
-  border: 1px solid var(--primary-color); /* Thinner border to the profile picture */
+  border: 1px solid var(--card-border-color); /* Thinner border to the profile picture */
 }
 
 .profilePicture {

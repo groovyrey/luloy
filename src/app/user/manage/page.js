@@ -159,18 +159,18 @@ export default function UserManagementPage() {
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-7">
           <div className="card">
-            <div className="card-header">
+            <div className="card-header" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--card-header-text-color)' }}>
               <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
               <h2 className="card-title fw-bold mb-0 fs-3">User Management</h2>
               <p className="mb-0 opacity-75">Search and manage user accounts.</p>
             </div>
             <div className="card-body">
               <form onSubmit={handleSearch} className="mb-4">
-                <div className="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border border-primary">
+                <div className="input-group mb-3">
                   <input
                     type="text"
                     id="searchUid"
-                    className="form-control border-0 ps-4"
+                    className="form-control"
                     value={searchUid}
                     onChange={(e) => setSearchUid(e.target.value)}
                     placeholder="Enter user UID to search..."
@@ -179,7 +179,7 @@ export default function UserManagementPage() {
                   />
                   <button
                     type="submit"
-                    className="btn btn-primary px-4"
+                    className="btn btn-primary"
                     disabled={isSearching}
                   >
                     {isSearching ? (
@@ -200,7 +200,7 @@ export default function UserManagementPage() {
         <div className="row justify-content-center mt-4 animated fadeIn delay-1s">
           <div className="col-md-8 col-lg-7">
             <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
-              <div className="card-header">
+              <div className="card-header" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--card-header-text-color)' }}>
                 <h5 className="mb-0 fs-4"><i className="bi bi-person-circle me-2"></i>User Profile: {targetUser.fullName}</h5>
                 <p className="mb-0 opacity-75">{targetUser.email}</p>
               </div>
@@ -255,7 +255,7 @@ export default function UserManagementPage() {
                           {badge.name}
                           <button
                             type="button"
-                            className="btn-close btn-close-white ms-2 opacity-75"
+                            className="btn-close btn-close-white ms-2"
                             aria-label="Remove badge"
                             onClick={() => handleRemoveBadge(badgeId)}
                             disabled={isUpdating}

@@ -22,7 +22,7 @@
   --border-radius-base: 1rem; /* Default border-radius */
   --transition-base: all 0.2s ease-in-out;
   --navbar-background-color: #ffffff;
-  --card-header-background-color: transparent;
+  --card-header-background-color: var(--primary-color);
   --card-header-text-color: #ffffff;
   --my-message-gradient-start: #66b3ff;
   --my-message-gradient-end: #3385ff;
@@ -46,7 +46,7 @@
   --navbar-box-shadow: none;
   --border-radius-base: 1rem; /* Override for dark theme */
   --navbar-background-color: #181818; /* Slightly Lighter Black */
-  --card-header-background-color: transparent; /* Darker header for dark theme */
+  --card-header-background-color: var(--primary-color); /* Darker header for dark theme */
   --card-header-text-color: #ffffff; /* White text for header */
   --my-message-gradient-start: #333333; /* Dark Grey */
   --other-message-gradient-start: #222222; /* Darker Grey */
@@ -257,7 +257,7 @@ p {
 .form-control,
 input[type="file"] {
   border: 1px solid var(--card-border-color);
-  border-radius: var(--border-radius-base);
+  border-radius: 0.5rem; /* Adjusted for a slightly less rounded look */
   padding: 0.5rem 0.75rem;
   transition: var(--transition-base);
   background-color: var(--card-background-color);
