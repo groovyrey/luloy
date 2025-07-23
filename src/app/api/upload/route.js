@@ -1,4 +1,4 @@
-import { put } from '@vercel/blob';
+import { put, head } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
@@ -53,11 +53,32 @@ export async function POST(request) {
   }
 
   try {
+    const userId = decodedClaims.uid; // decodedClaims is already available from session verification
+    let docRef;
+    let existingDocId = null;
+
+    // Check if a document with the same filename and userId already exists
+    const existingDocsSnapshot = await firestore.collection(collectionName)
+      .where('filename', '==', filename)
+      .where(type === 'post' ? 'uploadedBy' : 'userId', '==', userId)
+      .limit(1)
+      .get();
+
+    if (existingDocsSnapshot.empty) {
+      // No existing document, create a new one
+      docRef = firestore.collection(collectionName).doc();
+      console.log(`Attempting to save to Firestore collection: ${collectionName}`);
+    } else {
+      // Existing document found, update it
+      existingDocId = existingDocsSnapshot.docs[0].id;
+      docRef = firestore.collection(collectionName).doc(existingDocId);
+      console.log(`Existing document found. Attempting to update Firestore document with ID: ${existingDocId}`);
+    }
+
     const blob = await put(blobPath, request.body, {
       access: 'public',
+      force: true, // Overwrite if file exists
     });
-
-    const userId = decodedClaims.uid; // decodedClaims is already available from session verification
 
     if (type === 'post') {
       const slug = generateSlug(title);
@@ -83,11 +104,9 @@ export async function POST(request) {
       };
     }
 
-    const docRef = firestore.collection(collectionName).doc();
-    console.log(`Attempting to save to Firestore collection: ${collectionName}`);
-    console.log('Metadata to save:', JSON.stringify(metadata, null, 2));
-    await docRef.set(metadata);
-    console.log(`Successfully saved to Firestore with ID: ${docRef.id}`);
+    console.log('Metadata to save/update:', JSON.stringify(metadata, null, 2));
+    await docRef.set(metadata, { merge: true }); // Use merge: true to update existing fields
+    console.log(`Successfully saved/updated to Firestore with ID: ${docRef.id}`);
 
     // Revalidate the /learn path if a new post was added
     if (type === 'post') {
