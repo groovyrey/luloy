@@ -81,7 +81,7 @@ export async function POST(request) {
       console.log(`Existing document found. Attempting to update Firestore document with ID: ${existingDocId}`);
     }
 
-    const blob = await put(blobPath, request.body, {
+    const blob = await put(blobPath, file, {
       access: 'public',
       contentType: contentType,
     });
