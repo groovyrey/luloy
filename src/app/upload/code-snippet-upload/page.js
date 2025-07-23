@@ -151,16 +151,21 @@ export default function CodeSnippetUploadPage() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="language-input" className="form-label">Language (auto-detected):</label>
-            <input
-              id="language-input"
-              type="text"
+            <label htmlFor="language-select" className="form-label">Language:</label>
+            <select
+              id="language-select"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              placeholder="e.g., javascript, python, java"
-              className="form-control"
+              className="form-select"
               disabled={uploading}
-            />
+            >
+              <option value="">Select Language</option>
+              {Object.entries(languageMap).map(([ext, lang]) => (
+                <option key={ext} value={lang}>
+                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                </option>
+              ))}
+            </select>
           </div>
           <button onClick={handleUpload} disabled={uploading || !file} className="btn btn-primary w-100">
             {uploading ? (

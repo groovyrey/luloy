@@ -33,7 +33,7 @@
 }
 
 .offcanvasHeaderActions {
-  padding-top: 3rem; /* Increased padding to move content further down */
+  padding-top: 1.5rem; /* Adjusted padding to move content slightly up */
   padding-bottom: 1.5rem; /* Spacing below the header actions */
   border-bottom: 1px solid var(--card-border-color); /* Separator line */
   margin-bottom: 1.5rem; /* Space between header actions and nav content */
