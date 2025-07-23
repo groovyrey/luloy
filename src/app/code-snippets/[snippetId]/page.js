@@ -234,7 +234,7 @@ export default function CodeSnippetPage() {
               <small className="text-muted">{snippetData.description || 'No description'}</small>
             </div>
           </div>
-          <div className="d-flex gap-2 w-100 justify-content-start">
+          <div className="d-flex gap-2">
             <button onClick={handleCopyCode} className="btn btn-sm btn-outline-primary" title="Copy Code">
               <i className="bi bi-clipboard"></i>
             </button>

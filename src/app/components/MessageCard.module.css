@@ -40,11 +40,13 @@
 
 .messageCardContainer small {
   color: var(--secondary-color);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 .senderName {
   color: var(--primary-color);
+  font-size: 0.95rem;
+  word-break: break-all;
 }
 
 .optionsButtonContainer {

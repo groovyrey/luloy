@@ -132,7 +132,7 @@ export default function CodeSnippetUploadPage() {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
       <div className="card" style={{ maxWidth: '600px', width: '100%' }}>
-        <div className="card-header" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--card-header-text-color)' }}>
+        <div className="card-header">
           <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
           <h2 className="card-title fw-bold mb-0 fs-3"><span className="bi-code-slash"></span>{" "}Upload Code Snippet</h2>
           <p className="mb-0 opacity-75">Share your code snippets with the community.</p>
@@ -165,11 +165,13 @@ export default function CodeSnippetUploadPage() {
               disabled={uploading}
             >
               <option value="">Select Language</option>
-              {Object.entries(languageMap).map(([ext, lang]) => (
-                <option key={ext} value={lang}>
-                  {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                </option>
-              ))}
+              {Array.from(new Set(Object.values(languageMap)))
+                .sort()
+                .map((lang) => (
+                  <option key={lang} value={lang}>
+                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                  </option>
+                ))}
             </select>
           </div>
           <button onClick={handleUpload} disabled={uploading || !file} className="btn btn-primary w-100">

@@ -164,7 +164,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
             </motion.div>
           )}
         </AnimatePresence>
-        <p className="text-muted fs-5">{message.message}</p>
+        <p className="text-muted" style={{ fontSize: '0.75rem' }}>{message.message}</p>
         <div className="d-flex justify-content-between align-items-center">
           <small className="">
             {message.date ? formatTimeAgo(message.date) : 'Date N/A'}

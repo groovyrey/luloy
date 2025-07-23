@@ -22,7 +22,7 @@
   --border-radius-base: 1rem; /* Default border-radius */
   --transition-base: all 0.2s ease-in-out;
   --navbar-background-color: #ffffff;
-  --card-header-background-color: var(--primary-color);
+  --card-header-background-color: var(--card-background-color);
   --card-header-text-color: #ffffff;
   --my-message-gradient-start: #66b3ff;
   --my-message-gradient-end: #3385ff;
@@ -46,7 +46,7 @@
   --navbar-box-shadow: none;
   --border-radius-base: 1rem; /* Override for dark theme */
   --navbar-background-color: #181818; /* Slightly Lighter Black */
-  --card-header-background-color: var(--primary-color); /* Darker header for dark theme */
+  --card-header-background-color: var(--card-background-color); /* Darker header for dark theme */
   --card-header-text-color: #ffffff; /* White text for header */
   --my-message-gradient-start: #333333; /* Dark Grey */
   --other-message-gradient-start: #222222; /* Darker Grey */
@@ -81,7 +81,7 @@ html.dark {
   --box-shadow: none;
   --box-shadow-hover: none;
   --navbar-background-color: #181818; /* Slightly Lighter Black */
-  --card-header-background-color: transparent; /* Darker header for dark theme */
+  --card-header-background-color: var(--card-background-color);
   --card-header-text-color: #ffffff; /* White text for header */
   
   --my-message-gradient-start: #333333; /* Dark Grey */
@@ -103,7 +103,7 @@ body {
   padding: 0;
   overflow-x: hidden;
   line-height: 1.5;
-  font-size: 0.875rem;
+  font-size: 0.8rem; /* Slightly smaller base font size */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -112,8 +112,29 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.25rem;
 }
 
+h5 {
+  font-size: 1.1rem; /* Slightly smaller h5 */
+}
+
+h6 {
+  font-size: 0.9rem; /* Slightly smaller h6 */
+}
+
 p {
   color: var(--text-color);
+  font-size: 0.8rem !important; /* Explicitly set p tag font size */
+}
+
+.card p {
+  font-size: 0.8rem !important; /* Ensure p tags inside cards are affected */
+}
+
+.card h5 {
+  font-size: 1.1rem !important; /* Ensure h5 tags inside cards are affected */
+}
+
+.card h6 {
+  font-size: 0.9rem !important; /* Ensure h6 tags inside cards are affected */
 }
 
 .card-title {

@@ -166,28 +166,22 @@ export default function UserManagementPage() {
             </div>
             <div className="card-body">
               <form onSubmit={handleSearch} className="mb-4">
-                <div className="input-group mb-3">
+                <div className="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border border-primary">
                   <input
                     type="text"
-                    id="searchUid"
-                    className="form-control"
+                    className="form-control border-0 ps-4"
+                    placeholder="Enter user UID to search..."
                     value={searchUid}
                     onChange={(e) => setSearchUid(e.target.value)}
-                    placeholder="Enter user UID to search..."
-                    aria-label="User UID"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
                     disabled={isSearching}
-                  >
+                  />
+                  <button className="btn btn-primary px-4" type="submit" disabled={isSearching}>
                     {isSearching ? (
                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     ) : (
                       <i className="bi bi-search"></i>
                     )}
-                    <span className="ms-2 d-none d-sm-inline">{isSearching ? 'Searching...' : 'Search User'}</span>
+                    <span className="ms-2 d-none d-sm-inline">Search</span>
                   </button>
                 </div>
               </form>
