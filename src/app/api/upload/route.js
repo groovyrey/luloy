@@ -13,7 +13,9 @@ function generateSlug(title) {
 }
 
 export async function POST(request) {
-  const session = cookies().get('session')?.value || '';
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('session');
+  const session = sessionCookie ? sessionCookie.value : '';
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized: No session found' }, { status: 401 });
@@ -27,15 +29,11 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Unauthorized: Invalid session' }, { status: 401 });
   }
 
-  const { searchParams } = new URL(request.url);
-  const filename = searchParams.get('filename');
-  const type = searchParams.get('type'); // 'post' or 'code'
-  const title = searchParams.get('title') || filename;
-  const description = searchParams.get('description') || '';
-  const language = searchParams.get('language') || 'unknown'; // For code snippets
+  // Parse the request body for filename, contentType, type, title, description, language
+  const { filename, contentType, type, title, description, language } = await request.json();
 
-  if (!filename || !type) {
-    return NextResponse.json({ error: 'Filename and type are required' }, { status: 400 });
+  if (!filename || !type || !contentType) {
+    return NextResponse.json({ error: 'Filename, content type, and type are required' }, { status: 400 });
   }
 
   let blobPath;
@@ -46,7 +44,7 @@ export async function POST(request) {
     blobPath = `posts/${filename}`;
     collectionName = 'posts';
   } else if (type === 'code') {
-    blobPath = `userCodes/${filename}`;
+    blobPath = `userCodes/${decodedClaims.uid}/${filename}`; // Ensure unique path for user codes
     collectionName = 'codes';
   } else {
     return NextResponse.json({ error: 'Invalid upload type' }, { status: 400 });
@@ -75,12 +73,10 @@ export async function POST(request) {
       console.log(`Existing document found. Attempting to update Firestore document with ID: ${existingDocId}`);
     }
 
-    const blob = await put(filename, null, {
+    const blob = await put(blobPath, request.body, {
       access: 'public',
-      contentType,
+      contentType: contentType,
     });
-
-    return NextResponse.json({ url: blob.url, downloadUrl: blob.downloadUrl });
 
     if (type === 'post') {
       const slug = generateSlug(title);

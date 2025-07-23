@@ -11,9 +11,11 @@
   --accent-color: #e9ecef;
   --background-color: #f8f9fa;
   --text-color: #343a40;
+  --text-color-rgb: 52, 58, 64;
   --light-text-color: #6c757d;
   --card-background-color: #ffffff;
   --card-border-color: #dee2e6;
+  --hover-bg-color: #f0f0f0;
   --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --box-shadow-hover: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   --navbar-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -36,11 +38,10 @@
   --input-background-color: #ffffff;
   --button-text-color: #ffffff;
   --button-disabled-background: #cccccc;
-  --primary-color-dark: #0056b3;
 }
 
 [data-theme="dark"] {
-  --box-shadow: none;
+  --primary-color: #0056b3;
   --box-shadow-hover: none;
   --navbar-box-shadow: none;
   --border-radius-base: 1rem; /* Override for dark theme */
@@ -50,6 +51,13 @@
   --my-message-gradient-start: #333333; /* Dark Grey */
   --other-message-gradient-start: #222222; /* Darker Grey */
   --other-message-gradient-end: #000000; /* Pure Black */
+  --accent-color: #444444; /* Medium Dark Grey */
+  --background-color: #0f0f0f; /* Slightly darker than card background */
+  --text-color: #f0f0f0; /* Off-white */
+  --light-text-color: #cccccc; /* Light Grey */
+  --card-background-color: #181818; /* Darker Almost Black */
+  --card-border-color: #333333; /* Lighter Darker Grey */
+  --hover-bg-color: #282828;
 }
 
 [data-theme="dark"] .card {
@@ -61,7 +69,7 @@
 }
 
 html.dark {
-  --primary-color: #007bff;
+  /* --primary-color: #007bff; */
   --primary-rgb: 0, 123, 255;
   --secondary-color: #6c757d;
   --accent-color: #444444; /* Medium Dark Grey */
@@ -212,6 +220,36 @@ p {
 
 .btn-outline-primary:hover {
   background-color: var(--primary-color);
+  color: var(--card-background-color);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.btn-outline-info {
+  color: var(--info-color);
+  border: 1px solid var(--info-color);
+  border-radius: var(--border-radius-base);
+  padding: 0.5rem 1rem;
+  transition: var(--transition-base);
+  box-shadow: var(--box-shadow);
+}
+
+.btn-outline-info:hover {
+  background-color: var(--info-color);
+  color: var(--card-background-color);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.btn-outline-danger {
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+  border-radius: var(--border-radius-base);
+  padding: 0.5rem 1rem;
+  transition: var(--transition-base);
+  box-shadow: var(--box-shadow);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--danger-color);
   color: var(--card-background-color);
   box-shadow: var(--box-shadow-hover);
 }

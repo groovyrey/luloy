@@ -59,7 +59,7 @@ import { useUser } from '../../../app/context/UserContext'; // To get current us
 import LoadingMessage from '../../../app/components/LoadingMessage';
 import Link from 'next/link';
 import FileIcon from '../../../app/components/FileIcon';
-import styles from './CodeSnippetPage.module.css';
+
 
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('typescript', typescript);
@@ -224,60 +224,47 @@ export default function CodeSnippetPage() {
   const syntaxHighlighterStyle = vscDarkPlus;
 
   return (
-    <div className={styles.snippetContainer}>
-      <div className={styles.snippetHeader}>
-        <FileIcon filename={snippetData.language} className="me-3" style={{ fontSize: '2.5rem' }} />
-        <h2 className={`${styles.cardTitle} text-truncate`}>{snippetData.filename}</h2>
-      </div>
-      {snippetData.description && (
-        <p className={styles.snippetDescription}>{snippetData.description}</p>
-      )}
-      <div className={styles.snippetMeta}>
-        <span className="badge" style={{ color: 'var(--text-color)' }}>Language: <code className={styles.languageCode}>{snippetData.language}</code></span>
-        <span className="badge" style={{ color: 'var(--text-color)' }}>
-          Uploaded by: <Link href={`/user/${snippetData.userId}`} className="text-primary">
-            {uploaderName}
-          </Link>
-        </span>
-        </div>
-      {isOwner && (
-        <div className={styles.actionsContainer}>
-          <h3 className={styles.actionsTitle}>Actions</h3>
-          <div className={styles.actionsButtons}>
-          <Link href={`/code-snippets/${snippetId}/edit`} className="btn btn-sm btn-primary d-flex align-items-center ms-2">
-            <i className="bi bi-pencil me-1"></i> Edit
-          </Link>
-          <button onClick={handleDelete} className="btn btn-sm btn-danger d-flex align-items-center ms-2">
-            <i className="bi bi-trash me-1"></i> Delete
-          </button>
+    <div className="container mt-4">
+      <div className="card mb-4">
+        <div className="card-header d-flex flex-column align-items-start">
+          <div className="d-flex align-items-center mb-2">
+            <FileIcon filename={snippetData.language} className="me-2" style={{ fontSize: '2rem' }} />
+            <div>
+              <h5 className="mb-0 text-truncate">{snippetData.filename}</h5>
+              <small className="text-muted">{snippetData.description || 'No description'}</small>
+            </div>
+          </div>
+          <div className="d-flex gap-2 w-100 justify-content-start">
+            <button onClick={handleCopyCode} className="btn btn-sm btn-outline-primary" title="Copy Code">
+              <i className="bi bi-clipboard"></i>
+            </button>
+            <button onClick={handleShareCode} className="btn btn-sm btn-outline-info" title="Share Snippet">
+              <i className="bi bi-share"></i>
+            </button>
+            {isOwner && (
+              <button onClick={handleDelete} className="btn btn-sm btn-outline-danger" title="Delete Snippet">
+                <i className="bi bi-trash"></i>
+              </button>
+            )}
           </div>
         </div>
-      )}
-      <div className={`${styles.codeBlockContainer} ${styles.markdownBody}`}>
-        <div className={styles.codeBlockHeader}>
-          <div className={styles.codeBlockActions}>
-            <button onClick={handleCopyCode} className="btn btn-sm btn-outline-secondary d-flex align-items-center me-2">
-              <i className="bi bi-clipboard me-1"></i> Copy Code
-            </button>
-            <button onClick={handleShareCode} className="btn btn-sm btn-outline-info d-flex align-items-center">
-              <i className="bi bi-share me-1"></i> Share
-            </button>
-          </div>
+        <div className="card-body p-0">
+          <SyntaxHighlighter
+            language={snippetData.language?.toLowerCase()}
+            style={syntaxHighlighterStyle}
+            showLineNumbers
+            wrapLines
+            customStyle={{
+              padding: '1em',
+              margin: '0',
+              borderRadius: 'var(--border-radius-base)',
+              fontSize: '0.9em',
+              backgroundColor: 'transparent',
+            }}
+          >
+            {codeContent}
+          </SyntaxHighlighter>
         </div>
-        <SyntaxHighlighter
-          language={snippetData.language?.toLowerCase()}
-          style={syntaxHighlighterStyle}
-          showLineNumbers
-          wrapLines
-          customStyle={{
-            padding: '1em',
-            margin: '0',
-            borderRadius: 'var(--border-radius-base)',
-            fontSize: '0.9em',
-          }}
-        >
-          {codeContent}
-        </SyntaxHighlighter>
       </div>
 
       <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>

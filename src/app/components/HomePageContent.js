@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link'; // Import Link for navigation
 import Modal from './Modal'; // Import the Modal component
 
@@ -14,6 +14,25 @@ import { gsap } from 'gsap';
 export default function HomePageContent() {
   const { user, loading, userData } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [learningPost, setLearningPost] = useState(null);
+
+  const fetchLearningPost = useCallback(async () => {
+    try {
+      const response = await fetch('/api/random-post');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setLearningPost(data);
+    } catch (error) {
+      console.error("Failed to fetch learning post:", error);
+      setLearningPost(null); // Ensure it's null on error
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLearningPost();
+  }, [fetchLearningPost]);
   
   
   const welcomeRef = useRef(null);
@@ -70,51 +89,23 @@ export default function HomePageContent() {
       {/* New Section: Learning Zone */}
       <div className="mt-5 w-100" style={{ maxWidth: '800px' }}>
         <h2 className="h3 fw-semibold text-secondary mb-4 text-center">Learning Zone</h2>
-        <div className="row g-5">
-          <div className="col-md-6">
-            <div className="card h-100">
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title text-primary">Introduction to Data Structures & Algorithms</h5>
-                <p className="card-text text-muted flex-grow-1">Get started with the fundamental concepts of data structures and algorithms.</p>
-                <Link href="/learn/data-structures-algorithms-introduction" className="btn btn-outline-primary mt-auto">
-                  Read More <i className="bi bi-arrow-right"></i>
-                </Link>
-              </div>
+        {learningPost ? (
+          <div className="card h-100">
+            <div className="card-body d-flex flex-column">
+              <h5 className="card-title text-primary">{learningPost.title}</h5>
+              <p className="card-text text-muted flex-grow-1">{learningPost.description}</p>
+              <Link href={`/learn/${learningPost.slug}`} className="btn btn-outline-primary mt-auto">
+                Read More <i className="bi bi-arrow-right"></i>
+              </Link>
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="card h-100">
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title text-primary">Object-Oriented Programming in Java</h5>
-                <p className="card-text text-muted flex-grow-1">Explore the core principles of OOP using Java with real-world examples.</p>
-                <Link href="/learn/object-oriented-programming-java" className="btn btn-outline-primary mt-auto">
-                  Read More <i className="bi bi-arrow-right"></i>
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="card h-100">
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title text-primary">Introduction to SQL</h5>
-                <p className="card-text text-muted flex-grow-1">Learn the basics of SQL for managing and querying relational databases.</p>
-                <Link href="/learn/introduction-to-sql" className="btn btn-outline-primary mt-auto">
-                  Read More <i className="bi bi-arrow-right"></i>
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="card h-100 text-center">
-              <div className="card-body d-flex flex-column justify-content-center">
-                 <h5 className="card-title">Explore More</h5>
-                 <p className="card-text text-muted">Visit the learn page for more articles.</p>
-                <Link href="/learn" className="btn btn-primary mt-3">
-                  Go to Learn Page <i className="bi bi-book"></i>
-                </Link>
-              </div>
-            </div>
-          </div>
+        ) : (
+          <p className="text-center text-muted">Loading learning content...</p>
+        )}
+        <div className="text-center mt-4">
+          <Link href="/learn" className="btn btn-primary">
+            Go to Learn Page <i className="bi bi-book"></i>
+          </Link>
         </div>
       </div>
 

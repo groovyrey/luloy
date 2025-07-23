@@ -63,11 +63,76 @@ export default function Offcanvas({ isOpen, onClose }) {
           >
             
             <div className={styles.offcanvasBody}>
+              <div className={styles.offcanvasHeaderActions}>
+                {loading ? (
+                  <div className={styles.loadingSpinner}></div>
+                ) : user ? (
+                  <div className={styles.userProfileContainer}>
+                    <button onClick={() => { setIsUserDropdownOpen(!isUserDropdownOpen); setIsMessagesDropdownOpen(false); }} className={styles.userProfileButton}>
+                      {userData?.profilePictureUrl ? (
+                        <img src={userData.profilePictureUrl} alt={userData.username || userData.firstName} className={styles.profilePicture} />
+                      ) : (
+                        <i className="bi bi-person-circle"></i>
+                      )}
+                      <span className="ms-2">{userData?.username || userData?.firstName}</span>
+                    </button>
+                    <AnimatePresence>
+                      {isUserDropdownOpen && (
+                        <motion.div 
+                          className={styles.dropdownMenu}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          variants={{
+                            hidden: { opacity: 0, maxHeight: 0 },
+                            visible: {
+                              opacity: 1,
+                              maxHeight: "500px",
+                              transition: {
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 20,
+                                staggerChildren: 0.1,
+                                delayChildren: 0.1,
+                                staggerDirection: 1,
+                              },
+                            },
+                          }}
+                        >
+                          <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
+                            <Link href={`/user/${userData?.username || user.uid}`} onClick={handleDropdownLinkClick}>
+                              <i className="bi bi-person-fill"></i> View Profile
+                            </Link>
+                          </motion.div>
+                          <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
+                            <Link href="/user/settings" onClick={handleDropdownLinkClick}>
+                              <i className="bi bi-gear-fill"></i> Settings
+                            </Link>
+                          </motion.div>
+                          <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
+                            <button onClick={handleLogout}>
+                              <i className="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>) : (
+                  <div className={styles.authButtons}>
+                    <Link href="/login" onClick={onClose} className={styles.authButton}>
+                      <i className="bi bi-box-arrow-in-right me-2"></i>Login
+                    </Link>
+                    <Link href="/signup" onClick={onClose} className={styles.authButton}>
+                      <i className="bi bi-person-plus-fill me-2"></i>Sign Up
+                    </Link>
+                  </div>
+                )}
+              </div>
               <div className={styles.scrollableNavContent}>
                 <div className={styles.navbarLinks}>
                   <ul>
                     <li className={styles.navDropdown}>
-                      <button onClick={() => setIsMessagesDropdownOpen(!isMessagesDropdownOpen)}>
+                      <button onClick={() => { setIsMessagesDropdownOpen(!isMessagesDropdownOpen); setIsUserDropdownOpen(false); }}>
                         <i className="bi bi-envelope me-2"></i>Messages
                         <i className={`bi bi-chevron-down ${isMessagesDropdownOpen ? 'rotate-180' : ''}`}></i>
                       </button>
@@ -95,15 +160,22 @@ export default function Offcanvas({ isOpen, onClose }) {
                           >
                             <div className={styles.navDropdownContent}>
                               <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                                <Link href="/messages/public" onClick={handleDropdownLinkClick}>
+                                <Link href="/messages?tab=public" onClick={handleDropdownLinkClick}>
                                   <i className="bi bi-chat-dots-fill"></i> Public Messages
                                 </Link>
                               </motion.div>
                               <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                                <Link href="/messages/send" onClick={handleDropdownLinkClick}>
+                                <Link href="/messages?tab=send" onClick={handleDropdownLinkClick}>
                                 <i className="bi bi-send-fill"></i> Send Message
                               </Link>
                               </motion.div>
+                              {user?.permissions?.canAssignBadges && (
+                                <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
+                                  <Link href="/messages?tab=private" onClick={handleDropdownLinkClick}>
+                                    <i className="bi bi-shield-lock me-2"></i> Private Messages
+                                  </Link>
+                                </motion.div>
+                              )}
                             </div>
                           </motion.div>
                         )}
@@ -178,81 +250,10 @@ export default function Offcanvas({ isOpen, onClose }) {
                             <i className="bi bi-person-badge me-2"></i>Manage Users
                           </Link>
                         </li>
-                        <li>
-                          <Link href="/messages/private" onClick={onClose}>
-                            <i className="bi bi-shield-lock me-2"></i>Private Messages
-                          </Link>
-                        </li>
                       </ul>
                     </div>
                   )}
                 </div>
-              </div>
-              <div className={styles.navbarActions}>
-                {loading ? (
-                  <div className={styles.loadingSpinner}></div>
-                ) : user ? (
-                  <div className={styles.userProfileContainer}>
-                    <button onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)} className={styles.userProfileButton}>
-                      {userData?.profilePictureUrl ? (
-                        <img src={userData.profilePictureUrl} alt={userData.username || userData.firstName} className={styles.profilePicture} />
-                      ) : (
-                        <i className="bi bi-person-circle"></i>
-                      )}
-                      <span className="ms-2">{userData?.username || userData?.firstName}</span>
-                    </button>
-                    <AnimatePresence>
-                      {isUserDropdownOpen && (
-                        <motion.div 
-                          className={styles.dropdownMenu}
-                          initial="hidden"
-                          animate="visible"
-                          exit="hidden"
-                          variants={{
-                            hidden: { opacity: 0, maxHeight: 0 },
-                            visible: {
-                              opacity: 1,
-                              maxHeight: "500px",
-                              transition: {
-                                type: "spring",
-                                stiffness: 300,
-                                damping: 20,
-                                staggerChildren: 0.1,
-                                delayChildren: 0.1,
-                                staggerDirection: -1,
-                              },
-                            },
-                          }}
-                        >
-                          <motion.div variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                            <Link href={`/user/${userData?.username || user.uid}`} onClick={handleDropdownLinkClick}>
-                              <i className="bi bi-person-fill"></i> View Profile
-                            </Link>
-                          </motion.div>
-                          <motion.div variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                            <Link href="/user/settings" onClick={handleDropdownLinkClick}>
-                              <i className="bi bi-gear-fill"></i> Settings
-                            </Link>
-                          </motion.div>
-                          <motion.div variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                            <button onClick={handleLogout}>
-                              <i className="bi bi-box-arrow-right"></i> Logout
-                            </button>
-                          </motion.div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <div className={styles.authButtons}>
-                    <Link href="/login" onClick={onClose} className={styles.authButton}>
-                      <i className="bi bi-box-arrow-in-right me-2"></i>Login
-                    </Link>
-                    <Link href="/signup" onClick={onClose} className={styles.authButton}>
-                      <i className="bi bi-person-plus-fill me-2"></i>Sign Up
-                    </Link>
-                  </div>
-                )}
               </div>
             </div>
           </motion.div>

@@ -1,0 +1,66 @@
+.sendMessagePrivateToggleCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border: 1px solid var(--card-border-color); /* Reverted to card-border-color */
+  border-radius: var(--border-radius-base); /* Changed to use CSS variable */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: var(--card-background-color);
+}
+
+.sendMessagePrivateToggleCard:hover {
+  background-color: var(--hover-bg-color);
+}
+
+.sendMessagePrivateToggleContent {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.sendMessagePrivateToggleLabel {
+  font-weight: bold;
+  margin-left: 8px;
+  color: var(--text-color);
+}
+
+.sendMessagePrivateToggleSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: rgba(var(--text-color-rgb), 0.2); /* Default background */
+  border-radius: 10px;
+  padding: 2px;
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sendMessagePrivateToggleSwitch[data-private="true"] {
+  justify-content: flex-end;
+  background-color: var(--primary-color);
+}
+
+.sendMessagePrivateToggleSwitch[data-private="false"] {
+  justify-content: flex-start;
+  background-color: #e0e0e0; /* Light mode background */
+}
+
+.sendMessagePrivateToggleHandle {
+  width: 16px;
+  height: 16px;
+  background-color: var(--background-color); /* Handle color */
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0,0,0,0.3);
+  transition: left 0.3s ease;
+}
+
+.sendMessagePrivateToggleSwitch[data-private="false"] .sendMessagePrivateToggleHandle {
+  left: 2px;
+}
+
+.sendMessagePrivateToggleSwitch[data-private="true"] .sendMessagePrivateToggleHandle {
+  left: calc(100% - 16px - 2px); /* 100% - handle_width - right_padding */
+}
