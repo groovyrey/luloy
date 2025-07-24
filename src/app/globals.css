@@ -126,7 +126,7 @@ p {
 }
 
 .card p {
-  font-size: 0.8rem !important; /* Ensure p tags inside cards are affected */
+  font-size: 0.9rem !important; /* Ensure p tags inside cards are affected */
 }
 
 .card h5 {

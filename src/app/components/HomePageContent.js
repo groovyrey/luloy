@@ -14,25 +14,6 @@ import { gsap } from 'gsap';
 export default function HomePageContent() {
   const { user, loading, userData } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [learningPost, setLearningPost] = useState(null);
-
-  const fetchLearningPost = useCallback(async () => {
-    try {
-      const response = await fetch('/api/random-post');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setLearningPost(data);
-    } catch (error) {
-      console.error("Failed to fetch learning post:", error);
-      setLearningPost(null); // Ensure it's null on error
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchLearningPost();
-  }, [fetchLearningPost]);
   
   
   const welcomeRef = useRef(null);
@@ -86,28 +67,7 @@ export default function HomePageContent() {
           </div>
       </div>
 
-      {/* New Section: Learning Zone */}
-      <div className="mt-5 w-100" style={{ maxWidth: '800px' }}>
-        <h2 className="h3 fw-semibold text-secondary mb-4 text-center">Learning Zone</h2>
-        {learningPost ? (
-          <div className="card h-100">
-            <div className="card-body d-flex flex-column">
-              <h5 className="card-title text-primary">{learningPost.title}</h5>
-              <p className="card-text text-muted flex-grow-1">{learningPost.description}</p>
-              <Link href={`/learn/${learningPost.slug}`} className="btn btn-outline-primary mt-auto">
-                Read More <i className="bi bi-arrow-right"></i>
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <p className="text-center text-muted">Loading learning content...</p>
-        )}
-        <div className="text-center mt-4">
-          <Link href="/learn" className="btn btn-primary">
-            Go to Learn Page <i className="bi bi-book"></i>
-          </Link>
-        </div>
-      </div>
+      
 
       
     </motion.div>

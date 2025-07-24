@@ -85,7 +85,7 @@
   /* Using Bootstrap's btn-link for consistent styling */
   padding: 0.75rem 1.5rem;
   text-align: left;
-  font-size: 1rem;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
   width: 100%;
@@ -93,4 +93,13 @@
 
 .deleteOptionButton {
   color: var(--danger-color); /* Keep danger color for text */
+}
+
+.messageContent {
+  padding: 5px; /* Padding inside the border */
+  margin: 5px;/* Reduced margin to align the border */
+  word-wrap: break-all;
+  white-space: pre-wrap;
+  font-size: 1.5rem !important; /* Increased font size for better readability */
+  border-left: 1px solid transparent; /* Thinner vertical line */
 }
