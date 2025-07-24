@@ -26,55 +26,7 @@ export async function GET(request, context) {
   }
 }
 
-export async function PUT(request, context) {
-  const { snippetId } = await context.params;
-  const session = (await cookies()).get('session')?.value || '';
 
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized: No session found' }, { status: 401 });
-  }
-
-  let decodedClaims;
-  try {
-    decodedClaims = await auth.verifySessionCookie(session, true);
-  } catch (error) {
-    console.error('Error verifying session cookie for PUT:', error);
-    return NextResponse.json({ error: 'Unauthorized: Invalid session' }, { status: 401 });
-  }
-
-  const userId = decodedClaims.uid;
-
-  if (!snippetId) {
-    return NextResponse.json({ error: 'Snippet ID is required' }, { status: 400 });
-  }
-
-  try {
-    const docRef = firestore.collection('codes').doc(snippetId);
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-      return NextResponse.json({ error: 'Snippet not found' }, { status: 404 });
-    }
-
-    if (docSnap.data().userId !== userId) {
-      return NextResponse.json({ error: 'Forbidden: You do not own this snippet' }, { status: 403 });
-    }
-
-    const { filename, description, codeBlobUrl } = await request.json();
-
-    const updateData = {};
-    if (filename !== undefined) updateData.filename = filename;
-    if (description !== undefined) updateData.description = description;
-    if (codeBlobUrl !== undefined) updateData.codeBlobUrl = codeBlobUrl;
-
-    await docRef.update(updateData);
-
-    return NextResponse.json({ message: 'Snippet updated successfully' });
-  } catch (error) {
-    console.error('Error updating code snippet:', error);
-    return NextResponse.json({ error: 'Failed to update code snippet' }, { status: 500 });
-  }
-}
 
 export async function DELETE(request, context) {
   const { snippetId } = await context.params;

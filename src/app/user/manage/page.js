@@ -159,7 +159,7 @@ export default function UserManagementPage() {
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-7">
           <div className="card">
-            <div className="card-header" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--card-header-text-color)' }}>
+            <div className="card-header">
               <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
               <h2 className="card-title fw-bold mb-0 fs-3">User Management</h2>
               <p className="mb-0 opacity-75">Search and manage user accounts.</p>
@@ -194,7 +194,7 @@ export default function UserManagementPage() {
         <div className="row justify-content-center mt-4 animated fadeIn delay-1s">
           <div className="col-md-8 col-lg-7">
             <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
-              <div className="card-header" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--card-header-text-color)' }}>
+              <div className="card-header">
                 <h5 className="mb-0 fs-4"><i className="bi bi-person-circle me-2"></i>User Profile: {targetUser.fullName}</h5>
                 <p className="mb-0 opacity-75">{targetUser.email}</p>
               </div>

@@ -47,15 +47,24 @@ export default function BlobUploadPage() {
       return;
     }
 
+    if (file.type !== 'text/markdown') {
+      toast.error('Only Markdown (.md) files are allowed for post uploads.');
+      return;
+    }
+
     setUploading(true);
     try {
-      const response = await fetch(
-        `/api/upload?filename=${encodeURIComponent(file.name)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&type=post`,
-        {
-          method: 'POST',
-          body: file,
-        }
-      );
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('filename', file.name);
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('type', 'post'); // Assuming 'post' type for blob uploads
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -85,10 +94,10 @@ export default function BlobUploadPage() {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '80vh' }}>
       <div className="card" style={{ maxWidth: '600px', width: '100%' }}>
-        <div className="card-header" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--card-header-text-color)' }}>
+        <div className="card-header">
           <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
-          <h2 className="card-title fw-bold mb-0 fs-3"><span className="bi-cloud-arrow-up"></span>{" "}Upload Learning Resources</h2>
-          <p className="mb-0 opacity-75">Upload documents, images, or other files for learning.</p>
+          <h2 className="card-title fw-bold mb-0 fs-3"><span className="bi-cloud-arrow-up"></span>{" "}Upload Post</h2>
+          <p className="mb-0 opacity-75">Upload your Markdown (.md) posts here.</p>
         </div>
         <div className="card-body">
           <div className="mb-3">

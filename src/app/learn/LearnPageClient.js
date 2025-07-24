@@ -44,8 +44,8 @@ export default function LearnPageClient({ allOfficialPostsData }) {
     <div>
       {isStaff && (
         <div className="text-center mb-4">
-          <Link href="/upload/blob-upload" className="btn btn-primary">
-            Upload Learning Resources
+          <Link href="/upload/upload-post" className="btn btn-primary">
+            <i className="bi-cloud-arrow-up"></i> Upload Post
           </Link>
         </div>
       )}
