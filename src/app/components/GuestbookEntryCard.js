@@ -235,6 +235,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
                   PreTag="div"
                   customStyle={{
                     borderRadius: 'var(--border-radius-base)',
+                    margin: '0',
                   }}
                   {...props}
                 >
