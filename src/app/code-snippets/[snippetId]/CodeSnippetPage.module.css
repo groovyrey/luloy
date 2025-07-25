@@ -1,0 +1,9 @@
+.leftAlign {
+  text-align: left;
+}
+
+.uploaderCard {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}

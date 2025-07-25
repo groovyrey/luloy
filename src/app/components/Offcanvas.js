@@ -133,7 +133,7 @@ export default function Offcanvas({ isOpen, onClose }) {
                   <ul>
                     <li className={styles.navDropdown}>
                       <button onClick={() => { setIsMessagesDropdownOpen(!isMessagesDropdownOpen); setIsUserDropdownOpen(false); }}>
-                        <i className="bi bi-envelope me-2"></i>Messages
+                        <i className="bi bi-book me-2"></i>Guestbook
                         <i className={`bi bi-chevron-down ${isMessagesDropdownOpen ? 'rotate-180' : ''}`}></i>
                       </button>
                       <AnimatePresence>
@@ -160,19 +160,19 @@ export default function Offcanvas({ isOpen, onClose }) {
                           >
                             <div className={styles.navDropdownContent}>
                               <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                                <Link href="/messages?tab=public" onClick={handleDropdownLinkClick}>
-                                  <i className="bi bi-chat-dots-fill"></i> Public Messages
+                                <Link href="/guestbook?tab=public" onClick={handleDropdownLinkClick}>
+                                  <i className="bi bi-chat-dots-fill"></i> Public Entries
                                 </Link>
                               </motion.div>
                               <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                                <Link href="/messages?tab=send" onClick={handleDropdownLinkClick}>
-                                <i className="bi bi-send-fill"></i> Send Message
+                                <Link href="/guestbook?tab=send" onClick={handleDropdownLinkClick}>
+                                <i className="bi bi-pencil-square"></i> Sign Guestbook
                               </Link>
                               </motion.div>
                               {user?.permissions?.canAssignBadges && (
                                 <motion.div variants={{ hidden: { y: -20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}>
-                                  <Link href="/messages?tab=private" onClick={handleDropdownLinkClick}>
-                                    <i className="bi bi-shield-lock me-2"></i> Private Messages
+                                  <Link href="/guestbook?tab=private" onClick={handleDropdownLinkClick}>
+                                    <i className="bi bi-shield-lock me-2"></i> Private Entries
                                   </Link>
                                 </motion.div>
                               )}

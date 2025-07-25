@@ -1,19 +1,21 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '../../../../lib/firebase';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, addDoc } from 'firebase/firestore';
-import MessageCard from '@/app/components/MessageCard';
+import GuestbookEntryCard from '@/app/components/GuestbookEntryCard';
 import LoadingMessage from '@/app/components/LoadingMessage';
 import { useUser } from '@/app/context/UserContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { showToast } from '../../utils/toast';
-import styles from '../SendMessage.module.css';
+import styles from '../GuestbookSendMessage.module.css';
+import tabStyles from '../GuestbookTabs.module.css';
 
 export default function MessagesClient() {
   const { user, userData, loading: userLoading } = useUser();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('public'); // State for active tab
 
   useEffect(() => {
@@ -33,9 +35,13 @@ export default function MessagesClient() {
   const [sender, setSender] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [sendAsUser, setSendAsUser] = useState(false);
+
+  const MAX_MESSAGE_LENGTH = 500;
+  
 
   useEffect(() => {
-    document.title = `Messages - ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`;
+    document.title = `Guestbook - ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`;
   }, [activeTab]);
 
   const fetchMessages = useCallback(async (isPrivateFetch) => {
@@ -118,11 +124,7 @@ export default function MessagesClient() {
   };
 
   const handleDeleteMessage = (deletedMessageId) => {
-    if (activeTab === 'public') {
-      fetchMessages(false);
-    } else if (activeTab === 'private') {
-      fetchMessages(true);
-    }
+    router.reload();
   };
 
   const handleUpdateMessage = async (updatedMessage) => {
@@ -141,7 +143,7 @@ export default function MessagesClient() {
     setIsSending(true);
     try {
       await addDoc(collection(db, 'maindata'), {
-        sender: sender,
+        sender: sendAsUser ? user.uid : sender,
         message: messageContent,
         private: isPrivate,
         date: new Date(),
@@ -149,6 +151,8 @@ export default function MessagesClient() {
       setMessageContent('');
       setSender('');
       setIsPrivate(false);
+      setSendAsUser(false); // Reset checkbox after sending
+      
       showToast('Message sent successfully!', 'success');
     } catch (error) {
       showToast('Error sending message: ' + error.message, 'error');
@@ -171,34 +175,31 @@ export default function MessagesClient() {
 
   return (
     <div className="container">
-      <div className="card mb-3">
-        <div className="card-body">
-          <h1 className="card-title text-primary mb-2 text-center"><i className="bi bi-chat-dots me-2"></i>Messages</h1>
-          <div className="d-flex justify-content-center flex-wrap">
+      <h1 className="card-title text-primary mt-4 mb-2 text-center"><i className="bi bi-book me-2"></i>Guestbook</h1>
+      <p className="text-center text-muted mb-3">Messages support Markdown text formatting. Learn more about <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer" className="text-primary">Markdown syntax</a>.</p>
+          <div className={`${tabStyles.tabsContainer} mb-3`}>
             <button
-              className={`btn ${activeTab === 'public' ? 'btn-primary' : 'btn-outline-primary'} m-1`}
-              onClick={() => setActiveTab('public')}
+              className={`${tabStyles.tabButton} ${activeTab === 'public' ? tabStyles.active : ''}`}
+              onClick={() => router.push('?tab=public')}
             >
-              <i className="bi bi-globe me-2"></i>Public
+              <i className="bi bi-globe me-2"></i>Public Entries
             </button>
             <button
-              className={`btn ${activeTab === 'private' ? 'btn-primary' : 'btn-outline-primary'} m-1`}
-              onClick={() => setActiveTab('private')}
+              className={`${tabStyles.tabButton} ${activeTab === 'private' ? tabStyles.active : ''}`}
+              onClick={() => router.push('?tab=private')}
             >
-              <i className="bi bi-lock me-2"></i>Private
+              <i className="bi bi-lock me-2"></i>Private Entries
             </button>
             <button
-              className={`btn ${activeTab === 'send' ? 'btn-primary' : 'btn-outline-primary'} m-1`}
-              onClick={() => setActiveTab('send')}
+              className={`${tabStyles.tabButton} ${activeTab === 'send' ? tabStyles.active : ''}`}
+              onClick={() => router.push('?tab=send')}
             >
-              <i className="bi bi-send me-2"></i>Send a Message
+              <i className="bi bi-pencil-square me-2"></i>Sign Guestbook
             </button>
           </div>
-        </div>
-      </div>
 
       {activeTab === 'public' && (
-        <AnimatePresence>
+        <AnimatePresence className="mt-3">
           {loading ? (
             <LoadingMessage />
           ) : (
@@ -225,7 +226,7 @@ export default function MessagesClient() {
                     },
                   }}
                 >
-                  <MessageCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />
+                  <GuestbookEntryCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />
                 </motion.div>
               ))}
             </motion.div>
@@ -241,7 +242,7 @@ export default function MessagesClient() {
                 <LoadingMessage />
               ) : (
                 <motion.div
-                  className="row"
+                  className="row mt-3"
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
@@ -263,7 +264,7 @@ export default function MessagesClient() {
                         },
                       }}
                     >
-                      <MessageCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />
+                      <GuestbookEntryCard message={message} onDelete={handleDeleteMessage} onUpdateMessage={handleUpdateMessage} />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -277,7 +278,7 @@ export default function MessagesClient() {
                     <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '3em', marginBottom: '1em' }} />
                     <h2 className="card-title text-danger"><i className="bi bi-exclamation-triangle me-2"></i>Unauthorized Access</h2>
                   </div>
-                  <p className="text-lg text-muted mb-8">You are not authorized to view private messages.</p>
+                  <p className="text-lg text-muted mb-8">You are not authorized to view private guestbook entries.</p>
                 </div>
               </div>
             </div>
@@ -296,21 +297,46 @@ export default function MessagesClient() {
           <div className="card" style={{ maxWidth: '600px', width: '100%' }}>
             <div className="card-header">
               <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
-              <h2 className="card-title fw-bold mb-0 fs-3"><i className="bi bi-send me-2"></i>Send a Message</h2>
-              <p className="mb-0 opacity-75">Send a public or private message.</p>
+              <h2 className="card-title fw-bold mb-0 fs-3"><i className="bi bi-pencil-square me-2"></i>Sign the Guestbook</h2>
+              <p className="mb-0 opacity-75">Sign a public or private entry.</p>
             </div>
             <div className="card-body">
               <form onSubmit={handleSendMessageSubmit}>
+                {user && (
+                  <div className={`${styles.sendAsUserToggleCard} mb-3`} onClick={() => {
+                    setSendAsUser(!sendAsUser);
+                    if (!sendAsUser) {
+                      setSender(userData?.username || userData?.firstName || user?.displayName || user?.email || '');
+                    } else {
+                      setSender('');
+                    }
+                  }}>
+                    <div className={styles.sendAsUserToggleContent}>
+                      <i className={`bi ${sendAsUser ? 'bi-person-fill' : 'bi-person'} me-2`}></i>
+                      <span className={styles.sendMessagePrivateToggleLabel}>
+                        Send as {userData?.username || userData?.firstName || user?.displayName || user?.email || 'Your Account'}
+                      </span>
+                    </div>
+                    <div className={styles.sendAsUserToggleSwitch} data-user={sendAsUser}>
+                      <motion.div
+                        className={styles.sendAsUserToggleHandle}
+                        layout
+                        transition={{ type: 'spring', stiffness: 700, damping: 30 }}
+                      />
+                    </div>
+                  </div>
+                )}
                 <div className="mb-3">
                   <label htmlFor="sender" className="form-label"><i className="bi bi-person me-2"></i>Sender (Optional)</label>
                   <input
                     type="text"
                     id="sender"
                     className="form-control"
-                    value={sender}
+                    value={sendAsUser ? (userData?.username || userData?.firstName || user?.displayName || user?.email || '') : sender}
                     onChange={(e) => setSender(e.target.value)}
                     placeholder="Sender"
                     maxLength={50}
+                    disabled={sendAsUser}
                   />
                   <small className="form-text text-muted">{sender.length}/50</small>
                 </div>
@@ -322,16 +348,16 @@ export default function MessagesClient() {
                     value={messageContent}
                     onChange={(e) => setMessageContent(e.target.value)}
                     placeholder="Write your message here..."
-                    maxLength={100}
+                    maxLength={MAX_MESSAGE_LENGTH}
                     required
                   ></textarea>
-                  <small className="form-text text-muted">{messageContent.length}/100</small>
+                  <small className="form-text text-muted">{messageContent.length}/{MAX_MESSAGE_LENGTH}</small>
                 </div>
                 <div className={`${styles.sendMessagePrivateToggleCard} mb-3`} onClick={() => setIsPrivate(!isPrivate)}>
                   <div className={styles.sendMessagePrivateToggleContent}>
                     <i className={`bi ${isPrivate ? 'bi-eye-slash' : 'bi-eye'} me-2`}></i>
                     <span className={styles.sendMessagePrivateToggleLabel}>
-                      {isPrivate ? 'Private' : 'Public'} Message
+                      {isPrivate ? 'Private' : 'Public'} Entry
                     </span>
                   </div>
                   <div className={styles.sendMessagePrivateToggleSwitch} data-private={isPrivate}>
@@ -355,7 +381,7 @@ export default function MessagesClient() {
                     ) : (
                       <i className="bi-send me-2"></i>
                     )}{' '}
-                    {isSending ? 'Sending...' : 'Send Message'}
+                    {isSending ? 'Signing...' : 'Sign Guestbook'}
                   </motion.button>
                 </div>
               </form>

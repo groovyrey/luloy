@@ -1,0 +1,109 @@
+.sendMessagePrivateToggleCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+}
+
+.sendMessagePrivateToggleCard:hover {
+  background-color: var(--hover-background-color);
+}
+
+.sendMessagePrivateToggleContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.sendMessagePrivateToggleLabel {
+  /* margin-left: 8px; Removed as gap handles spacing */
+  /* font-weight: 500; Handled by parent */
+}
+
+.sendMessagePrivateToggleSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: rgba(var(--text-color-rgb), 0.2); /* Default for public/off state */
+  border-radius: 10px;
+  padding: 2px;
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.sendMessagePrivateToggleSwitch[data-private="true"] {
+  justify-content: flex-end;
+  background-color: var(--primary-color);
+}
+
+.sendMessagePrivateToggleSwitch[data-private="false"] {
+  justify-content: flex-start;
+  background-color: #e0e0e0;
+}
+
+.sendMessagePrivateToggleHandle {
+  width: 16px;
+  height: 16px;
+  background-color: var(--background-color);
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+/* Styles for Send as User Toggle */
+.sendAsUserToggleCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+}
+
+.sendAsUserToggleCard:hover {
+  background-color: var(--hover-background-color);
+}
+
+.sendAsUserToggleContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.sendAsUserToggleSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: rgba(var(--text-color-rgb), 0.2); /* Default for off state */
+  border-radius: 10px;
+  padding: 2px;
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.sendAsUserToggleSwitch[data-user="true"] {
+  justify-content: flex-end;
+  background-color: var(--primary-color);
+}
+
+.sendAsUserToggleSwitch[data-user="false"] {
+  justify-content: flex-start;
+  background-color: #e0e0e0;
+}
+
+.sendAsUserToggleHandle {
+  width: 16px;
+  height: 16px;
+  background-color: var(--background-color);
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}

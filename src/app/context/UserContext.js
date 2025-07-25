@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '/lib/firebase';
 import { getComputedPermissions } from '../utils/BadgeSystem';
@@ -34,7 +34,7 @@ export function UserProvider({ children }) {
     }
   };
 
-  const fetchAndStoreUserData = async (uid) => {
+  const fetchAndStoreUserData = useCallback(async (uid) => {
     if (allUsersData[uid] || fetchingUsers.current.has(uid)) {
       return;
     }
@@ -48,7 +48,7 @@ export function UserProvider({ children }) {
     } finally {
       fetchingUsers.current.delete(uid);
     }
-  };
+  }, [allUsersData, fetchingUsers, fetchUserData]);
 
   // Function to refresh user data, exposed via context
   const refreshUserData = async () => {

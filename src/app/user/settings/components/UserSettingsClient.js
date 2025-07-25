@@ -8,6 +8,7 @@ import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { showToast } from '../../../../app/utils/toast';
 import { capitalizeName } from '../../../../app/utils/capitalizeName';
+import styles from './UserSettingsClient.module.css';
 import Modal from '../../../../app/components/Modal';
 
 export default function UserSettingsClient() {
@@ -397,31 +398,35 @@ export default function UserSettingsClient() {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center py-3" style={{ minHeight: 'calc(100vh - 60px)' }}>
-      <div className="card shadow-sm" style={{ maxWidth: '450px', width: '100%' }}>
-        <div className="card-header text-center py-2">
-          <img src="/luloy.svg" alt="Luloy Logo" className="mb-2" style={{ height: '3.5em' }} />
-          <h2 className="card-title fw-bold mb-0 fs-5"><span className="bi-person-fill-gear me-2"></span>User Settings</h2>
-          <p className="mb-0 text-muted text-xs">Manage your profile and account settings.</p>
-          <div className="d-flex justify-content-center mt-3">
+      <div className="card shadow-sm mb-3" style={{ maxWidth: '450px', width: '100%' }}>
+        <div className={`${styles.tabsContainer} card-body p-2 d-flex justify-content-start`}>
             <button
-              className={`btn btn-sm ${activeSection === 'information' ? 'btn-light text-primary' : 'btn-outline-light'} me-2`}
+              className={`${styles.tabButton} ${activeSection === 'information' ? styles.active : ''} me-2`}
               onClick={() => {
                 router.push(`/user/settings?tab=information`, undefined, { shallow: true });
                 setActiveSection('information');
               }}
             >
+              <i className="bi bi-person-circle me-2"></i>
               Information
             </button>
             <button
-              className={`btn btn-sm ${activeSection === 'security' ? 'btn-light text-primary' : 'btn-outline-light'}`}
+              className={`${styles.tabButton} ${activeSection === 'security' ? styles.active : ''}`}
               onClick={() => {
                 router.push(`/user/settings?tab=security`, undefined, { shallow: true });
                 setActiveSection('security');
               }}
             >
+              <i className="bi bi-shield-lock me-2"></i>
               Security
             </button>
-          </div>
+        </div>
+      </div>
+      <div className="card shadow-sm" style={{ maxWidth: '450px', width: '100%' }}>
+        <div className="card-header text-center py-2">
+          <img src="/luloy.svg" alt="Luloy Logo" className="mb-2" style={{ height: '3.5em' }} />
+          <h2 className="card-title fw-bold mb-0 fs-5"><span className="bi-person-fill-gear me-2"></span>User Settings</h2>
+          <p className="mb-0 text-muted text-xs">Manage your profile and account settings.</p>
         </div>
         <div className="card-body p-3">
           {activeSection === 'information' && (

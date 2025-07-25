@@ -5,11 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './UserSearchResultCard.module.css';
 
-export default function UserSearchResultCard({ user }) {
+export default function UserSearchResultCard({ user, className, displayUploadDate, uploadDate }) {
 
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${className || ''}`}>
       <Link href={`/user/${user.id}`} className={styles.link}>
         <div className={styles.profilePictureContainer}>
           {user.profilePictureUrl ? (
@@ -28,8 +28,14 @@ export default function UserSearchResultCard({ user }) {
         </div>
         <div className={styles.userInfo}>
           <h5 className={styles.userName}>{user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)} {user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)}</h5>
-          <p className={styles.userEmail}>{user.email}</p>
-          <small className={styles.userId}>ID: {user.id}</small>
+          {displayUploadDate ? (
+            <small className={styles.userId}>Uploaded: {new Date(uploadDate).toLocaleDateString()}</small>
+          ) : (
+            <>
+              <p className={styles.userEmail}>{user.email}</p>
+              <small className={styles.userId}>ID: {user.id}</small>
+            </>
+          )}
         </div>
       </Link>
     </div>

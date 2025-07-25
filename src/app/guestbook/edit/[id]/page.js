@@ -54,7 +54,7 @@ export default function EditMessagePage() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       showToast('Message updated successfully!', 'success');
-      router.push('/messages');
+      router.push('/guestbook');
     } catch (error) {
       showToast("Failed to save message.", 'error');
     } finally {

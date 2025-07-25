@@ -35,7 +35,7 @@ export async function middleware(request) {
   console.log("Middleware: User badges:", user.badges);
 
   // Define paths that require authLevel 1
-  const authLevel1Paths = ["/messages/private", "/user/update-authlevel"];
+  const authLevel1Paths = ["/guestbook/private", "/user/update-authlevel"];
 
   // Check if the current path requires authLevel 1 and if the user has it
   if (authLevel1Paths.some(path => request.nextUrl.pathname.startsWith(path)) && user.authLevel !== 1) {

@@ -58,7 +58,9 @@ import { useTheme } from '../../../app/context/ThemeContext';
 import { useUser } from '../../../app/context/UserContext'; // To get current user
 import LoadingMessage from '../../../app/components/LoadingMessage';
 import Link from 'next/link';
+import styles from './CodeSnippetPage.module.css';
 import FileIcon from '../../../app/components/FileIcon';
+import UserSearchResultCard from '../../../app/components/UserSearchResultCard';
 
 
 SyntaxHighlighter.registerLanguage('javascript', javascript);
@@ -119,7 +121,7 @@ export default function CodeSnippetPage() {
   const [loading, setLoading] = useState(true);
   const { theme } = useTheme();
   const { user } = useUser(); // Get the current logged-in user
-  const [uploaderName, setUploaderName] = useState('');
+  const [uploaderData, setUploaderData] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // State for modal visibility
 
   useEffect(() => {
@@ -139,7 +141,7 @@ export default function CodeSnippetPage() {
             throw new Error(`Failed to fetch user data: ${userRes.status}`);
           }
           const userData = await userRes.json();
-          setUploaderName(userData.fullName || userData.email); // Fallback to email if full name not available
+          setUploaderData({ ...userData, id: userData.uid });
 
           if (data.codeBlobUrl) {
             const codeRes = await fetch(data.codeBlobUrl);
@@ -223,13 +225,37 @@ export default function CodeSnippetPage() {
   const isOwner = user && user.uid === snippetData.userId;
   const syntaxHighlighterStyle = vscDarkPlus;
 
+  // Helper function to parse Firestore timestamp
+  const parseFirestoreTimestamp = (timestamp) => {
+    if (timestamp && typeof timestamp === 'object') {
+      // Check for Firestore Timestamp object structure
+      if (typeof timestamp.seconds === 'number') {
+        return new Date(timestamp.seconds * 1000);
+      } else if (typeof timestamp._seconds === 'number') { // Handle common serialization of Firestore Timestamp
+        return new Date(timestamp._seconds * 1000);
+      }
+    } else if (typeof timestamp === 'string') {
+      // Attempt to parse as a string
+      const date = new Date(timestamp);
+      if (!isNaN(date.getTime())) {
+        return date;
+      }
+    }
+    return null; // Return null if parsing fails
+  };
+
+  const uploadDate = parseFirestoreTimestamp(snippetData.createdAt);
+
   return (
     <div className="container mt-4">
-      <div className="card mb-4">
+      {uploaderData && uploadDate && (
+        <UserSearchResultCard user={uploaderData} className={`${styles.uploaderCard} mb-3`} displayUploadDate={true} uploadDate={uploadDate} />
+      )}
+      <div className="card mb-4" style={{ maxWidth: '800px', width: '100%' }}>
         <div className="card-header d-flex flex-column align-items-start">
           <div className="d-flex align-items-center mb-2">
             <FileIcon filename={snippetData.language} className="me-2" style={{ fontSize: '2rem' }} />
-            <div>
+            <div className={styles.leftAlign}>
               <h5 className="mb-0 text-truncate">{snippetData.filename}</h5>
               <small className="text-muted">{snippetData.description || 'No description'}</small>
             </div>

@@ -58,10 +58,10 @@ export default function HomePageContent() {
       <div className="mt-5 text-center">
         <h2 className="h3 fw-semibold text-secondary mb-3">Quick Actions</h2>
         <div className="d-flex flex-wrap justify-content-center gap-3">
-          <Link href="/messages?tab=send" className="btn btn-primary">
+          <Link href="/guestbook?tab=send" className="btn btn-primary">
             <i className="bi bi-send me-2"></i> Send a Message
           </Link>
-          <Link href="/messages?tab=public" className="btn btn-outline-primary">
+          <Link href="/guestbook?tab=public" className="btn btn-outline-primary">
             <i className="bi bi-globe me-2"></i> View Public Messages
           </Link>
           </div>

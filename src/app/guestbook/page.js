@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
-import MessagesClient from './components/MessagesClient';
+import GuestbookClient from './components/GuestbookClient';
 import LoadingMessage from '@/app/components/LoadingMessage';
 
-export default function MessagesPage() {
+export default function GuestbookPage() {
   return (
     <Suspense fallback={<LoadingMessage />}>
-      <MessagesClient />
+      <GuestbookClient />
     </Suspense>
   );
 }
