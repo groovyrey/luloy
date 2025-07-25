@@ -16,6 +16,16 @@
   
 }
 
+.senderInfo {
+  border: 1px solid var(--card-border-color); /* Add border */
+  border-radius: var(--border-radius-base); /* Rounded corners */
+  padding: 10px 15px; /* More padding inside the border */
+  width: 100%; /* Take max width */
+  margin-bottom: 10px; /* Space below the border */
+  display: flex;
+  align-items: center;
+}
+
 .messageCardContainer .card-title {
   font-size: 1.1rem;
   font-weight: 600;

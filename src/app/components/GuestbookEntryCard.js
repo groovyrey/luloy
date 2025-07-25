@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation'; // Import useRouter
+import Link from 'next/link';
 import styles from './GuestbookEntryCard.module.css';
 import { useUser } from '../context/UserContext';
 import { showToast } from '../utils/toast';
@@ -173,20 +174,26 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
       <div className="card-body">
         <div className={styles.cardHeader}>
           {senderUserData ? (
-            <div className="d-flex align-items-center">
-              <img
-                src={senderUserData.profilePictureUrl || '/luloy.svg'}
-                alt={senderUserData.username || senderUserData.firstName || 'User'}
-                className="rounded-circle me-2" style={{ width: '30px', height: '30px', objectFit: 'cover' }}
-              />
-              <h5 className={styles.senderName}>
-                {senderUserData.username || senderUserData.firstName || 'Anonymous'}
-              </h5>
+            <div className={`${styles.senderInfo} d-flex align-items-center justify-content-between`}>
+              <div className="d-flex align-items-center">
+                <img
+                  src={senderUserData.profilePictureUrl || '/luloy.svg'}
+                  alt={senderUserData.username || senderUserData.firstName || 'User'}
+                  className="rounded-circle me-2" style={{ width: '30px', height: '30px', objectFit: 'cover' }}
+                />
+                <h5 className={styles.senderName}>
+                  {senderUserData.username || senderUserData.firstName || 'Anonymous'}
+                </h5>
+              </div>
+              {senderUserData && (
+                <Link href={`/user/${senderUserData.uid}`} className="text-decoration-none" title="View Profile">
+                  <i className="bi bi-box-arrow-up-right"></i>
+                </Link>
+              )}
             </div>
           ) : (
             <h5 className={styles.senderName}><i className="bi bi-person-circle me-2"></i>{" "}{message.sender === "" ? <span className="text-danger">?</span> : <span>{message.sender}</span>}</h5>
           )}
-          
         </div>
         <AnimatePresence>
           {showOptions && (
