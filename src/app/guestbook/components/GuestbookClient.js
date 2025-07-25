@@ -124,7 +124,7 @@ export default function MessagesClient() {
   };
 
   const handleDeleteMessage = (deletedMessageId) => {
-    router.reload();
+    setMessages(prevMessages => prevMessages.filter(msg => msg.id !== deletedMessageId));
   };
 
   const handleUpdateMessage = async (updatedMessage) => {
