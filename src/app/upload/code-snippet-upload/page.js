@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { useTheme } from '../../context/ThemeContext';
@@ -12,6 +12,7 @@ export default function CodeSnippetUploadPage() {
   const [uploading, setUploading] = useState(false);
   const [snippetId, setSnippetId] = useState(null);
   const { theme } = useTheme();
+  const fileInputRef = useRef(null);
 
   const getFileExtension = (filename) => {
     return filename.split('.').pop().toLowerCase();
@@ -139,12 +140,27 @@ export default function CodeSnippetUploadPage() {
         </div>
         <div className="card-body">
           <div className="mb-3">
-            <label htmlFor="file-input" className="form-label">Select Code File:</label>
-            <input id="file-input" type="file" className="form-control" onChange={handleFileChange} disabled={uploading} />
+            <label htmlFor="file-input" className="form-label"><i className="bi-code-slash me-2"></i>Select Code File:</label>
+            <input
+              id="file-input"
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              disabled={uploading}
+              style={{ display: 'none' }} // Hide the default input
+            />
+            <button
+              type="button"
+              className="btn btn-primary w-100 rounded-pill shadow-sm"
+              onClick={() => fileInputRef.current.click()}
+              disabled={uploading}
+            >
+              {file ? file.name : 'Choose File'}
+            </button>
             <p className="text-muted mt-2" style={{ fontSize: '0.85rem' }}>Max file size: 1MB</p>
           </div>
           <div className="mb-3">
-            <label htmlFor="description-input" className="form-label">Description:</label>
+            <label htmlFor="description-input" className="form-label"><i className="bi-file-text me-2"></i>Description:</label>
             <textarea
               id="description-input"
               value={description}
@@ -156,7 +172,7 @@ export default function CodeSnippetUploadPage() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="language-select" className="form-label">Language:</label>
+            <label htmlFor="language-select" className="form-label"><i className="bi-translate me-2"></i>Language:</label>
             <select
               id="language-select"
               value={language}
@@ -174,7 +190,12 @@ export default function CodeSnippetUploadPage() {
                 ))}
             </select>
           </div>
-          <button onClick={handleUpload} disabled={uploading || !file} className="btn btn-primary w-100">
+          <button
+            type="submit"
+            className="btn btn-primary w-100"
+            onClick={handleUpload}
+            disabled={uploading || !file}
+          >
             {uploading ? (
               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             ) : (
