@@ -223,7 +223,6 @@ export default function CodeSnippetPage() {
   }
 
   const isOwner = user && user.uid === snippetData.userId;
-  style={syntaxHighlighterTheme}
 
   // Helper function to parse Firestore timestamp
   const parseFirestoreTimestamp = (timestamp) => {
@@ -277,7 +276,7 @@ export default function CodeSnippetPage() {
         <div className="card-body p-0">
           <SyntaxHighlighter
             language={snippetData.language?.toLowerCase()}
-            
+            style={syntaxHighlighterTheme}
             showLineNumbers
             wrapLines
             customStyle={{
@@ -285,7 +284,7 @@ export default function CodeSnippetPage() {
               margin: '0',
               borderRadius: 'var(--border-radius-base)',
               fontSize: '0.9em',
-              backgroundColor: 'transparent',
+              background: 'transparent',
             }}
           >
             {codeContent}
