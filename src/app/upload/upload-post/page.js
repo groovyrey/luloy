@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTheme } from '../../context/ThemeContext';
 import Link from 'next/link';
@@ -18,6 +18,7 @@ export default function BlobUploadPage() {
   const { theme } = useTheme();
   const { user, userData, loading } = useUser();
   const router = useRouter();
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (!loading) {
@@ -101,16 +102,31 @@ export default function BlobUploadPage() {
         </div>
         <div className="card-body">
           <div className="mb-3">
-            <label htmlFor="title-input" className="form-label">Title:</label>
+            <label htmlFor="title-input" className="form-label"><i className="bi-card-heading me-2"></i>Title:</label>
             <input type="text" id="title-input" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter title for the resource" disabled={uploading} />
           </div>
           <div className="mb-3">
-            <label htmlFor="description-input" className="form-label">Description:</label>
+            <label htmlFor="description-input" className="form-label"><i className="bi-file-text me-2"></i>Description:</label>
             <textarea id="description-input" className="form-control" rows="3" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Enter a brief description" disabled={uploading}></textarea>
           </div>
           <div className="mb-3">
-            <label htmlFor="file-input" className="form-label">Select File:</label>
-            <input type="file" id="file-input" className="form-control" onChange={handleFileChange} disabled={uploading} />
+            <label htmlFor="file-input" className="form-label"><i className="bi-file-earmark-richtext me-2"></i>Select File:</label>
+            <input
+              id="file-input"
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              disabled={uploading}
+              style={{ display: 'none' }} // Hide the default input
+            />
+            <button
+              type="button"
+              className="btn btn-outline-primary w-100"
+              onClick={() => fileInputRef.current.click()}
+              disabled={uploading}
+            >
+              {file ? file.name : 'Choose File'}
+            </button>
           </div>
           <button onClick={handleUpload} disabled={uploading || !file} className="btn btn-primary w-100">
             {uploading ? (
