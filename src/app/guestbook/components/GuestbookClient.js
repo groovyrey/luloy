@@ -24,6 +24,14 @@ export default function MessagesClient() {
       setActiveTab(tab);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (user) {
+      setSendOption('user');
+    } else {
+      setSendOption('anonymous');
+    }
+  }, [user]);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -35,7 +43,7 @@ export default function MessagesClient() {
   const [sender, setSender] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [sendAsUser, setSendAsUser] = useState(false);
+  const [sendOption, setSendOption] = useState('anonymous'); // 'user' or 'anonymous'
 
   const MAX_MESSAGE_LENGTH = 500;
   
@@ -143,7 +151,7 @@ export default function MessagesClient() {
     setIsSending(true);
     try {
       await addDoc(collection(db, 'maindata'), {
-        sender: sendAsUser ? user.uid : sender,
+        sender: sendOption === 'user' ? (userData?.username || userData?.firstName || user?.displayName || user?.email || '') : sender,
         message: messageContent,
         private: isPrivate,
         date: new Date(),
@@ -151,7 +159,6 @@ export default function MessagesClient() {
       setMessageContent('');
       setSender('');
       setIsPrivate(false);
-      setSendAsUser(false); // Reset checkbox after sending
       
       showToast('Message sent successfully!', 'success');
     } catch (error) {
@@ -302,41 +309,30 @@ export default function MessagesClient() {
             </div>
             <div className="card-body">
               <form onSubmit={handleSendMessageSubmit}>
-                {user && (
-                  <div className={`${styles.sendAsUserToggleCard} mb-3`} onClick={() => {
-                    setSendAsUser(!sendAsUser);
-                    if (!sendAsUser) {
-                      setSender(userData?.username || userData?.firstName || user?.displayName || user?.email || '');
-                    } else {
-                      setSender('');
-                    }
-                  }}>
-                    <div className={styles.sendAsUserToggleContent}>
-                      <i className={`bi ${sendAsUser ? 'bi-person-fill' : 'bi-person'} me-2`}></i>
-                      <span className={styles.sendMessagePrivateToggleLabel}>
-                        Send as {userData?.username || userData?.firstName || user?.displayName || user?.email || 'Your Account'}
-                      </span>
-                    </div>
-                    <div className={styles.sendAsUserToggleSwitch} data-user={sendAsUser}>
-                      <motion.div
-                        className={styles.sendAsUserToggleHandle}
-                        layout
-                        transition={{ type: 'spring', stiffness: 700, damping: 30 }}
-                      />
-                    </div>
-                  </div>
-                )}
+                <div className="mb-3">
+                  <label htmlFor="sendOption" className="form-label"><i className="bi bi-person-circle me-2"></i>Send As:</label>
+                  <select
+                    id="sendOption"
+                    className="form-select"
+                    value={sendOption}
+                    onChange={(e) => setSendOption(e.target.value)}
+                    disabled={!user}
+                  >
+                    {user && <option value="user">{userData?.username || userData?.firstName || user?.displayName || user?.email || 'Your Account'}</option>}
+                    <option value="anonymous">Anonymous</option>
+                  </select>
+                </div>
                 <div className="mb-3">
                   <label htmlFor="sender" className="form-label"><i className="bi bi-person me-2"></i>Sender (Optional)</label>
                   <input
                     type="text"
                     id="sender"
                     className="form-control"
-                    value={sendAsUser ? (userData?.username || userData?.firstName || user?.displayName || user?.email || '') : sender}
+                    value={sendOption === 'user' ? (userData?.username || userData?.firstName || user?.displayName || user?.email || '') : sender}
                     onChange={(e) => setSender(e.target.value)}
                     placeholder="Sender"
                     maxLength={50}
-                    disabled={sendAsUser}
+                    disabled={sendOption === 'user'}
                   />
                   <small className="form-text text-muted">{sender.length}/50</small>
                 </div>
@@ -353,19 +349,21 @@ export default function MessagesClient() {
                   ></textarea>
                   <small className="form-text text-muted">{messageContent.length}/{MAX_MESSAGE_LENGTH}</small>
                 </div>
-                <div className={`${styles.sendMessagePrivateToggleCard} mb-3`} onClick={() => setIsPrivate(!isPrivate)}>
-                  <div className={styles.sendMessagePrivateToggleContent}>
-                    <i className={`bi ${isPrivate ? 'bi-eye-slash' : 'bi-eye'} me-2`}></i>
-                    <span className={styles.sendMessagePrivateToggleLabel}>
-                      {isPrivate ? 'Private' : 'Public'} Entry
-                    </span>
-                  </div>
-                  <div className={styles.sendMessagePrivateToggleSwitch} data-private={isPrivate}>
-                    <motion.div
-                      className={styles.sendMessagePrivateToggleHandle}
-                      layout
-                      transition={{ type: 'spring', stiffness: 700, damping: 30 }}
-                    />
+                <div className="d-flex flex-column flex-md-row gap-3 mb-3">
+                  <div className={`${styles.sendMessagePrivateToggleCard} flex-fill`} onClick={() => setIsPrivate(!isPrivate)}>
+                    <div className={styles.sendMessagePrivateToggleContent}>
+                      <i className={`bi ${isPrivate ? 'bi-eye-slash' : 'bi-eye'} me-2`}></i>
+                      <span className={styles.sendMessagePrivateToggleLabel}>
+                        {isPrivate ? 'Private' : 'Public'} Entry
+                      </span>
+                    </div>
+                    <div className={styles.sendMessagePrivateToggleSwitch} data-private={isPrivate}>
+                      <motion.div
+                        className={styles.sendMessagePrivateToggleHandle}
+                        layout
+                        transition={{ type: 'spring', stiffness: 700, damping: 30 }}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="d-grid gap-2">
