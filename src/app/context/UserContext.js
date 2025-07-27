@@ -125,7 +125,8 @@ export function UserProvider({ children }) {
         if (currentUser) {
           // Fetch user data from Firestore via API
           const fetchedUserData = await fetchUserData(currentUser.uid);
-          if (fetchedUserData) {
+        console.log("UserContext: Fetched user data on auth state change:", fetchedUserData);
+        if (fetchedUserData) {
             setUserData(fetchedUserData);
             setAllUsersData(prevData => ({ ...prevData, [currentUser.uid]: fetchedUserData }));
           } else {
