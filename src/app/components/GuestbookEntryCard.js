@@ -11,7 +11,9 @@ import Modal from './Modal'; // Import the Modal component
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+import { useTheme } from '../context/ThemeContext';
+
 import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
 import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
 import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
@@ -35,6 +37,7 @@ SyntaxHighlighter.registerLanguage('go', go);
 export default function MessageCard({ message, onDelete, onUpdateMessage }) {
   const { user, userData, allUsersData, fetchAndStoreUserData } = useUser();
   const router = useRouter(); // Initialize useRouter
+  const { theme, syntaxHighlighterTheme } = useTheme();
 
   const [showOptions, setShowOptions] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
@@ -230,7 +233,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
               const match = /language-(\w+)/.exec(className || '');
               return !inline && match ? (
                 <SyntaxHighlighter
-                  style={vscDarkPlus}
+                  style={syntaxHighlighterTheme}
                   language={match[1]}
                   PreTag="div"
                   customStyle={{

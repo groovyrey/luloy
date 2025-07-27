@@ -32,7 +32,7 @@ export default function UserProfilePage({ params }) {
     if (id) {
       const fetchProfile = async () => {
         try {
-          const res = await fetch(`/api/user/${id}`);
+          const res = await fetch(`/api/user/${id}`, { next: { revalidate: 3600, tags: ['profile-picture'] } });
           if (res.ok) {
             const data = await res.json();
             setProfileData(data);

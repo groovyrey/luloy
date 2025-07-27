@@ -5,7 +5,7 @@ import Modal from '../../../app/components/Modal';
 import { useParams, useRouter } from 'next/navigation'; // useRouter for navigation
 import { toast } from 'react-hot-toast';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
 import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
 import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
@@ -119,7 +119,7 @@ export default function CodeSnippetPage() {
   const [snippetData, setSnippetData] = useState(null);
   const [codeContent, setCodeContent] = useState('');
   const [loading, setLoading] = useState(true);
-  const { theme } = useTheme();
+  const { syntaxHighlighterTheme } = useTheme();
   const { user } = useUser(); // Get the current logged-in user
   const [uploaderData, setUploaderData] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // State for modal visibility
@@ -223,7 +223,7 @@ export default function CodeSnippetPage() {
   }
 
   const isOwner = user && user.uid === snippetData.userId;
-  const syntaxHighlighterStyle = vscDarkPlus;
+  style={syntaxHighlighterTheme}
 
   // Helper function to parse Firestore timestamp
   const parseFirestoreTimestamp = (timestamp) => {
@@ -277,7 +277,7 @@ export default function CodeSnippetPage() {
         <div className="card-body p-0">
           <SyntaxHighlighter
             language={snippetData.language?.toLowerCase()}
-            style={syntaxHighlighterStyle}
+            
             showLineNumbers
             wrapLines
             customStyle={{
