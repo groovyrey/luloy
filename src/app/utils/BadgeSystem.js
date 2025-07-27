@@ -1,5 +1,6 @@
-import { FaBug, FaTrophy, FaUserTie, FaStar, FaGem, FaHandsHelping, FaGavel } from 'react-icons/fa';
+import { FaBug, FaTrophy, FaUserTie, FaStar, FaGem, FaHandsHelping, FaGavel, FaMale, FaFemale, FaGenderless } from 'react-icons/fa';
 import { BsShieldCheck, BsCodeSlash } from 'react-icons/bs';
+import * as BiIcons from 'react-icons/bi';
 
 const BADGES = {
   'administrator': {
@@ -89,6 +90,45 @@ const BADGES = {
   // Add more badges here as needed
 };
 
+const GENDER_ICONS = {
+  'Male': { icon: FaMale, color: '#007bff' }, // Blue
+  'Female': { icon: FaFemale, color: '#ff69b4' }, // Pink
+  'Non-binary': { icon: FaGenderless, color: '#6f42c1' }, // Purple
+  'Prefer not to say': { icon: FaGenderless, color: '#6c757d' }, // Gray
+};
+
+const INTEREST_ICONS = {
+  'Programming': { icon: BiIcons.BiCodeAlt, color: '#007bff' },
+  'Web Development': { icon: BiIcons.BiGlobe, color: '#28a745' },
+  'Mobile Development': { icon: BiIcons.BiMobile, color: '#fd7e14' },
+  'Data Science': { icon: BiIcons.BiData, color: '#6f42c1' },
+  'Machine Learning': { icon: BiIcons.BiBrain, color: '#dc3545' },
+  'Cybersecurity': { icon: BiIcons.BiLockAlt, color: '#343a40' },
+  'Cloud Computing': { icon: BiIcons.BiCloud, color: '#17a2b8' },
+  'DevOps': { icon: BiIcons.BiGitBranch, color: '#6610f2' },
+  'Game Development': { icon: BiIcons.BiGame, color: '#e83e8c' },
+  'UI/UX Design': { icon: BiIcons.BiPalette, color: '#ffc107' },
+  'Technical Writing': { icon: BiIcons.BiBookContent, color: '#6c757d' },
+  'Open Source': { icon: BiIcons.BiLaptop, color: '#20c997' },
+  'Artificial Intelligence': { icon: BiIcons.BiChip, color: '#007bff' },
+  'Blockchain': { icon: BiIcons.BiBlock, color: '#6f42c1' },
+  'Internet of Things (IoT)': { icon: BiIcons.BiWifi, color: '#17a2b8' },
+  'Robotics': { icon: BiIcons.BiHardHat, color: '#dc3545' },
+  'Virtual Reality (VR)': { icon: BiIcons.BiGlasses, color: '#e83e8c' },
+  'Augmented Reality (AR)': { icon: BiIcons.BiGlassesAlt, color: '#ffc107' },
+  'Gaming': { icon: BiIcons.BiGame, color: '#28a745' },
+  'Photography': { icon: BiIcons.BiCamera, color: '#6c757d' },
+  'Music': { icon: BiIcons.BiMusic, color: '#fd7e14' },
+  'Reading': { icon: BiIcons.BiBook, color: '#007bff' },
+  'Sports': { icon: BiIcons.BiFootball, color: '#dc3545' },
+  'Travel': { icon: BiIcons.BiWorld, color: '#17a2b8' },
+  'Cooking': { icon: BiIcons.BiFoodMenu, color: '#ffc107' },
+  'Fitness': { icon: BiIcons.BiRun, color: '#28a745' },
+  'Gardening': { icon: BiIcons.BiLeaf, color: '#20c997' },
+  'DIY': { icon: BiIcons.BiWrench, color: '#6f42c1' },
+  'Volunteering': { icon: BiIcons.BiHeart, color: '#fd7e14' },
+};
+
 // A helper function to get a user's combined permissions
 function getComputedPermissions(badgeIds = []) {
   const permissions = {};
@@ -107,4 +147,4 @@ function getComputedPermissions(badgeIds = []) {
   return permissions;
 }
 
-export { BADGES, getComputedPermissions };
+export { BADGES, GENDER_ICONS, INTEREST_ICONS, getComputedPermissions };

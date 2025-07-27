@@ -68,6 +68,10 @@
   box-shadow: none !important;
 }
 
+[data-theme="dark"] hr {
+  border-color: #444444; /* A visible grey for dark theme */
+}
+
 html.dark {
   /* --primary-color: #007bff; */
   --primary-rgb: 0, 123, 255;

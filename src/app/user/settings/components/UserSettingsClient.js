@@ -8,16 +8,61 @@ import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { showToast } from '../../../../app/utils/toast';
 import { capitalizeName } from '../../../../app/utils/capitalizeName';
+import { GENDER_ICONS, INTEREST_ICONS } from '../../../../app/utils/BadgeSystem';
 import styles from './UserSettingsClient.module.css';
 import Modal from '../../../../app/components/Modal';
+import ReactIconRenderer from '../../../../app/components/ReactIconRenderer';
+
+
 
 export default function UserSettingsClient() {
+  const formatEmail = (email) => {
+    if (!email) return '';
+    const [name, domain] = email.split('@');
+    if (name.length <= 3) return `${name.substring(0, 1)}***@${domain}`;
+    return `${name.substring(0, 3)}***@${domain}`;
+  };
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { user, userData, loading, refreshUserData } = useUser();
   const router = useRouter();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+  const [interests, setInterests] = useState([]);
+  const availableInterests = [
+    'Programming',
+    'Web Development',
+    'Mobile Development',
+    'Data Science',
+    'Machine Learning',
+    'Cybersecurity',
+    'Cloud Computing',
+    'DevOps',
+    'Game Development',
+    'UI/UX Design',
+    'Technical Writing',
+    'Open Source',
+    'Artificial Intelligence',
+    'Blockchain',
+    'Internet of Things (IoT)',
+    'Robotics',
+    'Virtual Reality (VR)',
+    'Augmented Reality (AR)',
+    'Gaming',
+    'Photography',
+    'Music',
+    'Reading',
+    'Sports',
+    'Travel',
+    'Cooking',
+    'Fitness',
+    'Gardening',
+    'DIY',
+    'Volunteering',
+  ];
+  
   const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [profilePicturePreviewUrl, setProfilePicturePreviewUrl] = useState(null);
   const [bio, setBio] = useState('');
@@ -64,10 +109,19 @@ export default function UserSettingsClient() {
       setFirstName(userData.firstName || '');
       setLastName(userData.lastName || '');
       setAge(userData.age || '');
+      setGender(userData.gender || '');
+      setInterests(userData.interests || []);
+      console.log("UserSettingsClient: Initializing gender with:", userData.gender);
+      console.log("UserSettingsClient: Initializing interests with:", userData.interests);
+      console.log("User data loaded in UserSettingsClient:", userData);
+      console.log("Setting gender to:", userData.gender);
+      console.log("Setting interests to:", userData.interests);
+
       if (userData.profilePictureUrl) {
         setProfilePicturePreviewUrl(userData.profilePictureUrl);
       }
       setBio(userData.bio || '');
+      setInterests(userData.interests || []);
       setIsFetchingUserData(false);
 
       // Load timestamps from userData (Firestore) and set disabled states
@@ -159,29 +213,36 @@ export default function UserSettingsClient() {
 
     setIsUpdating(true);
 
+    
+
     const updatedFields = {
       firstName: capitalizeName(firstName),
       lastName: capitalizeName(lastName),
       age: parseInt(age),
+      gender: gender,
+      interests: interests,
     };
 
     if (bio !== userData.bio) updatedFields.bio = bio;
 
-    // Check if any of the core fields (firstName, lastName, age) have actually changed
+    // Check if any of the core fields (firstName, lastName, age, gender, location, timezone, occupation, interests) have actually changed
     // or if bio has changed. If not, show info toast and return.
     if (firstName === userData.firstName &&
         lastName === userData.lastName &&
         age === userData.age &&
+        gender === userData.gender &&
         bio === userData.bio) {
       showToast('No changes to update.', 'info');
       setIsUpdating(false);
       return;
     }
 
-    // Determine if firstName, lastName, or age were actually changed for rate limiting
+    // Determine if firstName, lastName, age, gender, location, timezone, occupation, or interests were actually changed for rate limiting
     let firstNameChanged = firstName !== userData.firstName;
     let lastNameChanged = lastName !== userData.lastName;
     let ageChanged = age !== userData.age;
+    let genderChanged = gender !== userData.gender;
+    
 
     try {
       const res = await fetch('/api/user/update', {
@@ -484,6 +545,38 @@ export default function UserSettingsClient() {
             >
               {profilePictureFile ? profilePictureFile.name : 'Choose Profile Picture'}
             </button>
+            <div className="d-flex gap-2 mb-2">
+              {profilePictureFile && (
+                <button
+                  type="button"
+                  className="btn btn-success flex-grow-1 rounded-pill shadow-sm"
+                  onClick={handleProfilePictureUpload}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? (
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  ) : (
+                    <i className="bi-upload me-1"></i>
+                  )}{' '}
+                  {isUpdating ? 'Uploading...' : 'Upload'}
+                </button>
+              )}
+              {profilePicturePreviewUrl && (
+                <button
+                  type="button"
+                  className="btn btn-danger flex-grow-1 rounded-pill shadow-sm"
+                  onClick={handleRemoveProfilePicture}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? (
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  ) : (
+                    <i className="bi-trash me-1"></i>
+                  )}{' '}
+                  {isUpdating ? 'Removing...' : 'Remove'}
+                </button>
+              )}
+            </div>
           </div>
           <hr className="my-3"/>
           <div className="mb-2">
@@ -511,11 +604,42 @@ export default function UserSettingsClient() {
               <small className="text-warning d-block mt-1 text-xs">Can change in: {ageRemainingTime}</small>
             )}
           </div>
-          <div className="mb-3">
-            <label htmlFor="bio" className="form-label small mb-1">Bio (max 50 chars)</label>
-            <textarea id="bio" className="form-control form-control-sm" placeholder="Tell us about yourself..." value={bio} onChange={e => setBio(e.target.value.slice(0, 50))} rows="2" maxLength={50} disabled={isUpdating}></textarea>
-            <div className="text-end text-muted small mt-1">
-              {bio.length}/50 characters
+          <div className="mb-2">
+            <label htmlFor="gender" className="form-label small mb-1">Gender</label>
+            <select id="gender" className="form-control form-control-sm" value={gender} onChange={e => setGender(e.target.value)} disabled={isUpdating}>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Non-binary">Non-binary</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+            {gender && GENDER_ICONS[gender] && (
+              <div className="d-flex align-items-center mt-2">
+                <ReactIconRenderer IconComponent={GENDER_ICONS[gender].icon} size={20} color={GENDER_ICONS[gender].color} className="me-2" />
+                <small className="text-muted">Current: {gender}</small>
+              </div>
+            )}
+          </div>
+          <div className="mb-2">
+            <label htmlFor="interests" className="form-label small mb-1">Interests</label>
+            <select multiple id="interests" className="form-control form-control-sm" value={interests} onChange={e => setInterests(Array.from(e.target.selectedOptions, option => option.value))} disabled={isUpdating}>
+              {availableInterests.map(interest => (
+                <option key={interest} value={interest}>{interest}</option>
+              ))}
+            </select>
+            <div className="mt-2 d-flex flex-wrap gap-2">
+              {interests.map(interest => {
+                const interestIcon = INTEREST_ICONS[interest];
+                return (
+                  <span key={interest} className="badge border border-primary text-primary rounded-pill py-2 px-3 d-flex align-items-center">
+                    {interestIcon && (
+                      <ReactIconRenderer IconComponent={interestIcon.icon} size={16} color={interestIcon.color} className="me-1" />
+                    )}
+                    {interest}
+                    <button type="button" className="btn-close ms-2" aria-label="Remove" onClick={() => setInterests(interests.filter(item => item !== interest))}></button>
+                  </span>
+                );
+              })}
             </div>
           </div>
           <button className="btn btn-primary w-100 mb-2" onClick={handleUpdate} disabled={isUpdating}>

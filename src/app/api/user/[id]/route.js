@@ -42,6 +42,8 @@ export async function GET(request, { params }) {
       fullName: `${userData.firstName || ''} ${userData.lastName || ''}`.trim(),
       email: userData.email,
       age: userData.age,
+      gender: userData.gender || null,
+      interests: userData.interests || [],
       bio: userData.bio || null,
       profilePictureUrl: userData.profilePictureUrl || null,
       badges: userData.badges, // Send the badges array to the client

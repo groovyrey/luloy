@@ -2,9 +2,9 @@ import { admin } from "/lib/firebase-admin.js";
 import { NextResponse } from "next/server";
 
 export async function PUT(request) {
-  let uid, firstName, lastName, age, bio, authLevel;
+  let uid, firstName, lastName, age, gender, location, timezone, occupation, interests, bio, authLevel;
   try {
-    ({ uid, firstName, lastName, age, bio, authLevel } = await request.json());
+    ({ uid, firstName, lastName, age, gender, location, timezone, occupation, interests, bio, authLevel } = await request.json());
 
     if (!uid) {
       console.error("Validation Error: UID is missing for user update.");
@@ -41,6 +41,31 @@ export async function PUT(request) {
       return NextResponse.json({ error: "Bio must be a string if provided." }, { status: 400 });
     }
 
+    if (gender !== undefined && typeof gender !== 'string') {
+      console.error(`Validation Error for UID ${uid}: Invalid gender provided: ${gender}`);
+      return NextResponse.json({ error: "Gender must be a string if provided." }, { status: 400 });
+    }
+
+    if (location !== undefined && typeof location !== 'string') {
+      console.error(`Validation Error for UID ${uid}: Invalid location provided: ${location}`);
+      return NextResponse.json({ error: "Location must be a string if provided." }, { status: 400 });
+    }
+
+    if (timezone !== undefined && typeof timezone !== 'string') {
+      console.error(`Validation Error for UID ${uid}: Invalid timezone provided: ${timezone}`);
+      return NextResponse.json({ error: "Timezone must be a string if provided." }, { status: 400 });
+    }
+
+    if (occupation !== undefined && typeof occupation !== 'string') {
+      console.error(`Validation Error for UID ${uid}: Invalid occupation provided: ${occupation}`);
+      return NextResponse.json({ error: "Occupation must be a string if provided." }, { status: 400 });
+    }
+
+    if (interests !== undefined && !Array.isArray(interests)) {
+      console.error(`Validation Error for UID ${uid}: Invalid interests provided: ${interests}`);
+      return NextResponse.json({ error: "Interests must be an array if provided." }, { status: 400 });
+    }
+
     const updateData = {};
     const now = admin.firestore.Timestamp.now();
 
@@ -61,6 +86,21 @@ export async function PUT(request) {
     }
     if (bio !== undefined && bio !== userData.bio) {
       updateData.bio = bio;
+    }
+    if (gender !== undefined && gender !== userData.gender) {
+      updateData.gender = gender;
+    }
+    if (location !== undefined && location !== userData.location) {
+      updateData.location = location;
+    }
+    if (timezone !== undefined && timezone !== userData.timezone) {
+      updateData.timezone = timezone;
+    }
+    if (occupation !== undefined && occupation !== userData.occupation) {
+      updateData.occupation = occupation;
+    }
+    if (interests !== undefined && interests !== userData.interests) {
+      updateData.interests = interests;
     }
     if (authLevel !== undefined && authLevel !== userData.authLevel) {
       updateData.authLevel = parseInt(authLevel);
