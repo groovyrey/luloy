@@ -1,18 +1,22 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
+import { vscDarkPlus, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const ThemeContext = createContext({
   theme: 'dark',
   toggleTheme: () => {},
+  syntaxHighlighterTheme: vscDarkPlus,
 });
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
+  const [syntaxHighlighterTheme, setSyntaxHighlighterTheme] = useState(vscDarkPlus);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(storedTheme);
+    setSyntaxHighlighterTheme(storedTheme === 'dark' ? vscDarkPlus : materialLight);
     document.body.setAttribute('data-theme', storedTheme);
     if (storedTheme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -24,6 +28,7 @@ export function ThemeProvider({ children }) {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
+    setSyntaxHighlighterTheme(newTheme === 'dark' ? vscDarkPlus : materialLight);
     localStorage.setItem('theme', newTheme);
     document.body.setAttribute('data-theme', newTheme);
     if (newTheme === 'dark') {
@@ -34,7 +39,7 @@ export function ThemeProvider({ children }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, syntaxHighlighterTheme }}>
       {children}
     </ThemeContext.Provider>
   );

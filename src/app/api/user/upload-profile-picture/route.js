@@ -1,7 +1,7 @@
 import { admin } from "/lib/firebase-admin.js";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -84,7 +84,7 @@ export async function POST(request) {
 
     
 
-    revalidatePath('/');
+    revalidateTag('profile-picture');
     return NextResponse.json({ message: "Profile picture uploaded successfully.", url: uploadResult.secure_url }, { status: 200 });
   } catch (error) {
     console.error("Error uploading profile picture:", error);
@@ -117,7 +117,7 @@ export async function DELETE(request) {
 
     
 
-    revalidatePath('/');
+    revalidateTag('profile-picture');
     return NextResponse.json({ message: "Profile picture removed successfully." }, { status: 200 });
   } catch (error) {
     console.error("Error removing profile picture:", error);

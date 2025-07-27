@@ -2,7 +2,7 @@
 
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useTheme } from '../context/ThemeContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -47,6 +47,7 @@ const renderAuthor = (author, authorDetails) => {
 
 export default function LearnPostClient({ postData }) {
   const { user, userData, loading } = useUser();
+  const { syntaxHighlighterTheme } = useTheme();
   const router = useRouter();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -90,7 +91,7 @@ export default function LearnPostClient({ postData }) {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
               <SyntaxHighlighter
-                style={vscDarkPlus}
+                style={syntaxHighlighterTheme}
                 language={match[1]}
                 {...props}
               >
