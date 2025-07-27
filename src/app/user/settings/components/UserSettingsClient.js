@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '../../../../app/context/UserContext';
 import LoadingMessage from '../../../../app/components/LoadingMessage';
@@ -34,7 +34,6 @@ export default function UserSettingsClient() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [isResetModalOpen, setIsResetModalOpen] = useState(false); // New state for reset password modal
-  const profilePictureInputRef = useRef(null);
   
   const [isFetchingUserData, setIsFetchingUserData] = useState(true); // New state for data fetching
   const [isUpdating, setIsUpdating] = useState(false); // New state for update loading
@@ -459,40 +458,24 @@ export default function UserSettingsClient() {
                 </div>
               )}
             </div>
-            <input
-              type="file"
-              id="profilePicture"
-              ref={profilePictureInputRef}
-              className="form-control form-control-sm mb-1"
-              onChange={e => {
-                const file = e.target.files[0];
-                setProfilePictureFile(file);
-                if (file) {
-                  setProfilePicturePreviewUrl(URL.createObjectURL(file));
-                } else {
-                  setProfilePicturePreviewUrl(null);
-                }
-              }}
-              disabled={isUpdating}
-              style={{ display: 'none' }} // Hide the default input
-            />
-            <button
-              type="button"
-              className="btn btn-outline-primary btn-sm w-100 mb-2"
-              onClick={() => profilePictureInputRef.current.click()}
-              disabled={isUpdating}
-            >
-              {profilePictureFile ? profilePictureFile.name : 'Choose Profile Picture'}
-            </button>
-            <div className="d-flex justify-content-between gap-2">
-              <button className="btn btn-secondary btn-sm w-50" onClick={handleProfilePictureUpload} disabled={isUpdating}>
+            <input type="file" id="profilePicture" className="form-control form-control-sm mb-1" onChange={e => {
+              const file = e.target.files[0];
+              setProfilePictureFile(file);
+              if (file) {
+                setProfilePicturePreviewUrl(URL.createObjectURL(file));
+              } else {
+                setProfilePicturePreviewUrl(null);
+              }
+            }} disabled={isUpdating} />
+            <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <button className="btn btn-secondary btn-sm flex-grow-1" onClick={handleProfilePictureUpload} disabled={isUpdating}>
                 {isUpdating ? (
                   <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 ) : (
                   <i className="bi-upload me-1"></i>
                 )}{' '}{isUpdating ? 'Uploading...' : 'Upload New'}
               </button>
-              <button className="btn btn-danger btn-sm w-50" onClick={handleRemoveProfilePicture} disabled={isUpdating || !userData?.profilePictureUrl}>
+              <button className="btn btn-danger btn-sm flex-grow-1" onClick={handleRemoveProfilePicture} disabled={isUpdating || !userData?.profilePictureUrl}>
                 <i className="bi-trash me-1"></i> Remove
               </button>
             </div>
@@ -538,7 +521,7 @@ export default function UserSettingsClient() {
             )}{' '}{isUpdating ? 'Updating...' : 'Update Profile'}
           </button>
           <div className="d-grid gap-2">
-          <Link href="/" className="btn btn-outline-secondary w-100">
+          <Link href="/" className="btn btn-outline-info btn-sm mt-2">
             Back to Home
           </Link>
           </div>
