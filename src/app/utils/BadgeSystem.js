@@ -98,7 +98,7 @@ const GENDER_OPTIONS = [
 
 const INTEREST_OPTIONS = [
   // General Interests
-  { value: 'General Interests', label: 'General Interests', icon: BiIcons.BiCategory, color: '#6c757d' },
+  { value: 'General Interests', label: 'General Interests', icon: BiIcons.BiInfoCircle, color: '#6c757d' },
   { value: 'Technology', label: 'Technology', icon: BiIcons.BiLaptop, color: '#007bff' },
   { value: 'Travel', label: 'Travel', icon: BiIcons.BiWorld, color: '#17a2b8' },
   { value: 'Food & Cooking', label: 'Food & Cooking', icon: BiIcons.BiFoodMenu, color: '#ffc107' },
@@ -112,8 +112,8 @@ const INTEREST_OPTIONS = [
   { value: 'Anime', label: 'Anime', icon: BiIcons.BiHappy, color: '#ff69b4' },
 
   // Personal Development
-  { value: 'Personal Development', label: 'Personal Development', icon: BiIcons.BiCategory, color: '#6c757d' },
-  { value: 'Productivity', label: 'Productivity', icon: BiIcons.BiTarget, color: '#28a745' },
+  { value: 'Personal Development', label: 'Personal Development', icon: BiIcons.BiTrendingUp, color: '#6c757d' },
+  { value: 'Productivity', label: 'Productivity', icon: BiIcons.BiBullseye, color: '#28a745' },
   { value: 'Mindfulness', label: 'Mindfulness', icon: BiIcons.BiLeaf, color: '#20c997' },
   { value: 'Fitness', label: 'Fitness', icon: BiIcons.BiRun, color: '#dc3545' },
   { value: 'Career Growth', label: 'Career Growth', icon: BiIcons.BiBriefcase, color: '#007bff' },
@@ -125,7 +125,7 @@ const INTEREST_OPTIONS = [
   { value: 'Financial Literacy', label: 'Financial Literacy', icon: BiIcons.BiDollar, color: '#28a745' },
 
   // Entertainment & Pop Culture
-  { value: 'Entertainment & Pop Culture', label: 'Entertainment & Pop Culture', icon: BiIcons.BiCategory, color: '#6c757d' },
+  { value: 'Entertainment & Pop Culture', label: 'Entertainment & Pop Culture', icon: BiIcons.BiMoviePlay, color: '#6c757d' },
   { value: 'Memes', label: 'Memes', icon: BiIcons.BiLaugh, color: '#ffc107' },
   { value: 'Celebrity News', label: 'Celebrity News', icon: BiIcons.BiStar, color: '#e83e8c' },
   { value: 'K-pop / J-pop', label: 'K-pop / J-pop', icon: BiIcons.BiMusic, color: '#ff69b4' },
@@ -133,11 +133,11 @@ const INTEREST_OPTIONS = [
   { value: 'Comics / Manga', label: 'Comics / Manga', icon: BiIcons.BiBookOpen, color: '#dc3545' },
   { value: 'TV Series', label: 'TV Series', icon: BiIcons.BiTv, color: '#007bff' },
   { value: 'Streaming', label: 'Streaming', icon: BiIcons.BiCameraMovie, color: '#17a2b8' },
-  { value: 'Dance', label: 'Dance', icon: BiIcons.BiDancer, color: '#fd7e14' },
+  { value: 'Dance', label: 'Dance', icon: BiIcons.BiBody, color: '#fd7e14' },
   { value: 'Creative Writing', label: 'Creative Writing', icon: BiIcons.BiPen, color: '#20c997' },
 
   // Tech & Digital
-  { value: 'Tech & Digital', label: 'Tech & Digital', icon: BiIcons.BiCategory, color: '#6c757d' },
+  { value: 'Tech & Digital', label: 'Tech & Digital', icon: BiIcons.BiChip, color: '#6c757d' },
   { value: 'Web Development', label: 'Web Development', icon: BiIcons.BiCode, color: '#007bff' },
   { value: 'Mobile Apps', label: 'Mobile Apps', icon: BiIcons.BiMobile, color: '#fd7e14' },
   { value: 'AI & Machine Learning', label: 'AI & Machine Learning', icon: BiIcons.BiBrain, color: '#6f42c1' },
@@ -149,7 +149,7 @@ const INTEREST_OPTIONS = [
   { value: 'Open Source', label: 'Open Source', icon: BiIcons.BiGitBranch, color: '#20c997' },
 
   // Social & Lifestyle
-  { value: 'Social & Lifestyle', label: 'Social & Lifestyle', icon: BiIcons.BiCategory, color: '#6c757d' },
+  { value: 'Social & Lifestyle', label: 'Social & Lifestyle', icon: BiIcons.BiHeart, color: '#6c757d' },
   { value: 'Relationships', label: 'Relationships', icon: BiIcons.BiHeart, color: '#ff69b4' },
   { value: 'Online Communities', label: 'Online Communities', icon: BiIcons.BiGroup, color: '#007bff' },
   { value: 'Self-Care', label: 'Self-Care', icon: BiIcons.BiSpa, color: '#20c997' },

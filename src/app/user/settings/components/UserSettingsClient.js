@@ -197,11 +197,16 @@ export default function UserSettingsClient() {
 
     // Check if any of the core fields (firstName, lastName, age, gender, location, timezone, occupation, interests) have actually changed
     // or if bio has changed. If not, show info toast and return.
-    if (firstName === userData.firstName &&
-        lastName === userData.lastName &&
-        age === userData.age &&
-        gender === userData.gender &&
-        bio === userData.bio) {
+    const interestsAreEqual = Array.isArray(interests) && Array.isArray(userData.interests) && interests.length === userData.interests.length && [...interests].sort().toString() === [...userData.interests].sort().toString();
+
+    if (
+      firstName === userData.firstName &&
+      lastName === userData.lastName &&
+      age === userData.age &&
+      gender === userData.gender &&
+      interestsAreEqual &&
+      bio === (userData.bio || '')
+    ) {
       showToast('No changes to update.', 'info');
       setIsUpdating(false);
       return;
@@ -607,6 +612,18 @@ export default function UserSettingsClient() {
                 );
               })}
             </div>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="bio" className="form-label small mb-1">Bio</label>
+            <textarea
+              id="bio"
+              className="form-control form-control-sm"
+              placeholder="Tell us about yourself"
+              value={bio}
+              onChange={e => setBio(e.target.value)}
+              disabled={isUpdating}
+              rows="3"
+            ></textarea>
           </div>
           <button className="btn btn-primary w-100 mb-2" onClick={handleUpdate} disabled={isUpdating}>
             {isUpdating ? (
