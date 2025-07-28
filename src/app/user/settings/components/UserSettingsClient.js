@@ -8,10 +8,12 @@ import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { showToast } from '../../../../app/utils/toast';
 import { capitalizeName } from '../../../../app/utils/capitalizeName';
-import { GENDER_ICONS, INTEREST_ICONS } from '../../../../app/utils/BadgeSystem';
+import { GENDER_OPTIONS, INTEREST_OPTIONS } from '../../../../app/utils/BadgeSystem';
 import styles from './UserSettingsClient.module.css';
 import Modal from '../../../../app/components/Modal';
 import ReactIconRenderer from '../../../../app/components/ReactIconRenderer';
+import MultiSelect from '../../../../app/components/MultiSelect';
+import SingleSelect from '../../../../app/components/SingleSelect';
 
 
 
@@ -31,38 +33,6 @@ export default function UserSettingsClient() {
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
   const [interests, setInterests] = useState([]);
-  const availableInterests = [
-    'Programming',
-    'Web Development',
-    'Mobile Development',
-    'Data Science',
-    'Machine Learning',
-    'Cybersecurity',
-    'Cloud Computing',
-    'DevOps',
-    'Game Development',
-    'UI/UX Design',
-    'Technical Writing',
-    'Open Source',
-    'Artificial Intelligence',
-    'Blockchain',
-    'Internet of Things (IoT)',
-    'Robotics',
-    'Virtual Reality (VR)',
-    'Augmented Reality (AR)',
-    'Gaming',
-    'Photography',
-    'Music',
-    'Reading',
-    'Sports',
-    'Travel',
-    'Cooking',
-    'Fitness',
-    'Gardening',
-    'DIY',
-    'Volunteering',
-  ];
-  
   const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [profilePicturePreviewUrl, setProfilePicturePreviewUrl] = useState(null);
   const [bio, setBio] = useState('');
@@ -606,34 +576,30 @@ export default function UserSettingsClient() {
           </div>
           <div className="mb-2">
             <label htmlFor="gender" className="form-label small mb-1">Gender</label>
-            <select id="gender" className="form-control form-control-sm" value={gender} onChange={e => setGender(e.target.value)} disabled={isUpdating}>
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Non-binary">Non-binary</option>
-              <option value="Prefer not to say">Prefer not to say</option>
-            </select>
-            {gender && GENDER_ICONS[gender] && (
-              <div className="d-flex align-items-center mt-2">
-                <ReactIconRenderer IconComponent={GENDER_ICONS[gender].icon} size={20} color={GENDER_ICONS[gender].color} className="me-2" />
-                <small className="text-muted">Current: {gender}</small>
-              </div>
-            )}
+            <SingleSelect
+              options={GENDER_OPTIONS}
+              selectedValue={gender}
+              onValueChange={setGender}
+              disabled={isUpdating}
+              placeholder="None"
+            />
           </div>
           <div className="mb-2">
             <label htmlFor="interests" className="form-label small mb-1">Interests</label>
-            <select multiple id="interests" className="form-control form-control-sm" value={interests} onChange={e => setInterests(Array.from(e.target.selectedOptions, option => option.value))} disabled={isUpdating}>
-              {availableInterests.map(interest => (
-                <option key={interest} value={interest}>{interest}</option>
-              ))}
-            </select>
+            <MultiSelect
+              options={INTEREST_OPTIONS}
+              selectedValues={interests}
+              onValuesChange={setInterests}
+              disabled={isUpdating}
+              placeholder="Select Interests"
+            />
             <div className="mt-2 d-flex flex-wrap gap-2">
               {interests.map(interest => {
-                const interestIcon = INTEREST_ICONS[interest];
+                const interestOption = INTEREST_OPTIONS.find(option => option.value === interest);
                 return (
                   <span key={interest} className="badge border border-primary text-primary rounded-pill py-2 px-3 d-flex align-items-center">
-                    {interestIcon && (
-                      <ReactIconRenderer IconComponent={interestIcon.icon} size={16} color={interestIcon.color} className="me-1" />
+                    {interestOption?.icon && (
+                      <ReactIconRenderer IconComponent={interestOption.icon} size={16} color={interestOption.color} className="me-1" />
                     )}
                     {interest}
                     <button type="button" className="btn-close ms-2" aria-label="Remove" onClick={() => setInterests(interests.filter(item => item !== interest))}></button>

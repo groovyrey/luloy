@@ -1,0 +1,82 @@
+.multiSelectContainer {
+  position: relative;
+  width: 100%;
+}
+
+.selectButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.selectButton:hover {
+  border-color: var(--primary-color);
+}
+
+.selectButton:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+  outline: none;
+}
+
+.selectButton:disabled {
+  background-color: var(--accent-color);
+  color: var(--light-text-color);
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.dropdownArrow {
+  margin-left: 0.5rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: 0.5rem;
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.dropdownItem:hover {
+  background-color: var(--hover-bg-color);
+}
+
+.dropdownItem.selected {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+}
+
+.dropdownItem.selected:hover {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+}
+
+.dropdownItem .react-icon {
+  margin-right: 0.5rem; /* Add space between icon and text */
+}

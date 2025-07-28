@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { showToast } from '../../../app/utils/toast';
 
 import React from 'react';
-import { BADGES, GENDER_ICONS, INTEREST_ICONS } from '../../../app/utils/BadgeSystem';
+import { BADGES, GENDER_OPTIONS, INTEREST_OPTIONS } from '../../../app/utils/BadgeSystem';
 import Link from 'next/link';
 import ReactIconRenderer from '../../../app/components/ReactIconRenderer';
 import CodeSnippetCard from '../../../app/components/CodeSnippetCard'; // Import CodeSnippetCard
@@ -199,8 +199,8 @@ export default function UserProfilePage({ params }) {
             {profileData.gender && (
               <div className="col-12 col-md-6">
                 <div className="d-flex align-items-center mb-2">
-                  {GENDER_ICONS[profileData.gender] && (
-                    <ReactIconRenderer IconComponent={GENDER_ICONS[profileData.gender].icon} size={20} color={GENDER_ICONS[profileData.gender].color} className="me-2" />
+                  {profileData.gender && (
+                    <ReactIconRenderer IconComponent={GENDER_OPTIONS.find(option => option.value === profileData.gender)?.icon} size={20} color={GENDER_OPTIONS.find(option => option.value === profileData.gender)?.color} className="me-2" />
                   )}
                   <p className="mb-0 fw-semibold">Gender:</p>
                 </div>
@@ -242,11 +242,11 @@ export default function UserProfilePage({ params }) {
                 </div>
                 <div className="mt-2 d-flex flex-wrap gap-2 ms-4">
                   {profileData.interests.map(interest => {
-                    const interestIcon = INTEREST_ICONS[interest];
+                    const interestOption = INTEREST_OPTIONS.find(option => option.value === interest);
                     return (
                       <span key={interest} className="badge border border-primary text-primary rounded-pill py-2 px-3 d-flex align-items-center">
-                        {interestIcon && (
-                          <ReactIconRenderer IconComponent={interestIcon.icon} size={16} color={interestIcon.color} className="me-1" />
+                        {interestOption?.icon && (
+                          <ReactIconRenderer IconComponent={interestOption.icon} size={16} color={interestOption.color} className="me-1" />
                         )}
                         {interest}
                       </span>
