@@ -87,7 +87,7 @@ html.dark {
   --navbar-background-color: #181818; /* Slightly Lighter Black */
   --card-header-background-color: var(--card-background-color);
   --card-header-text-color: #ffffff; /* White text for header */
-  
+  --primary-text-color: #ffffff;
   --my-message-gradient-start: #333333; /* Dark Grey */
   
   --other-message-gradient-start: #222222; /* Darker Grey */
