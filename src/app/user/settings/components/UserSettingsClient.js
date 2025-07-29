@@ -502,6 +502,16 @@ export default function UserSettingsClient() {
               className="form-control form-control-sm mb-1"
               onChange={e => {
                 const file = e.target.files[0];
+                const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+                if (file && file.size > MAX_FILE_SIZE) {
+                  showToast('File size exceeds 5MB limit.', 'error');
+                  setProfilePictureFile(null);
+                  setProfilePicturePreviewUrl(null);
+                  e.target.value = null; // Clear the input field
+                  return;
+                }
+
                 setProfilePictureFile(file);
                 if (file) {
                   setProfilePicturePreviewUrl(URL.createObjectURL(file));
@@ -536,7 +546,7 @@ export default function UserSettingsClient() {
                   {isUpdating ? 'Uploading...' : 'Upload'}
                 </button>
               )}
-              {profilePicturePreviewUrl && (
+              {userData.profilePictureUrl && (
                 <button
                   type="button"
                   className="btn btn-danger flex-grow-1 rounded-pill shadow-sm"
@@ -623,7 +633,9 @@ export default function UserSettingsClient() {
               onChange={e => setBio(e.target.value)}
               disabled={isUpdating}
               rows="3"
+              maxLength="100"
             ></textarea>
+            <small className="form-text text-muted">{bio.length}/100 characters</small>
           </div>
           <button className="btn btn-primary w-100 mb-2" onClick={handleUpdate} disabled={isUpdating}>
             {isUpdating ? (
