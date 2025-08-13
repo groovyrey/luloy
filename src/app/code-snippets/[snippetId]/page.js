@@ -250,12 +250,12 @@ export default function CodeSnippetPage() {
       {uploaderData && uploadDate && (
         <UserSearchResultCard user={uploaderData} className={`${styles.uploaderCard} mb-3`} displayUploadDate={true} uploadDate={uploadDate} />
       )}
-      <div className="card mb-4" style={{ maxWidth: '800px', width: '100%' }}>
+      <div className={`card mb-4 ${styles.mainCard}`}>
         <div className="card-header d-flex flex-column align-items-start">
           <div className="d-flex align-items-center mb-2">
             <FileIcon filename={snippetData.language} className="me-2" style={{ fontSize: '2rem' }} />
             <div className={styles.leftAlign}>
-              <h5 className="mb-0 text-truncate">{snippetData.filename}</h5>
+              <h5 className={`mb-0 ${styles.title}`}>{snippetData.filename}</h5>
               <small className="text-muted">{snippetData.description || 'No description'}</small>
             </div>
           </div>
