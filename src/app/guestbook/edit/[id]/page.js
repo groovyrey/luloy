@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useUser } from '../../../../context/UserContext';
-import { showToast } from '../../../../utils/toast';
-import LoadingMessage from '../../../../components/LoadingMessage';
+import { useUser } from '../../../context/UserContext';
+import { showToast } from '../../../utils/toast';
+import LoadingMessage from '../../../components/LoadingMessage';
 
 export default function EditMessagePage() {
   const { user } = useUser();
