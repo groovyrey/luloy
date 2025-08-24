@@ -16,7 +16,7 @@
 # next.js
 /.next/
 /out/
-/.ssh
+.ssh/*
 
 # production
 /build
