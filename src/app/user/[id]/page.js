@@ -96,12 +96,9 @@ export default function UserProfilePage({ params }) {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center py-4" style={{ minHeight: '80vh' }}>
-      <motion.div
+      <div
         className="card shadow-lg border-0 rounded-4"
         style={{ maxWidth: '600px', width: '100%', overflow: 'hidden' }}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
       >
         <div className="card-body p-4">
           <div className="d-flex flex-column align-items-center mb-4">
@@ -257,7 +254,7 @@ export default function UserProfilePage({ params }) {
             )}
           </div>
         </div>
-      </motion.div>
+      </div>
 
       <motion.div
         className="card shadow-lg border-0 rounded-4 mt-4"
