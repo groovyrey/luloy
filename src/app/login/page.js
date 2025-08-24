@@ -49,13 +49,7 @@ export default function LoginPage() {
   
 
 	return (
-    <motion.div 
-      initial={{ opacity: 0, y: -20 }} 
-      animate={{ opacity: 1, y: 0 }} 
-      exit={{ opacity: 0, y: 20 }} 
-      transition={{ duration: 0.5 }}
-      className="d-flex flex-column align-items-center justify-content-center px-3" style={{ minHeight: '80vh' }}
-    >
+    <div className="d-flex flex-column align-items-center justify-content-center px-3" style={{ minHeight: '80vh' }}>
       <div className="card" style={{ maxWidth: '400px', width: '100%' }}>
         <div className="card-header">
           <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
@@ -88,6 +82,6 @@ export default function LoginPage() {
           
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
