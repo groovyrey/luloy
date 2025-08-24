@@ -23,21 +23,27 @@ export default function EditMessagePage() {
     }
 
     const fetchMessage = async () => {
+      console.log('User object:', user);
+      console.log('User ID token:', user?.idToken);
       try {
         const response = await fetch(`/api/messages/${id}`, {
           headers: {
             'Authorization': `Bearer ${user.idToken}`,
           },
         });
+        console.log('Fetch response:', response);
         if (response.ok) {
           const data = await response.json();
           setMessage(data);
           setSender(data.sender);
           setMessageContent(data.message);
         } else {
-          showToast('Failed to fetch message', 'error');
+          const errorData = await response.json();
+          console.error('Error fetching message:', errorData);
+          showToast(`Failed to fetch message: ${errorData.message}`, 'error');
         }
       } catch (error) {
+        console.error('Caught error fetching message:', error);
         showToast('Error fetching message: ' + error.message, 'error');
       } finally {
         setLoading(false);
