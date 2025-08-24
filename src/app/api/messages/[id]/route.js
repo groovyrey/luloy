@@ -1,9 +1,37 @@
-import { db } from '../../../../../lib/firebase.js';
+import { db, admin } from '../../../../../lib/firebase-admin.js';
 import { NextResponse } from 'next/server';
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { getComputedPermissions } from '../../../../../utils/BadgeSystem.js';
+
+async function verifyUser(request) {
+  const idToken = request.headers.get('authorization')?.split('Bearer ')[1];
+  if (!idToken) {
+    return null;
+  }
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    return decodedToken;
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return null;
+  }
+}
 
 export async function GET(request, { params }) {
   try {
+    const decodedToken = await verifyUser(request);
+    if (!decodedToken) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userDoc = await admin.firestore().collection('users').doc(decodedToken.uid).get();
+    const userData = userDoc.data();
+    const permissions = getComputedPermissions(userData.badges || []);
+
+    if (!permissions.canManageMessages) {
+        return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+    }
+
     const { id } = await params;
     const messageRef = doc(db, "maindata", id);
     const messageSnap = await getDoc(messageRef);
@@ -22,6 +50,19 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   try {
+    const decodedToken = await verifyUser(request);
+    if (!decodedToken) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userDoc = await admin.firestore().collection('users').doc(decodedToken.uid).get();
+    const userData = userDoc.data();
+    const permissions = getComputedPermissions(userData.badges || []);
+
+    if (!permissions.canManageMessages) {
+        return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+    }
+
     const { id } = await params;
     const { message, sender } = await request.json();
 

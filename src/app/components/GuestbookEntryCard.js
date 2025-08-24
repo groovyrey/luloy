@@ -211,7 +211,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
               onClick={(e) => e.stopPropagation()} // Prevent clicks inside options from closing the card
             >
               <button className="btn btn-link text-start" onClick={() => {
-                router.push(`/messages/edit/${message.id}`);
+                router.push(`/guestbook/edit/${message.id}`);
                 setShowOptions(false);
               }}>
                 <i className="bi bi-pencil-square me-2"></i>Edit
