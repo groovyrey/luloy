@@ -1,4 +1,4 @@
-import { db, admin } from '../../../../../lib/firebase-admin.js';
+import { firestore as db, admin } from '../../../../../lib/firebase-admin.js';
 import { NextResponse } from 'next/server';
 import { getComputedPermissions } from '../../../utils/BadgeSystem.js';
 
