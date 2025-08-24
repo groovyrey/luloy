@@ -1,6 +1,5 @@
 import { db, admin } from '../../../../../lib/firebase-admin.js';
 import { NextResponse } from 'next/server';
-import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getComputedPermissions } from '../../../utils/BadgeSystem.js';
 
 async function verifyUser(request) {
@@ -32,11 +31,11 @@ export async function GET(request, { params }) {
         return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    const { id } = await params;
-    const messageRef = doc(db, "maindata", id);
-    const messageSnap = await getDoc(messageRef);
+    const { id } = params;
+    const messageRef = db.collection('maindata').doc(id);
+    const messageSnap = await messageRef.get();
 
-    if (!messageSnap.exists()) {
+    if (!messageSnap.exists) {
       return NextResponse.json({ message: 'Message not found' }, { status: 404 });
     }
 
@@ -63,11 +62,11 @@ export async function PUT(request, { params }) {
         return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    const { id } = await params;
+    const { id } = params;
     const { message, sender } = await request.json();
 
-    const messageRef = doc(db, "maindata", id);
-    await updateDoc(messageRef, { message, sender });
+    const messageRef = db.collection('maindata').doc(id);
+    await messageRef.update({ message, sender });
 
     return NextResponse.json({ message: 'Message updated successfully' });
   } catch (error) {
