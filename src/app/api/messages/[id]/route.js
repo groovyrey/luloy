@@ -1,7 +1,7 @@
 import { db, admin } from '../../../../../lib/firebase-admin.js';
 import { NextResponse } from 'next/server';
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { getComputedPermissions } from '../../../../../utils/BadgeSystem.js';
+import { getComputedPermissions } from '../../../utils/BadgeSystem.js';
 
 async function verifyUser(request) {
   const idToken = request.headers.get('authorization')?.split('Bearer ')[1];
