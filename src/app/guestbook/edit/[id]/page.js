@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import LoadingMessage from '../../../components/LoadingMessage';
-import { showToast } from '../../../utils/toast';
+import LoadingMessage from '../../../../components/LoadingMessage';
+import { showToast } from '../../../../utils/toast';
+import { useUser } from '../../../../context/UserContext';
 
 export default function EditMessagePage() {
   const params = useParams();
   const { id } = params;
   const router = useRouter();
+  const { user, loading: userLoading } = useUser();
 
   const [messageContent, setMessageContent] = useState('');
   const [messageSender, setMessageSender] = useState('');
@@ -18,9 +20,18 @@ export default function EditMessagePage() {
   useEffect(() => {
     document.title = `Edit Message ${id}`;
     const fetchMessage = async () => {
+      if (!user) {
+        showToast('You must be logged in to edit messages.', 'error');
+        router.push('/login');
+        return;
+      }
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/messages/${id}`);
+        const response = await fetch(`/api/messages/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${user.idToken}`
+          }
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -34,19 +45,25 @@ export default function EditMessagePage() {
       }
     };
 
-    if (id) {
+    if (id && !userLoading) {
       fetchMessage();
     }
-  }, [id]);
+  }, [id, user, userLoading, router]);
 
   const handleSave = async (e) => {
     e.preventDefault();
+    if (!user) {
+      showToast('You must be logged in to save messages.', 'error');
+      router.push('/login');
+      return;
+    }
     setIsSaving(true);
     try {
       const response = await fetch(`/api/messages/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.idToken}`
         },
         body: JSON.stringify({ message: messageContent, sender: messageSender }),
       });
@@ -62,7 +79,7 @@ export default function EditMessagePage() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || userLoading) {
     return <LoadingMessage />;
   }
 
