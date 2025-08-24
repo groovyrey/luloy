@@ -2,130 +2,123 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import LoadingMessage from '../../../components/LoadingMessage';
-import { showToast } from '../../../utils/toast';
-import { useUser } from '../../../context/UserContext';
+import { useUser } from '../../../../context/UserContext';
+import { showToast } from '../../../../utils/toast';
+import LoadingMessage from '../../../../components/LoadingMessage';
 
 export default function EditMessagePage() {
-  const params = useParams();
-  const { id } = params;
+  const { user } = useUser();
   const router = useRouter();
-  const { user, loading: userLoading } = useUser();
-
+  const { id } = useParams();
+  const [message, setMessage] = useState(null);
+  const [sender, setSender] = useState('');
   const [messageContent, setMessageContent] = useState('');
-  const [messageSender, setMessageSender] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    document.title = `Edit Message ${id}`;
-    const fetchMessage = async () => {
-      if (!user) {
-        showToast('You must be logged in to edit messages.', 'error');
+    if (!user) {
         router.push('/login');
         return;
-      }
-      setIsLoading(true);
+    }
+
+    const fetchMessage = async () => {
       try {
         const response = await fetch(`/api/messages/${id}`, {
           headers: {
-            'Authorization': `Bearer ${user.idToken}`
-          }
+            'Authorization': `Bearer ${user.idToken}`,
+          },
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.ok) {
+          const data = await response.json();
+          setMessage(data);
+          setSender(data.sender);
+          setMessageContent(data.message);
+        } else {
+          showToast('Failed to fetch message', 'error');
         }
-        const data = await response.json();
-        setMessageContent(data.message);
-        setMessageSender(data.sender || '');
       } catch (error) {
-        showToast("Failed to fetch message:", 'error');
+        showToast('Error fetching message: ' + error.message, 'error');
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    if (id && !userLoading) {
+    if (id) {
       fetchMessage();
     }
-  }, [id, user, userLoading, router]);
+  }, [id, user, router]);
 
-  const handleSave = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!user) {
-      showToast('You must be logged in to save messages.', 'error');
-      router.push('/login');
-      return;
-    }
-    setIsSaving(true);
+    setIsUpdating(true);
     try {
       const response = await fetch(`/api/messages/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.idToken}`
+          'Authorization': `Bearer ${user.idToken}`,
         },
-        body: JSON.stringify({ message: messageContent, sender: messageSender }),
+        body: JSON.stringify({
+          sender,
+          message: messageContent,
+        }),
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+
+      if (response.ok) {
+        showToast('Message updated successfully', 'success');
+        router.push('/guestbook');
+      } else {
+        const errorData = await response.json();
+        showToast(`Failed to update message: ${errorData.message}`, 'error');
       }
-      showToast('Message updated successfully!', 'success');
-      router.push('/guestbook');
     } catch (error) {
-      showToast("Failed to save message.", 'error');
+      showToast('Error updating message: ' + error.message, 'error');
     } finally {
-      setIsSaving(false);
+      setIsUpdating(false);
     }
   };
 
-  if (isLoading || userLoading) {
+  if (loading) {
     return <LoadingMessage />;
   }
 
-  
+  if (!message) {
+    return <p>Message not found.</p>;
+  }
 
   return (
-    <div className="container py-5">
+    <div className="container mt-5">
       <div className="card">
         <div className="card-header">
-          <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />
-          <h1 className="card-title fw-bold mb-0 fs-3">Edit Message</h1>
-          <p className="mb-0 opacity-75">Editing message with ID: {id}</p>
+          <h2>Edit Message</h2>
         </div>
         <div className="card-body">
-        
-        <form onSubmit={handleSave}>
-          <div className="mb-3">
-            <label htmlFor="messageContent" className="form-label">Message Content</label>
-            <textarea 
-              className="form-control" 
-              id="messageContent" 
-              rows="5" 
-              placeholder="Enter your message here..."
-              value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
-            ></textarea>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="messageSender" className="form-label">Sender (Optional)</label>
-            <input 
-              type="text" 
-              className="form-control" 
-              id="messageSender" 
-              placeholder="Anonymous" 
-              value={messageSender}
-              onChange={(e) => setMessageSender(e.target.value)}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary w-100 mt-3" disabled={isSaving}>
-            {isSaving ? (
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            ) : (
-              null
-            )}{' '}{isSaving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </form>
+          <form onSubmit={handleUpdate}>
+            <div className="mb-3">
+              <label htmlFor="sender" className="form-label">Sender</label>
+              <input
+                type="text"
+                id="sender"
+                className="form-control"
+                value={sender}
+                onChange={(e) => setSender(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="messageContent" className="form-label">Message</label>
+              <textarea
+                id="messageContent"
+                className="form-control"
+                rows="5"
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+              ></textarea>
+            </div>
+            <button type="submit" className="btn btn-primary" disabled={isUpdating}>
+              {isUpdating ? 'Updating...' : 'Update Message'}
+            </button>
+          </form>
         </div>
       </div>
     </div>
