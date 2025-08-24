@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import LoadingMessage from '../../../../components/LoadingMessage';
 import { showToast } from '../../../../utils/toast';
-import { useUser } from '../../../../context/UserContext';
+import { useUser } from '../../../context/UserContext';
 
 export default function EditMessagePage() {
   const params = useParams();
