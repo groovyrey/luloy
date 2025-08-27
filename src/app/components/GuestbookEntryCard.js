@@ -170,7 +170,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
 
   return (
     <motion.div
-      className={`${styles.messageCardContainer} card mb-4`}
+      className={`${styles.messageCardContainer} ${styles.compactCard} card`}
       
       onClick={() => { if (user && user.permissions?.canManageMessages) setShowOptions(!showOptions); }}
     >

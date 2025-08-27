@@ -1,0 +1,38 @@
+.formSection .form-control {
+  border-radius: 8px;
+  padding: 1.5rem 1rem 0.5rem;
+  border: 1px solid var(--card-border-color);
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+}
+
+.formSection .form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+  border-color: var(--primary-color);
+}
+
+.formSection .form-floating > label {
+  color: var(--light-text-color);
+}
+
+.authButton {
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.authButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.authLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.authLink:hover {
+  text-decoration: underline;
+}

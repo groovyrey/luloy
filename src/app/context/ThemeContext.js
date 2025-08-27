@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { vscDarkPlus, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus, okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const ThemeContext = createContext({
   theme: 'dark',
@@ -16,7 +16,7 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(storedTheme);
-    setSyntaxHighlighterTheme(storedTheme === 'dark' ? vscDarkPlus : materialLight);
+    setSyntaxHighlighterTheme(storedTheme === 'dark' ? vscDarkPlus : okaidia);
     document.body.setAttribute('data-theme', storedTheme);
     if (storedTheme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -28,7 +28,7 @@ export function ThemeProvider({ children }) {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    setSyntaxHighlighterTheme(newTheme === 'dark' ? vscDarkPlus : materialLight);
+    setSyntaxHighlighterTheme(newTheme === 'dark' ? vscDarkPlus : okaidia);
     localStorage.setItem('theme', newTheme);
     document.body.setAttribute('data-theme', newTheme);
     if (newTheme === 'dark') {

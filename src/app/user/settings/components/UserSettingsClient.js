@@ -435,7 +435,7 @@ export default function UserSettingsClient() {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center py-3" style={{ minHeight: 'calc(100vh - 60px)' }}>
-      <div className="card shadow-sm mb-3" style={{ maxWidth: '450px', width: '100%' }}>
+      <div className={styles.settingsTabsContainer} style={{ maxWidth: '450px', width: '100%' }}>
         <div className={`${styles.tabsContainer} card-body p-2 d-flex justify-content-start`}>
             <button
               className={`${styles.tabButton} ${activeSection === 'information' ? styles.active : ''} me-2`}

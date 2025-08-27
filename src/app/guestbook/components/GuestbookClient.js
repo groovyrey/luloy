@@ -22,6 +22,10 @@ export default function MessagesClient() {
     const tab = searchParams.get('tab');
     if (tab && ['public', 'private', 'send'].includes(tab)) {
       setActiveTab(tab);
+      // Reset pagination when tab changes
+      setPage(1);
+      setPageCursors([null]);
+      setHasNextPage(true); // Assume there might be a next page initially
     }
   }, [searchParams]);
   const [messages, setMessages] = useState([]);
@@ -197,6 +201,12 @@ export default function MessagesClient() {
               <i className="bi bi-pencil-square me-2"></i>Sign Guestbook
             </button>
           </div>
+
+      {(activeTab === 'public' || activeTab === 'private') && (
+        <div className="text-center text-muted mb-3">
+          Page {page}
+        </div>
+      )}
 
       {activeTab === 'public' && (
         <AnimatePresence className="mt-3">

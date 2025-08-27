@@ -3,25 +3,35 @@
   border-radius: var(--border-radius-base);
   overflow: hidden; /* Ensures content respects border-radius */
   transition: var(--transition-base);
+  border: 1px solid var(--card-border-color); /* Ensure a subtle border */
+  box-shadow: var(--box-shadow-base); /* Subtle shadow for modern look */
+}
+
+.messageCardContainer:hover {
+  transform: translateY(-3px); /* Lift effect on hover */
+  box-shadow: var(--box-shadow-hover); /* More pronounced shadow on hover */
+}
+
+.compactCard {
+  margin-bottom: 1rem; /* Compact margin for the card itself */
 }
 
 .messageCardContainer .card-body {
-  padding: 1rem;
+  padding: 0.75rem; /* Reduced padding */
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
 }
 
 .senderInfo {
   border: 1px solid var(--card-border-color); /* Add border */
   border-radius: var(--border-radius-base); /* Rounded corners */
-  padding: 10px 15px; /* More padding inside the border */
+  padding: 8px 12px; /* More compact padding */
   width: 100%; /* Take max width */
-  margin-bottom: 10px; /* Space below the border */
+  margin-bottom: 8px; /* More compact space below the border */
   display: flex;
   align-items: center;
 }
@@ -106,10 +116,10 @@
 }
 
 .messageContent {
-  padding: 5px; /* Padding inside the border */
-  margin: 5px;/* Reduced margin to align the border */
+  padding: 3px; /* More compact padding */
+  margin: 3px; /* More compact margin */
   word-wrap: break-all;
   white-space: pre-wrap;
-  font-size: 1.5rem !important; /* Increased font size for better readability */
+  font-size: 1rem !important; /* Reduced font size for compactness */
   border-left: 1px solid transparent; /* Thinner vertical line */
 }
