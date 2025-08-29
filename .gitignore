@@ -16,7 +16,6 @@
 # next.js
 /.next/
 /out/
-.ssh/*
 
 # production
 /build
@@ -42,4 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # ssh keys
-.ssh
+.ssh/
