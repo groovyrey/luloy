@@ -7,7 +7,7 @@ import styles from './CodeSnippetCard.module.css';
 
 export default function CodeSnippetCard({ snippet, className }) {
   return (
-    <Link href={`/code-snippets/${snippet.id}`} className="text-decoration-none text-dark">
+    <Link href={`/code-snippets/${snippet.id}`} className="text-decoration-none text-body">
     <div
       className={`card mb-3 ${className}`}
     >

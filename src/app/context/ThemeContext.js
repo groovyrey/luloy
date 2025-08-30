@@ -1,22 +1,22 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { vscDarkPlus, okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const ThemeContext = createContext({
   theme: 'dark',
   toggleTheme: () => {},
-  syntaxHighlighterTheme: vscDarkPlus,
+  syntaxHighlighterTheme: oneDark,
 });
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
-  const [syntaxHighlighterTheme, setSyntaxHighlighterTheme] = useState(vscDarkPlus);
+  const [syntaxHighlighterTheme, setSyntaxHighlighterTheme] = useState(oneDark);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(storedTheme);
-    setSyntaxHighlighterTheme(storedTheme === 'dark' ? vscDarkPlus : okaidia);
+    setSyntaxHighlighterTheme(storedTheme === 'dark' ? oneDark : oneLight);
     document.body.setAttribute('data-theme', storedTheme);
     if (storedTheme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -28,7 +28,7 @@ export function ThemeProvider({ children }) {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    setSyntaxHighlighterTheme(newTheme === 'dark' ? vscDarkPlus : okaidia);
+    setSyntaxHighlighterTheme(newTheme === 'dark' ? oneDark : oneLight);
     localStorage.setItem('theme', newTheme);
     document.body.setAttribute('data-theme', newTheme);
     if (newTheme === 'dark') {

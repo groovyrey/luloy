@@ -284,7 +284,6 @@ export default function CodeSnippetPage() {
               margin: '0',
               borderRadius: 'var(--border-radius-base)',
               fontSize: '0.9em',
-              background: 'transparent',
             }}
           >
             {codeContent}

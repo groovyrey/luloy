@@ -60,13 +60,7 @@
   --hover-bg-color: #282828;
 }
 
-[data-theme="dark"] .card {
-  box-shadow: none !important;
-}
 
-[data-theme="dark"] .card:hover {
-  box-shadow: none !important;
-}
 
 [data-theme="dark"] hr {
   border-color: #444444; /* A visible grey for dark theme */
@@ -155,7 +149,7 @@ p {
 
 .card {
   background-color: var(--card-background-color);
-  border: none; /* Equivalent to Bootstrap's border-0 */
+  border: 1px solid var(--card-border-color); /* Equivalent to Bootstrap's border-0 */
   border-radius: var(--border-radius-base);
   box-shadow: var(--box-shadow);
   transition: var(--transition-base);
