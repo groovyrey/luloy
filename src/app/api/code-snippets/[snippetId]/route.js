@@ -5,6 +5,8 @@ import { auth } from '/lib/firebase-admin';
 import { del, put } from '@vercel/blob';
 import { revalidatePath } from 'next/cache'; // Import revalidatePath
 
+export const revalidate = 0; // Ensure no caching for this API route
+
 export async function GET(request, context) {
   const { snippetId } = await context.params;
 
@@ -29,7 +31,7 @@ export async function GET(request, context) {
 }
 
 export async function PUT(request, context) {
-  console.log('Incoming PUT request headers:', request.headers);
+  
   const { snippetId } = await context.params;
   const session = (await cookies()).get('session')?.value || '';
 
@@ -64,7 +66,7 @@ export async function PUT(request, context) {
     }
 
     const { filename, description, codeContent } = await request.json();
-    console.log('DEBUG: Incoming codeContent:', codeContent);
+    
 
     const updateData = {
       filename,
@@ -84,15 +86,15 @@ export async function PUT(request, context) {
         access: 'public',
         allowOverwrite: true,
       });
-      console.log('DEBUG: Blob upload result:', blob);
-      console.log('DEBUG: New Blob URL:', blob.url); // Log the new blob URL
+      
+      
       updateData.codeBlobUrl = blob.url;
 
       // Delete old blob if it exists and is different from the new one
       if (oldBlobUrl && oldBlobUrl !== blob.url) {
         try {
           await del(oldBlobUrl);
-          console.log(`Successfully deleted old blob: ${oldBlobUrl}`);
+          
         } catch (blobError) {
           console.error(`Error deleting old blob ${oldBlobUrl}:`, blobError);
         }
@@ -104,7 +106,7 @@ export async function PUT(request, context) {
     // Revalidate paths to ensure fresh data is fetched on subsequent requests
     revalidatePath(`/code-snippets/${snippetId}`);
     revalidatePath(`/user/my-snippets`); // Assuming this path lists user's snippets
-    console.log(`BACKEND DEBUG: revalidatePath called for /code-snippets/${snippetId} and /user/my-snippets`); // ADDED FOR DEBUGGING
+    
 
     return NextResponse.json({ message: 'Snippet updated successfully' });
   } catch (error) {

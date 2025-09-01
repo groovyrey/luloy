@@ -98,7 +98,8 @@ export default function EditCodeSnippetPage() {
       }
 
       toast.success('Snippet updated successfully!');
-      window.location.href = `/code-snippets/${snippetId}`; // Full page reload
+      router.push(`/code-snippets/${snippetId}`);
+      router.refresh(); // Re-fetches data for the current route
     } catch (error) {
       console.error('Update failed:', error);
       toast.error(`Update failed: ${error.message}`);
@@ -185,7 +186,6 @@ export default function EditCodeSnippetPage() {
               mode={getAceMode(language)}
               theme={theme === 'dark' ? 'dracula' : 'github'}
               onChange={(newValue) => {
-                console.log('DEBUG: AceEditor onChange - newValue:', newValue.substring(0, 100)); // Log first 100 chars
                 setCodeContent(newValue);
               }}
               name="code-editor"
@@ -210,7 +210,6 @@ export default function EditCodeSnippetPage() {
             type="submit"
             className="btn btn-primary w-100"
             onClick={async () => {
-              console.log('DEBUG: handleUpdate - codeContent being sent:', codeContent.substring(0, 100)); // Log first 100 chars
               await handleUpdate();
             }}
             disabled={updating}

@@ -145,7 +145,7 @@ export default function CodeSnippetPage() {
           setUploaderData({ ...userData, id: userData.uid });
 
           if (data.codeBlobUrl) {
-            const codeRes = await fetch(data.codeBlobUrl);
+            const codeRes = await fetch(data.codeBlobUrl, { cache: 'no-store' });
             if (!codeRes.ok) {
               throw new Error(`Failed to fetch code content: ${codeRes.status}`);
             }

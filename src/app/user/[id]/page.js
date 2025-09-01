@@ -144,7 +144,13 @@ export default function UserProfilePage({ params }) {
                     <i className="bi bi-envelope-fill me-2 text-primary"></i>
                     <p className="mb-0 fw-semibold">Email:</p>
                   </div>
-                  <p className="text-muted ms-4">{profileData.email.split('@')[0].substring(0, 3) + '***@' + profileData.email.split('@')[1]}</p>
+                  <p className="text-muted ms-4">
+                  {profileData.email ? (
+                    profileData.email.split('@')[0].substring(0, 3) + '***@' + profileData.email.split('@')[1]
+                  ) : (
+                    'N/A' // Or some other placeholder
+                  )}
+                </p>
                 </div>
                 <div className="col-12 col-md-6">
                   <div className="d-flex align-items-center mb-2">
