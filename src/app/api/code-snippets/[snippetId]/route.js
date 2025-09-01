@@ -2,7 +2,8 @@ import { firestore } from '/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { auth } from '/lib/firebase-admin';
-import { del } from '@vercel/blob';
+import { del, put } from '@vercel/blob';
+import { revalidatePath } from 'next/cache'; // Import revalidatePath
 
 export async function GET(request, context) {
   const { snippetId } = await context.params;
@@ -19,14 +20,98 @@ export async function GET(request, context) {
       return NextResponse.json({ error: 'Snippet not found' }, { status: 404 });
     }
 
-    return NextResponse.json(docSnap.data());
+    const snippetData = docSnap.data();
+    return NextResponse.json(snippetData);
   } catch (error) {
     console.error('Error fetching code snippet:', error);
     return NextResponse.json({ error: 'Failed to fetch code snippet' }, { status: 500 });
   }
 }
 
+export async function PUT(request, context) {
+  console.log('Incoming PUT request headers:', request.headers);
+  const { snippetId } = await context.params;
+  const session = (await cookies()).get('session')?.value || '';
 
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized: No session found' }, { status: 401 });
+  }
+
+  let decodedClaims;
+  try {
+    decodedClaims = await auth.verifySessionCookie(session, true);
+  } catch (error) {
+    console.error('Error verifying session cookie for update:', error);
+    return NextResponse.json({ error: 'Unauthorized: Invalid session' }, { status: 401 });
+  }
+
+  const userId = decodedClaims.uid;
+
+  if (!snippetId) {
+    return NextResponse.json({ error: 'Snippet ID is required' }, { status: 400 });
+  }
+
+  try {
+    const docRef = firestore.collection('codes').doc(snippetId);
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      return NextResponse.json({ error: 'Snippet not found' }, { status: 404 });
+    }
+
+    if (docSnap.data().userId !== userId) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this snippet' }, { status: 403 });
+    }
+
+    const { filename, description, codeContent } = await request.json();
+    console.log('DEBUG: Incoming codeContent:', codeContent);
+
+    const updateData = {
+      filename,
+      description,
+      updatedAt: new Date(),
+    };
+
+    if (codeContent !== undefined) {
+      const snippetData = docSnap.data();
+      const oldBlobUrl = snippetData.codeBlobUrl;
+
+      // Determine file extension based on language, default to .txt
+      const fileExtension = snippetData.language ? `.${snippetData.language.toLowerCase()}` : '.txt';
+      const blobFilename = `userCodes/${userId}/${snippetId}${fileExtension}`;
+
+      const blob = await put(blobFilename, codeContent, {
+        access: 'public',
+        allowOverwrite: true,
+      });
+      console.log('DEBUG: Blob upload result:', blob);
+      console.log('DEBUG: New Blob URL:', blob.url); // Log the new blob URL
+      updateData.codeBlobUrl = blob.url;
+
+      // Delete old blob if it exists and is different from the new one
+      if (oldBlobUrl && oldBlobUrl !== blob.url) {
+        try {
+          await del(oldBlobUrl);
+          console.log(`Successfully deleted old blob: ${oldBlobUrl}`);
+        } catch (blobError) {
+          console.error(`Error deleting old blob ${oldBlobUrl}:`, blobError);
+        }
+      }
+    }
+
+    await docRef.update(updateData);
+
+    // Revalidate paths to ensure fresh data is fetched on subsequent requests
+    revalidatePath(`/code-snippets/${snippetId}`);
+    revalidatePath(`/user/my-snippets`); // Assuming this path lists user's snippets
+    console.log(`BACKEND DEBUG: revalidatePath called for /code-snippets/${snippetId} and /user/my-snippets`); // ADDED FOR DEBUGGING
+
+    return NextResponse.json({ message: 'Snippet updated successfully' });
+  } catch (error) {
+    console.error('Error updating code snippet:', error);
+    return NextResponse.json({ error: 'Failed to update code snippet' }, { status: 500 });
+  }
+}
 
 export async function DELETE(request, context) {
   const { snippetId } = await context.params;
@@ -82,3 +167,4 @@ export async function DELETE(request, context) {
     return NextResponse.json({ error: 'Failed to delete code snippet' }, { status: 500 });
   }
 }
+

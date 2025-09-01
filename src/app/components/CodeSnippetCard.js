@@ -1,30 +1,34 @@
 'use client';
 
 import Link from 'next/link';
-
+import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FileIcon from './FileIcon';
 import styles from './CodeSnippetCard.module.css';
 
 export default function CodeSnippetCard({ snippet, className }) {
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {snippet.filename}
+    </Tooltip>
+  );
+
   return (
-    <Link href={`/code-snippets/${snippet.id}`} className="text-decoration-none text-body">
-    <div
-      className={`card mb-3 ${className}`}
-    >
-      <div className="card-body">
-        <div className="d-flex justify-content-between align-items-center">
-          <div className="d-flex align-items-center">
-            <FileIcon filename={snippet.language} className="me-3" style={{ fontSize: '2.5rem' }} />
-            <div className="flex-grow-1 me-2" style={{ minWidth: 0 }}>
-              <h5 className={`${styles.cardTitle} card-title mb-0 text-truncate`}>{snippet.filename}</h5>
-              <small className="text-muted text-truncate">{snippet.language}</small>
-            </div>
-          </div>
-          
+    <Link href={`/code-snippets/${snippet.id}`} className="text-decoration-none">
+      <div className={`${styles.card} ${className}`}>
+        <div className={styles.cardHeader}>
+          <FileIcon filename={snippet.language} />
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip}
+          >
+            <h5 className={styles.cardTitle}>{snippet.filename}</h5>
+          </OverlayTrigger>
+          <Badge pill bg="secondary" className={styles.languageBadge}>
+            {snippet.language}
+          </Badge>
         </div>
-        {snippet.description && <p className="card-text mt-2">{snippet.description}</p>}
       </div>
-    </div>
-</Link>
+    </Link>
   );
 }

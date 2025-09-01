@@ -26,14 +26,16 @@ export async function POST(request) {
   console.log('DEBUG: Session cookie created:', sessionCookie);
 
   const cookieOptions = {
+    name: "session",
+    value: sessionCookie,
     maxAge: expiresIn,
     httpOnly: true,
-    secure: true,
-    sameSite: 'Lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
   };
   console.log('DEBUG: Setting session cookie with options:', cookieOptions);
 
-  (await cookies()).set("session", sessionCookie, cookieOptions);
+  (await cookies()).set(cookieOptions);
 
   return NextResponse.json({ status: "success" });
 }

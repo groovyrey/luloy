@@ -28,6 +28,7 @@ import {
   DiTerminal,
   DiDatabase,
 } from 'react-icons/di';
+import styles from './FileIcon.module.css';
 
 const FileIcon = ({ filename, className, style }) => {
   const language = filename.toLowerCase();
@@ -132,7 +133,11 @@ const FileIcon = ({ filename, className, style }) => {
       IconComponent = FaFile;
   }
 
-  return <IconComponent className={className} style={{ ...style, color: 'var(--text-color)' }} />;
+  return (
+    <span className={`${styles.iconWrapper} ${className}`} style={style}>
+      <IconComponent />
+    </span>
+  );
 };
 
 export default FileIcon;

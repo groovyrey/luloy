@@ -45,29 +45,6 @@ export default function MySnippetsPage() {
     }
   }, [user, userLoading]);
 
-  const handleDeleteSnippet = async (snippetId) => {
-    if (!confirm('Are you sure you want to delete this snippet? This action cannot be undone.')) {
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/code-snippets/${snippetId}`, {
-        method: 'DELETE',
-      });
-
-      if (res.ok) {
-        showToast('Snippet deleted successfully!', 'success');
-        // Remove the deleted snippet from the state
-        setUserSnippets(prevSnippets => prevSnippets.filter(snippet => snippet.snippetId !== snippetId));
-      } else {
-        const errorData = await res.json();
-        showToast(`Failed to delete snippet: ${errorData.error || 'Unknown error'}`, 'error');
-      }
-    } catch (err) {
-      showToast('An unexpected error occurred during deletion.', 'error');
-    }
-  };
-
   if (userLoading || loadingSnippets) {
     return <LoadingMessage />;
   }
@@ -108,7 +85,7 @@ export default function MySnippetsPage() {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
+    <div style={{ padding: '20px', maxWidth: '1200px', margin: 'auto' }}>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="text-primary">My Code Snippets</h1>
         <Link href="/upload/code-snippet-upload" className="btn btn-primary btn-sm">
@@ -120,11 +97,11 @@ export default function MySnippetsPage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="row g-4"
+          className="row g-3"
         >
           {userSnippets.map((snippet, index) => (
-            <motion.div key={`${snippet.snippetId}-${index}`} variants={itemVariants} className="col-md-6 mb-4">
-              <CodeSnippetCard snippet={snippet} onDelete={handleDeleteSnippet} />
+            <motion.div key={`${snippet.snippetId}-${index}`} variants={itemVariants} className="col-lg-4 col-md-6 col-sm-12">
+              <CodeSnippetCard snippet={snippet} />
             </motion.div>
           ))}
         </motion.div>
