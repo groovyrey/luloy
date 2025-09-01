@@ -61,6 +61,7 @@ import Link from 'next/link';
 import styles from './CodeSnippetPage.module.css';
 import FileIcon from '../../../app/components/FileIcon';
 import UserSearchResultCard from '../../../app/components/UserSearchResultCard';
+import SnippetOptionsDropdown from '../../../app/components/SnippetOptionsDropdown';
 
 
 SyntaxHighlighter.registerLanguage('javascript', javascript);
@@ -119,7 +120,7 @@ export default function CodeSnippetPage() {
   const [snippetData, setSnippetData] = useState(null);
   const [codeContent, setCodeContent] = useState('');
   const [loading, setLoading] = useState(true);
-  const { syntaxHighlighterTheme } = useTheme();
+  const { syntaxHighlighterTheme, theme } = useTheme();
   const { user } = useUser(); // Get the current logged-in user
   const [uploaderData, setUploaderData] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // State for modal visibility
@@ -252,25 +253,22 @@ export default function CodeSnippetPage() {
       )}
       <div className={`card mb-4 ${styles.mainCard}`}>
         <div className="card-header d-flex flex-column align-items-start">
-          <div className="d-flex align-items-center mb-2">
-            <FileIcon filename={snippetData.language} className="me-2" style={{ fontSize: '2rem' }} />
-            <div className={styles.leftAlign}>
-              <h5 className={`mb-0 ${styles.title}`}>{snippetData.filename}</h5>
-              <small className="text-muted">{snippetData.description || 'No description'}</small>
+          <div className="d-flex align-items-center mb-2 w-100 justify-content-between">
+            <div className="d-flex align-items-center">
+              <FileIcon filename={snippetData.language} />
+              <div className={styles.leftAlign}>
+                <h5 className={`mb-0 ${styles.title}`}>{snippetData.filename}</h5>
+                <small className="text-muted">{snippetData.description || 'No description'}</small>
+              </div>
             </div>
-          </div>
-          <div className="d-flex gap-2">
-            <button onClick={handleCopyCode} className="btn btn-sm btn-outline-primary" title="Copy Code">
-              <i className="bi bi-clipboard"></i>
-            </button>
-            <button onClick={handleShareCode} className="btn btn-sm btn-outline-info" title="Share Snippet">
-              <i className="bi bi-share"></i>
-            </button>
-            {isOwner && (
-              <button onClick={handleDelete} className="btn btn-sm btn-outline-danger" title="Delete Snippet">
-                <i className="bi bi-trash"></i>
-              </button>
-            )}
+            <SnippetOptionsDropdown
+              snippetId={snippetId}
+              isOwner={isOwner}
+              onCopy={handleCopyCode}
+              onShare={handleShareCode}
+              onDelete={handleDelete}
+              theme={theme}
+            />
           </div>
         </div>
         <div className="card-body p-0">
