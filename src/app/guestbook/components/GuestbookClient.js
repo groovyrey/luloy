@@ -92,7 +92,7 @@ export default function MessagesClient() {
 
       if (documentSnapshots.docs.length > 5) {
         setHasNextPage(true);
-        const nextCursor = documentSnapshots.docs[4];
+        const nextCursor = documentSnapshots.docs[5]; // Use the 6th document as the cursor for the next page
         if (pageCursors.length <= page) {
             setPageCursors(prev => [...prev, nextCursor]);
         }
@@ -124,6 +124,7 @@ export default function MessagesClient() {
   const handlePrevPage = () => {
     if (page > 1) {
       setPage(prevPage => prevPage - 1);
+      setPageCursors(prevCursors => prevCursors.slice(0, prevCursors.length - 1));
     }
   };
 
