@@ -13,12 +13,6 @@ const nextConfig = {
     domains: ['res.cloudinary.com'],
   },
   allowedDevOrigins: ['http://192.168.100.219:3000'],
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals.push('react-icons');
-    }
-    return config;
-  },
 };
 
 export default nextConfig;

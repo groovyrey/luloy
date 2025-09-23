@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '../../../../lib/firebase';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, addDoc } from 'firebase/firestore';
@@ -33,6 +33,12 @@ export default function MessagesClient() {
   const [page, setPage] = useState(1);
   const [pageCursors, setPageCursors] = useState([null]);
   const [hasNextPage, setHasNextPage] = useState(true);
+
+
+
+
+
+
 
   // State for Send Message form
   const [messageContent, setMessageContent] = useState('');
@@ -93,18 +99,25 @@ export default function MessagesClient() {
       if (documentSnapshots.docs.length > 5) {
         setHasNextPage(true);
         const nextCursor = documentSnapshots.docs[5]; // Use the 6th document as the cursor for the next page
-        if (pageCursors.length <= page) {
-            setPageCursors(prev => [...prev, nextCursor]);
-        }
+        setPageCursors(prev => {
+          const newCursors = [...prev];
+          newCursors[page] = nextCursor; // Store cursor for page (page + 1) at index 'page'
+          return newCursors;
+        });
       } else {
         setHasNextPage(false);
+        setPageCursors(prev => {
+          const newCursors = [...prev];
+          newCursors.splice(page); // Remove any cursors beyond the current page if no next page
+          return newCursors;
+        });
       }
 
     } catch (error) {
       showToast("Error fetching messages: " + error.message, 'error');
     }
     setLoading(false);
-  }, [page, user, pageCursors]);
+  }, [page, user]);
 
   useEffect(() => {
     if (activeTab === 'public') {
