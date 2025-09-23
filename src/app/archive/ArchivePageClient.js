@@ -5,8 +5,9 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useUser } from '../context/UserContext';
 import LoadingMessage from '../components/LoadingMessage';
+import styles from './ArchivePage.module.css';
 
-export default function LearnPageClient({ allOfficialPostsData }) {
+export default function ArchivePageClient({ allOfficialPostsData }) {
   const { user, userData, loading } = useUser();
   const [posts, setPosts] = useState(allOfficialPostsData);
 
@@ -15,8 +16,8 @@ export default function LearnPageClient({ allOfficialPostsData }) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1, // Adjust as needed for desired stagger effect
-        delayChildren: 0.2, // Delay before children start animating
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
       },
     },
   };
@@ -47,34 +48,31 @@ export default function LearnPageClient({ allOfficialPostsData }) {
           <Link href="/upload/upload-post" className="btn btn-primary">
             <i className="bi-cloud-arrow-up"></i> Upload Post
           </Link>
+          <p className="text-muted mt-2">Posts support Markdown text formatting. Learn more about <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer" className="text-primary">Markdown syntax</a>.</p>
         </div>
       )}
       
       {posts.length === 0 ? (
         <div className="text-center text-muted fst-italic mt-4">
-          <p className="mb-0">No official learning resources found yet.</p>
+          <p className="mb-0">No posts found yet.</p>
         </div>
       ) : (
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="row g-4"
+          className={styles.cardGrid}
         >
           {posts.map(({ slug, title, date, description }) => (
-            <div key={slug} className="col-md-6 mb-4">
-              <motion.div variants={itemVariants}>
-              <div className="card mb-3">
-                <div className="card-body">
-                  <Link href={`/learn/${slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <h5 className="card-title mb-2 text-primary">{title}</h5>
-                    <p className="mb-1">{description}</p>
-                    <small className="text-muted">{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</small>
-                  </Link>
+            <motion.div key={slug} variants={itemVariants} className={styles.cardWrapper}>
+              <Link href={`/archive/${slug}`} className={styles.cardLink}>
+                <div className={styles.card}>
+                  <h5 className={styles.cardTitle}>{title}</h5>
+                  <p className={styles.cardDescription}>{description}</p>
+                  <small className={styles.cardDate}>{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</small>
                 </div>
-              </div>
+              </Link>
             </motion.div>
-            </div>
           ))}
         </motion.div>
       )}

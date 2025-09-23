@@ -116,7 +116,7 @@ export async function POST(request) {
 
     // Revalidate the /learn path if a new post was added
     if (type === 'post') {
-      revalidatePath('/learn');
+      revalidatePath('/archive');
     }
 
     return NextResponse.json({ ...blob, firestoreDocId: docRef.id });

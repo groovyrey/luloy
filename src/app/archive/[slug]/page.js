@@ -1,5 +1,5 @@
 import { getPostData, getAllPostSlugs } from '../../../../lib/markdown';
-import LearnPostClient from '../LearnPostClient';
+import ArchivePostClient from '../ArchivePostClient';
 
 export default async function Post({ params }) {
   const resolvedParams = await params;
@@ -9,5 +9,5 @@ export default async function Post({ params }) {
     return <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>Post not found.</div>;
   }
 
-  return <LearnPostClient postData={postData} />;
+  return <ArchivePostClient postData={postData} />;
 }

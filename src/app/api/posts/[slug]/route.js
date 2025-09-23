@@ -66,7 +66,7 @@ export async function DELETE(request, { params }) {
     await firestore.collection('posts').doc(docId).delete();
 
     // Revalidate the /learn path to clear Next.js cache
-    revalidatePath('/learn');
+    revalidatePath('/archive');
 
     return NextResponse.json({ message: 'Post deleted successfully' });
   } catch (error) {

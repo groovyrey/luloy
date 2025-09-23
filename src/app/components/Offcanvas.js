@@ -188,8 +188,8 @@ export default function Offcanvas({ isOpen, onClose }) {
                     </li>
                     
                     <li>
-                      <Link href="/learn" onClick={onClose}>
-                        <i className="bi bi-book me-2"></i>Learn
+                      <Link href="/archive" onClick={onClose}>
+                        <i className="bi bi-archive me-2"></i>Archive
                       </Link>
                     </li>
                     

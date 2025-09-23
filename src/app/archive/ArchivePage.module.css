@@ -1,0 +1,135 @@
+.archiveContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.heroSubtitle {
+  font-size: 1.2rem;
+  color: var(--text-color-secondary);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .cardGrid {
+    grid-template-columns: 1fr; /* Single column on smaller screens */
+    padding: 0 1rem; /* Add some horizontal padding */
+  }
+  .archiveContainer {
+    padding: 1rem; /* Reduce overall padding on smaller screens */
+  }
+}
+
+.cardWrapper {
+  text-decoration: none;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius-base);
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.cardDescription {
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.cardDate {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.markdownBody h1 {
+  font-size: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.markdownBody h2 {
+  font-size: 2rem;
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: var(--text-color);
+}
+
+.markdownBody h3 {
+  font-size: 1.75rem;
+  margin-top: 1rem;
+  margin-bottom: 0.6rem;
+  color: var(--text-color);
+}
+
+.markdownBody p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.markdownBody pre {
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius-base);
+  overflow-x: auto;
+}
+
+.markdownBody code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.markdownBody ul,
+.markdownBody ol {
+  margin-bottom: 1rem;
+  padding-left: 20px;
+}
+
+.markdownBody li {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.markdownBody a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.markdownBody a:hover {
+  text-decoration: none;
+}

@@ -9,8 +9,9 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import Modal from '../components/Modal';
 import { useUser } from '../context/UserContext';
-import styles from './LearnPage.module.css';
+import styles from './[slug]/PostPage.module.css';
 import { capitalizeName } from '../utils/capitalizeName';
+import PostOptionsDropdown from '../components/PostOptionsDropdown';
 
 // Helper function to render author
 const renderAuthor = (author, authorDetails) => {
@@ -45,9 +46,9 @@ const renderAuthor = (author, authorDetails) => {
   }
 };
 
-export default function LearnPostClient({ postData }) {
+export default function ArchivePostClient({ postData }) {
   const { user, userData, loading } = useUser();
-  const { syntaxHighlighterTheme } = useTheme();
+  const { theme, syntaxHighlighterTheme } = useTheme();
   const router = useRouter();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -71,20 +72,37 @@ export default function LearnPostClient({ postData }) {
       }
 
       toast.success('Post deleted successfully!');
-      router.push('/learn'); // Redirect to learn page after deletion
+      router.push('/archive'); // Redirect to archive page after deletion
     } catch (err) {
       console.error('Error deleting post:', err);
       toast.error(err.message || 'Failed to delete post.');
     }
   };
 
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success('Post URL copied to clipboard!');
+  };
+
   return (
-    <div className="container py-5">
-      <div className="card">
-        <div className="card-body">
-          <h1 className="card-title text-center mb-4">{postData.title}</h1>
-          <p className="text-center text-muted mb-4"><em>By {renderAuthor(postData.author, postData.authorDetails)} on {new Date(postData.date).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}</em></p>
-          <div className={styles.markdownBody}>
+    <div className={styles.postContainer}>
+      <div className={styles.postHeaderCard}>
+        <div className={styles.postHeader}>
+          <h1 className={styles.postTitle}>{postData.title}</h1>
+          <p className={styles.postMeta}>
+            By {renderAuthor(postData.author, postData.authorDetails)} on {new Date(postData.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
+        <div className={styles.dropdownWrapper}>
+          <PostOptionsDropdown
+            isStaff={isStaff}
+            onShare={handleShare}
+            onDelete={handleDelete}
+            theme={theme}
+          />
+        </div>
+      </div>
+      <div className={styles.markdownBody}>
         <ReactMarkdown
           components={{
             code({ node, inline, className, children, ...props }) {
@@ -108,19 +126,6 @@ export default function LearnPostClient({ postData }) {
         {postData.content}
       </ReactMarkdown>
       </div>
-          {isStaff && (
-            <div className="text-center mt-4">
-              <button
-                onClick={handleDelete}
-                className="btn btn-danger"
-              >
-                Delete Post
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
       <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
         <h3>Confirm Deletion</h3>
         <p>Are you sure you want to delete this post? This action cannot be undone.</p>

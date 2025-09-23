@@ -1,3 +1,41 @@
+.postContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.postHeaderCard {
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius-base);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dropdownWrapper {
+  margin-left: 1rem;
+}
+
+.postHeader {
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+.postTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.postMeta {
+  font-size: 1rem;
+  color: var(--text-color-secondary);
+}
+
 .markdownBody h1 {
   font-size: 2.5rem;
   margin-top: 1.5rem;
@@ -24,12 +62,6 @@
   line-height: 1.6;
 }
 
-
-
-
-
-
-
 .markdownBody pre {
   background-color: var(--card-background-color);
   border-radius: var(--border-radius-base);
@@ -49,7 +81,7 @@
 
 .markdownBody li {
   margin-bottom: 0.5rem;
-  color: var(--text-color); /* Ensure list item text respects theme */
+  color: var(--text-color);
 }
 
 .markdownBody a {
