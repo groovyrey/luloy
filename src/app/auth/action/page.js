@@ -125,7 +125,3 @@ export default function ResetPasswordPage() {
     </Suspense>
   );
 }
-ntent />
-    </Suspense>
-  );
-}
