@@ -82,11 +82,7 @@ export default function LoginPage() {
                         <label htmlFor="passwordInput"><i className="bi bi-lock me-2"></i>Password</label>
                     </div>
                 </motion.div>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
-                >
+                <motion.div>
                     <div className="d-grid gap-2">
                         <button className={`btn btn-primary ${formStyles.authButton}`} type="submit" disabled={isLoggingIn}>
                             {isLoggingIn ? (

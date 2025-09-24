@@ -7,10 +7,7 @@
   box-shadow: var(--box-shadow-base); /* Subtle shadow for modern look */
 }
 
-.messageCardContainer:hover {
-  transform: translateY(-3px); /* Lift effect on hover */
-  box-shadow: var(--box-shadow-hover); /* More pronounced shadow on hover */
-}
+
 
 .compactCard {
   margin-bottom: 1rem; /* Compact margin for the card itself */

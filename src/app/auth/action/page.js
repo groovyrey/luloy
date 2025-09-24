@@ -76,10 +76,6 @@ function ResetPasswordContent() {
           
           {isVerifying && (
             <motion.div 
-              initial={{ opacity: 0, y: -10 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              exit={{ opacity: 0, y: 10 }} 
-              transition={{ duration: 0.3 }}
               className="alert alert-info d-flex align-items-center justify-content-center" role="alert"
             >
               <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
@@ -126,6 +122,10 @@ export default function ResetPasswordPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ResetPasswordContent />
+    </Suspense>
+  );
+}
+ntent />
     </Suspense>
   );
 }

@@ -64,7 +64,7 @@ export default function ArchivePageClient({ allOfficialPostsData }) {
           className={styles.cardGrid}
         >
           {posts.map(({ slug, title, date, description }) => (
-            <motion.div key={slug} variants={itemVariants} className={styles.cardWrapper}>
+            <motion.div key={slug} className={styles.cardWrapper}>
               <Link href={`/archive/${slug}`} className={styles.cardLink}>
                 <div className={styles.card}>
                   <h5 className={styles.cardTitle}>{title}</h5>

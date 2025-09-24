@@ -51,9 +51,6 @@ export default function UserSearchPage() {
         <div className="col-md-8 col-lg-7">
           <motion.div
             className="card"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
           >
             <div className="card-header">
               <img src="/luloy.svg" alt="Luloy Logo" className="mb-3" style={{ height: '4.5em' }} />

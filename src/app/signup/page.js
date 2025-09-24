@@ -138,7 +138,7 @@ export default function SignupPage() {
             brandingSubtitle="Create an account to unlock all the features of Luloy."
         >
             <form onSubmit={handleSignup}>
-                <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+                <motion.div>
                     <div className="form-floating mb-3">
                         <input type="text" className="form-control" id="firstNameInput" placeholder=" " onChange={e => setFirstName(e.target.value)} />
                         <label htmlFor="firstNameInput"><i className="bi bi-person me-2"></i>First Name</label>
@@ -168,7 +168,7 @@ export default function SignupPage() {
                         <label htmlFor="passwordInput"><i className="bi bi-lock me-2"></i>Password</label>
                     </div>
                 </motion.div>
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.7 }}>
+                <motion.div>
                     <div className="d-grid gap-2">
                         <button className={`btn btn-primary ${formStyles.authButton}`} type="submit" disabled={isSigningUp}>
                             {isSigningUp ? (

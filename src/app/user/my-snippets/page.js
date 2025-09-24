@@ -100,7 +100,7 @@ export default function MySnippetsPage() {
           className="row g-3"
         >
           {userSnippets.map((snippet, index) => (
-            <motion.div key={`${snippet.snippetId}-${index}`} variants={itemVariants} className="col-lg-4 col-md-6 col-sm-12">
+            <motion.div key={`${snippet.snippetId}-${index}`} className="col-lg-4 col-md-6 col-sm-12">
               <CodeSnippetCard snippet={snippet} />
             </motion.div>
           ))}

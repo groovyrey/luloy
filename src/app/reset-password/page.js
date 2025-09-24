@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { showToast } from '../utils/toast';
 import { motion } from "framer-motion";
 import Link from 'next/link';
-import AuthLayout from '../components/AuthLayout';
+import ResetPasswordLayout from '../components/ResetPasswordLayout';
 import formStyles from '../components/AuthForm.module.css';
 
 export default function ResetPasswordPage() {
@@ -46,11 +46,9 @@ export default function ResetPasswordPage() {
     };
 
     return (
-        <AuthLayout
+        <ResetPasswordLayout
             title="Reset Password"
             subtitle="Enter your email to receive a password reset link."
-            brandingTitle="Forgot Your Password?"
-            brandingSubtitle="No worries, we'll help you get back on track."
         >
             <form onSubmit={handleSubmit}>
                 <motion.div
@@ -71,11 +69,7 @@ export default function ResetPasswordPage() {
                         <label htmlFor="emailInput"><i className="bi bi-envelope me-2"></i>Email</label>
                     </div>
                 </motion.div>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
-                >
+                <motion.div>
                     <div className="d-grid gap-2">
                         <button className={`btn btn-primary ${formStyles.authButton}`} type="submit" disabled={isSubmitting}>
                             {isSubmitting ? (
@@ -91,6 +85,6 @@ export default function ResetPasswordPage() {
             <p className="mt-3 text-center">
                 Remember your password? <Link href="/login" className={formStyles.authLink}>Login</Link>
             </p>
-        </AuthLayout>
+        </ResetPasswordLayout>
     );
 }

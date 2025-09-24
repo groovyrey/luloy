@@ -43,7 +43,7 @@ export default function BadgesPage() {
         {Object.keys(BADGES).map((badgeKey) => {
           const badge = BADGES[badgeKey];
           return (
-            <motion.div key={badgeKey} className="col-md-4 mb-4" variants={itemVariants}>
+            <motion.div key={badgeKey} className="col-md-4 mb-4">
               <div className="card h-100 shadow-sm d-flex flex-column justify-content-between">
                 <div className="card-body text-center">
                   <div className={`mb-3 ${badge.color}`}>

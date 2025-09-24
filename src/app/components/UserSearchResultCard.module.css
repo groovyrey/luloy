@@ -10,10 +10,7 @@
   margin-bottom: 10px; /* Reduced margin */
 }
 
-.card:hover {
-  transform: translateY(-3px); /* Less pronounced lift effect */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Lighter shadow on hover */
-}
+
 
 .link {
   display: flex;

@@ -84,8 +84,14 @@ export default function MessagesClient() {
         );
       }
 
+      const pageSize = 5;
       const documentSnapshots = await getDocs(q);
-      const newMessages = documentSnapshots.docs.slice(0, 5).map(doc => {
+      const docs = documentSnapshots.docs;
+
+      const hasMore = docs.length > pageSize;
+      setHasNextPage(hasMore);
+
+      const newMessages = (hasMore ? docs.slice(0, pageSize) : docs).map(doc => {
         const data = doc.data();
         return {
           id: doc.id,
@@ -93,22 +99,19 @@ export default function MessagesClient() {
           date: data.date && typeof data.date.toDate === 'function' ? data.date.toDate().toISOString() : data.date,
         };
       });
-      
       setMessages(newMessages);
 
-      if (documentSnapshots.docs.length > 5) {
-        setHasNextPage(true);
-        const nextCursor = documentSnapshots.docs[5]; // Use the 6th document as the cursor for the next page
+      if (hasMore) {
+        const nextCursor = docs[pageSize - 1];
         setPageCursors(prev => {
           const newCursors = [...prev];
-          newCursors[page] = nextCursor; // Store cursor for page (page + 1) at index 'page'
+          newCursors[page] = nextCursor;
           return newCursors;
         });
       } else {
-        setHasNextPage(false);
         setPageCursors(prev => {
           const newCursors = [...prev];
-          newCursors.splice(page); // Remove any cursors beyond the current page if no next page
+          newCursors.splice(page);
           return newCursors;
         });
       }
@@ -137,7 +140,6 @@ export default function MessagesClient() {
   const handlePrevPage = () => {
     if (page > 1) {
       setPage(prevPage => prevPage - 1);
-      setPageCursors(prevCursors => prevCursors.slice(0, prevCursors.length - 1));
     }
   };
 
@@ -229,9 +231,6 @@ export default function MessagesClient() {
           ) : (
             <motion.div
               className="row"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
             >
               {messages.map(message => (
                 <motion.div

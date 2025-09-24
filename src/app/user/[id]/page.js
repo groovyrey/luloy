@@ -145,7 +145,7 @@ export default function UserProfilePage({ params }) {
                     <p className="mb-0 fw-semibold">Email:</p>
                   </div>
                   <p className="text-muted ms-4">
-                  {profileData.email ? (
+                  {typeof profileData.email === 'string' ? (
                     profileData.email.split('@')[0].substring(0, 3) + '***@' + profileData.email.split('@')[1]
                   ) : (
                     'N/A' // Or some other placeholder
@@ -302,9 +302,6 @@ export default function UserProfilePage({ params }) {
           {/* New Section for Code Snippets */}
           <motion.div
             className="card shadow-lg border-0 rounded-4 mt-4"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="card-body p-4">
               <h5 className="card-title text-center mb-4 fw-bold">Code Snippets</h5>
