@@ -266,9 +266,6 @@ export default function UserProfilePage({ params }) {
 
           <motion.div
             className="card shadow-lg border-0 rounded-4 mt-4"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="card-body p-4">
               <h5 className="card-title text-center mb-4 fw-bold">Luloy Badges</h5>
