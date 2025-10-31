@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Lottie from 'react-lottie';
 import { motion } from 'framer-motion';
-import animationData from '../../../public/loading_animation.json'; // Adjust path as needed
+import animationData from '../../../public/loading_spinner_dots.json'; // Adjust path as needed
 
 import { useTheme } from '../context/ThemeContext'; // Import useTheme
 
