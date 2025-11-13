@@ -7,9 +7,29 @@ import { useUser } from '../context/UserContext';
 import LoadingMessage from '../components/LoadingMessage';
 import styles from './ArchivePage.module.css';
 
-export default function ArchivePageClient({ allOfficialPostsData }) {
-  const { user, userData, loading } = useUser();
-  const [posts, setPosts] = useState(allOfficialPostsData);
+export default function ArchivePageClient() {
+  const { user, userData, loading: userLoading } = useUser();
+  const [posts, setPosts] = useState([]);
+  const [postsLoading, setPostsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/posts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
+        }
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setPostsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -35,7 +55,7 @@ export default function ArchivePageClient({ allOfficialPostsData }) {
     },
   };
 
-  if (loading) {
+  if (userLoading || postsLoading) {
     return <LoadingMessage />;
   }
 

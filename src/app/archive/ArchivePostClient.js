@@ -1,14 +1,15 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useTheme } from '../context/ThemeContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import Modal from '../components/Modal';
 import { useUser } from '../context/UserContext';
+import LoadingMessage from '../components/LoadingMessage';
 import styles from './[slug]/PostPage.module.css';
 import { capitalizeName } from '../utils/capitalizeName';
 import PostOptionsDropdown from '../components/PostOptionsDropdown';
@@ -46,11 +47,34 @@ const renderAuthor = (author, authorDetails) => {
   }
 };
 
-export default function ArchivePostClient({ postData }) {
-  const { user, userData, loading } = useUser();
+export default function ArchivePostClient({ slug }) {
+  const { user, userData, loading: userLoading } = useUser();
   const { theme, syntaxHighlighterTheme } = useTheme();
   const router = useRouter();
+  const [postData, setPostData] = useState(null);
+  const [postLoading, setPostLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`/api/posts/${slug}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch post');
+        }
+        const data = await response.json();
+        setPostData(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setPostLoading(false);
+      }
+    };
+
+    if (slug) {
+      fetchPost();
+    }
+  }, [slug]);
 
   const isStaff = user && userData && userData.badges && userData.badges.includes('staff');
 
@@ -83,6 +107,14 @@ export default function ArchivePostClient({ postData }) {
     navigator.clipboard.writeText(window.location.href);
     toast.success('Post URL copied to clipboard!');
   };
+
+  if (userLoading || postLoading) {
+    return <LoadingMessage />;
+  }
+
+  if (!postData) {
+    return <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>Post not found.</div>;
+  }
 
   return (
     <div className={styles.postContainer}>

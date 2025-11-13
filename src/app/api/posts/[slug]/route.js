@@ -1,8 +1,22 @@
-import { firestore, auth } from '/lib/firebase-admin';
+import { firestore, auth } from '../../../../../lib/firebase-admin';
+import { getPostData } from '../../../../../lib/markdown';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { del } from '@vercel/blob';
+
+export async function GET(request, { params }) {
+  try {
+    const postData = await getPostData(params.slug);
+    if (!postData) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+    return NextResponse.json(postData);
+  } catch (error) {
+    console.error(`Error fetching post data for slug: ${params.slug}`, error);
+    return NextResponse.json({ error: 'Failed to fetch post data' }, { status: 500 });
+  }
+}
 
 export async function DELETE(request, { params }) {
   const cookieStore = await cookies(); // Await the cookies() function

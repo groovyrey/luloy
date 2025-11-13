@@ -225,12 +225,15 @@ export default function MessagesClient() {
       )}
 
       {activeTab === 'public' && (
-        <AnimatePresence className="mt-3">
+        <AnimatePresence>
           {loading ? (
             <LoadingMessage />
           ) : (
             <motion.div
               className="row"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
             >
               {messages.map(message => (
                 <motion.div
