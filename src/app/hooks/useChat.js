@@ -33,14 +33,19 @@ export const useChat = () => {
     const initialQuery = query(messagesRef, orderByChild('createdAt'), limitToLast(MESSAGE_LIMIT));
 
     const unsubscribe = onValue(initialQuery, (snapshot) => {
-      console.log('Initial snapshot received:', snapshot.val());
-      const loadedMessages = processMessages(snapshot.val());
-      setMessages(loadedMessages);
-      if (loadedMessages.length > 0) {
-        oldestMessageTimestamp.current = loadedMessages[0].createdAt;
+      try {
+        console.log('Initial snapshot received:', snapshot.val());
+        const loadedMessages = processMessages(snapshot.val());
+        setMessages(loadedMessages);
+        if (loadedMessages.length > 0) {
+          oldestMessageTimestamp.current = loadedMessages[0].createdAt;
+        }
+        setHasMore(loadedMessages.length === MESSAGE_LIMIT);
+      } catch (error) {
+        console.error("Error processing initial messages:", error);
+      } finally {
+        setLoading(false);
       }
-      setHasMore(loadedMessages.length === MESSAGE_LIMIT);
-      setLoading(false);
     }, { onlyOnce: true });
 
     return unsubscribe; // Return unsubscribe function
@@ -49,7 +54,7 @@ export const useChat = () => {
   useEffect(() => {
     const unsubscribeInitial = loadInitialMessages();
 
-    const onChildAddedListener = onChildAdded(query(messagesRef, orderByChild('createdAt'), limitToLast(1)), (snapshot) => {
+    const onChildAddedListener = onChildAdded(messagesRef, (snapshot) => {
       console.log('New message added:', snapshot.val());
       const newMessage = { id: snapshot.key, ...snapshot.val() };
       setMessages(prev => {
@@ -63,7 +68,7 @@ export const useChat = () => {
 
     return () => {
       unsubscribeInitial();
-      off(query(messagesRef, orderByChild('createdAt'), limitToLast(1)), 'child_added', onChildAddedListener);
+      off(messagesRef, 'child_added', onChildAddedListener);
     };
   }, [loadInitialMessages, messagesRef]);
 
