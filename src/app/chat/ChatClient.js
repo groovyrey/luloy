@@ -70,6 +70,17 @@ export default function ChatClient() {
     }
   }, [handleScroll]);
 
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (container) {
+      const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
+
+      if (isScrolledToBottom) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+  }, [messages]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (messageText.trim() === '') return;
@@ -92,7 +103,7 @@ export default function ChatClient() {
     return (
       <div key={msg.id} className={`${styles.messageContainer} ${isMe ? styles.alignRight : ''}`}>
         <div className={`${styles.message} ${isMe ? styles.myMessage : styles.otherMessage}`}>
-          {!isMe && <strong>{msg.name}:</strong>}
+          {!isMe && <strong>{msg.name.split(' ')[0]}:</strong>}
           {msg.data}
         </div>
       </div>
