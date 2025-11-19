@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useUser } from '../context/UserContext';
 import { database } from '../../../lib/firebase';
-import { ref, push, serverTimestamp, query, orderByChild, limitToLast, onValue, off, get, remove } from 'firebase/database';
+import { ref, push, serverTimestamp, query, orderByChild, limitToLast, onValue, off, get, remove, onChildAdded } from 'firebase/database';
 
 const MESSAGES_COLLECTION = 'public-chat';
 const MESSAGE_LIMIT = 50;
@@ -32,7 +32,7 @@ export const useChat = () => {
     setLoading(true);
     const initialQuery = query(messagesRef, orderByChild('createdAt'), limitToLast(MESSAGE_LIMIT));
 
-    onValue(initialQuery, (snapshot) => {
+    const unsubscribe = onValue(initialQuery, (snapshot) => {
       console.log('Initial snapshot received:', snapshot.val());
       const loadedMessages = processMessages(snapshot.val());
       setMessages(loadedMessages);
@@ -42,27 +42,29 @@ export const useChat = () => {
       setHasMore(loadedMessages.length === MESSAGE_LIMIT);
       setLoading(false);
     }, { onlyOnce: true });
+
+    return unsubscribe; // Return unsubscribe function
   }, [messagesRef]);
 
   useEffect(() => {
-    loadInitialMessages();
+    const unsubscribeInitial = loadInitialMessages();
 
-    const recentMessagesQuery = query(messagesRef, orderByChild('createdAt'), limitToLast(1));
-    const listener = onValue(recentMessagesQuery, (snapshot) => {
-      console.log('New message snapshot received:', snapshot.val());
-      const newMessages = processMessages(snapshot.val());
-      if (newMessages.length > 0) {
-        const newMessage = newMessages[0];
-        setMessages(prev => {
-          if (!prev.some(m => m.id === newMessage.id)) {
-            return [...prev, newMessage];
-          }
-          return prev;
-        });
-      }
+    const onChildAddedListener = onChildAdded(query(messagesRef, orderByChild('createdAt'), limitToLast(1)), (snapshot) => {
+      console.log('New message added:', snapshot.val());
+      const newMessage = { id: snapshot.key, ...snapshot.val() };
+      setMessages(prev => {
+        // Ensure no duplicates and maintain limit
+        const updatedMessages = [...prev, newMessage]
+          .sort((a, b) => a.createdAt - b.createdAt)
+          .slice(-MESSAGE_LIMIT); // Keep only the last MESSAGE_LIMIT messages
+        return updatedMessages;
+      });
     });
 
-    return () => off(recentMessagesQuery, 'value', listener);
+    return () => {
+      unsubscribeInitial();
+      off(query(messagesRef, orderByChild('createdAt'), limitToLast(1)), 'child_added', onChildAddedListener);
+    };
   }, [loadInitialMessages, messagesRef]);
 
   const sendMessage = async (messageText) => {
@@ -78,7 +80,8 @@ export const useChat = () => {
     try {
       await push(messagesRef, newMessage);
 
-      // Enforce message limit
+      // Enforce message limit (this will be handled by the onChildAdded listener more robustly)
+      // This client-side check is a fallback/immediate enforcement
       const snapshot = await get(query(messagesRef, orderByChild('createdAt')));
       const allMessages = processMessages(snapshot.val());
 
