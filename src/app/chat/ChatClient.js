@@ -11,7 +11,7 @@ export default function ChatClient() {
   const [messages, setMessages] = useState([]);
   const ably = useAbly();
 
-  const { channel } = useChannel('chat-channel', (message) => {
+  const { channel } = useChannel((message) => {
     setMessages((prev) => [...prev, message]);
   });
 

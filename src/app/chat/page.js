@@ -1,6 +1,6 @@
 'use client';
 
-import { AblyProvider } from "ably/react";
+import { AblyProvider, ChannelProvider } from "ably/react";
 import Ably from "ably";
 import ChatClient from "./ChatClient";
 import { useMemo } from "react";
@@ -14,8 +14,10 @@ export default function ChatPage() {
 
   return (
     <AblyProvider client={client}>
+      <ChannelProvider channelName="chat-channel">
         <h1 className="text-center my-4">Public Chat Room</h1>
         <ChatClient />
+      </ChannelProvider>
     </AblyProvider>
   );
 }
