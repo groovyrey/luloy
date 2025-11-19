@@ -1,0 +1,108 @@
+/* src/app/ry/BirthdayPage.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap');
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  font-family: 'Inter', sans-serif;
+}
+
+.card {
+  background-color: var(--card-background-color);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  position: relative; /* Added for absolute positioning of images */
+  /* overflow: hidden; Ensures images don't spill out if positioned slightly outside */
+}
+
+.birthdayCake {
+  position: absolute;
+  top: -30px; /* Adjust as needed to place it on the border */
+  left: -30px; /* Adjust as needed to place it on the border */
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  z-index: 10; /* Ensure it's above other content */
+}
+
+.birthdayImage {
+  position: absolute;
+  top: -30px; /* Adjust as needed to place it on the border */
+  right: -30px; /* Adjust as needed to place it on the border */
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  z-index: 10; /* Ensure it's above other content */
+}
+
+.birthdayCake {
+  position: absolute;
+  top: -25px; /* Adjust as needed */
+  left: -25px; /* Adjust as needed */
+  width: 80px; /* Adjust as needed */
+  height: auto;
+  z-index: 10; /* Ensure it's above other elements */
+}
+
+.birthdayImage {
+  position: absolute;
+  top: -25px; /* Adjust as needed */
+  right: -25px; /* Adjust as needed */
+  width: 80px; /* Adjust as needed */
+  height: auto;
+  z-index: 10; /* Ensure it's above other elements */
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.title {
+  color: var(--primary-color);
+  font-family: 'Mountains of Christmas', cursive;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.message {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.messageContainer {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: var(--primary-color-dark);
+}
