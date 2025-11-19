@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -18,19 +17,10 @@ export default function ChatClient() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const messagesContainerRef = useRef(null);
-  const messagesEndRef = useRef(null);
 
   const { channel } = useChannel('chat-channel', (message) => {
     setMessages((prev) => [...prev, { id: message.id, name: message.name || 'Anonymous', data: message.data }]);
   });
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const fetchMessages = useCallback(async (cursor) => {
     if (!hasMore && cursor) return;
@@ -97,11 +87,17 @@ export default function ChatClient() {
     setMessageText('');
   };
 
-  const messageElements = messages.map((msg) => (
-    <div key={msg.id} className={styles.message}>
-      <strong>{msg.name}:</strong> {msg.data}
-    </div>
-  ));
+  const messageElements = messages.map((msg) => {
+    const isMe = user && msg.name === user.displayName;
+    return (
+      <div key={msg.id} className={`${styles.messageContainer} ${isMe ? styles.alignRight : ''}`}>
+        <div className={`${styles.message} ${isMe ? styles.myMessage : styles.otherMessage}`}>
+          {!isMe && <strong>{msg.name}:</strong>}
+          {msg.data}
+        </div>
+      </div>
+    );
+  });
 
   return (
     <div className={styles.chatContainer}>
@@ -109,7 +105,6 @@ export default function ChatClient() {
         {isLoading && Array.from({ length: 5 }).map((_, i) => <MessageSkeleton key={i} />)}
         {isLoadingMore && <div className={styles.loadingMore}><MessageSkeleton /></div>}
         {messageElements}
-        <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSubmit} className={styles.messageForm}>
         <input
