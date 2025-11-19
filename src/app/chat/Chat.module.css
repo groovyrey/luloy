@@ -4,7 +4,7 @@
   height: 70vh;
   max-width: 800px;
   margin: 0 auto;
-  border: 1px solid #ccc;
+  border: 1px solid var(--card-border-color);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -34,12 +34,12 @@
 }
 
 .myMessage {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
 }
 
 .otherMessage {
-  background-color: #f1f1f1;
+  background-color: var(--other-message-gradient-start);
 }
 
 .otherMessage strong {
@@ -49,13 +49,13 @@
 .messageForm {
   display: flex;
   padding: 1rem;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--card-border-color);
 }
 
 .messageInput {
   flex-grow: 1;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--card-border-color);
   border-radius: 20px;
   margin-right: 1rem;
 }
@@ -63,14 +63,14 @@
 .sendButton {
   padding: 0.5rem 1.5rem;
   border: none;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
   border-radius: 20px;
   cursor: pointer;
 }
 
 .sendButton:disabled {
-  background-color: #ccc;
+  background-color: var(--button-disabled-background);
 }
 
 .loadingMore {

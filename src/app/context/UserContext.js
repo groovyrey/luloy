@@ -142,6 +142,7 @@ export function UserProvider({ children }) {
             idToken: await currentUser.getIdToken(), // Get the latest ID token
             badges: userBadges,
             permissions: userPermissions,
+            firstName: fetchedUserData.firstName,
           };
           setUser(userObject);
         } else {

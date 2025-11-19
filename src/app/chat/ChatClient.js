@@ -91,7 +91,7 @@ export default function ChatClient() {
     if (messageText.trim() === '') return;
 
     try {
-        await channel.publish({ name: user?.displayName || 'Anonymous', data: messageText });
+        await channel.publish({ name: user?.firstName || 'Anonymous', data: messageText });
         await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -132,7 +132,7 @@ export default function ChatClient() {
           disabled={!user}
         />
         <button type="submit" className={styles.sendButton} disabled={!user}>
-          Send
+          <i className="bi bi-send-fill"></i> Send
         </button>
       </form>
       {!user && <p className="text-center mt-2">Please log in to chat.</p>}
