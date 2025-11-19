@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useChannel, useAbly } from 'ably/react';
-import { UserContext } from '../context/UserContext';
+import { useUser } from '../context/UserContext';
 import styles from './Chat.module.css';
 
 export default function ChatClient() {
-  const { user, loading } = useContext(UserContext);
+  const { user, loading } = useUser();
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
   const ably = useAbly();

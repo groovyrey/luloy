@@ -1,7 +1,6 @@
 import { AblyProvider } from "ably/react";
 import Ably from "ably";
 import ChatClient from "./ChatClient";
-import { UserProvider } from "../context/UserContext";
 
 // IMPORTANT: Create a .env.local file in your project's root
 // and add your new Ably API key like this:
