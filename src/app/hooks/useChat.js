@@ -2,11 +2,12 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useUser } from '../context/UserContext';
+import { useUser } => '../context/UserContext';
 import { database } from '../../../lib/firebase';
-import { ref, push, serverTimestamp, query, orderByChild, limitToLast, onValue, off } from 'firebase/database';
+import { ref, push, serverTimestamp, query, orderByChild, limitToLast, onValue, off, get, remove } from 'firebase/database';
 
 const MESSAGES_COLLECTION = 'public-chat';
+const MESSAGE_LIMIT = 50;
 
 export const useChat = () => {
   const { user } = useUser();
@@ -29,7 +30,7 @@ export const useChat = () => {
 
   const loadInitialMessages = useCallback(() => {
     setLoading(true);
-    const initialQuery = query(messagesRef, orderByChild('createdAt'), limitToLast(20));
+    const initialQuery = query(messagesRef, orderByChild('createdAt'), limitToLast(MESSAGE_LIMIT));
 
     onValue(initialQuery, (snapshot) => {
       console.log('Initial snapshot received:', snapshot.val());
@@ -38,7 +39,7 @@ export const useChat = () => {
       if (loadedMessages.length > 0) {
         oldestMessageTimestamp.current = loadedMessages[0].createdAt;
       }
-      setHasMore(loadedMessages.length === 20);
+      setHasMore(loadedMessages.length === MESSAGE_LIMIT);
       setLoading(false);
     }, { onlyOnce: true });
   }, [messagesRef]);
@@ -76,6 +77,17 @@ export const useChat = () => {
 
     try {
       await push(messagesRef, newMessage);
+
+      // Enforce message limit
+      const snapshot = await get(query(messagesRef, orderByChild('createdAt')));
+      const allMessages = processMessages(snapshot.val());
+
+      if (allMessages.length > MESSAGE_LIMIT) {
+        const oldestMessage = allMessages[0];
+        await remove(ref(database, `${MESSAGES_COLLECTION}/${oldestMessage.id}`));
+        console.log('Removed oldest message:', oldestMessage.id);
+      }
+
     } catch (error) {
       console.error("Failed to send message:", error);
     }
