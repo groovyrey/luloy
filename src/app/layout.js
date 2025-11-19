@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { UserProvider } from "./context/UserContext";
 import ToastProvider from "./components/ToastProvider";
 import { ThemeProvider } from "./context/ThemeContext";
+import { Analytics } from '@vercel/analytics/react';
 
 import Navbar from "./components/Navbar";
 import NavigationButtons from "./components/NavigationButtons";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
         </ThemeProvider>
         <div id="modal-root"></div>
         <BootstrapClient />
+        <Analytics />
       </body>
     </html>
   );

@@ -26,6 +26,7 @@
     "@google/gemini-cli": "^0.5.5",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
+    "@vercel/analytics": "^1.5.0",
     "@vercel/blob": "^1.1.1",
     "ace-builds": "^1.43.2",
     "autoprefixer": "^10.4.21",
