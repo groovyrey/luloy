@@ -186,6 +186,11 @@ export default function Offcanvas({ isOpen, onClose }) {
                         <i className="bi bi-search me-2"></i>Search Users
                       </Link>
                     </li>
+                    <li>
+                      <Link href="/chat" onClick={onClose}>
+                        <i className="bi bi-chat-dots me-2"></i>Chat
+                      </Link>
+                    </li>
                     
                     <li>
                       <Link href="/archive" onClick={onClose}>
