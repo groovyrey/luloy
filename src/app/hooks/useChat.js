@@ -19,9 +19,12 @@ export const useChat = () => {
 
   const processMessages = (messageData) => {
     if (!messageData) return [];
-    return Object.keys(messageData)
+    console.log('Raw message data:', messageData);
+    const processed = Object.keys(messageData)
       .map(key => ({ id: key, ...messageData[key] }))
       .sort((a, b) => a.createdAt - b.createdAt);
+    console.log('Processed messages:', processed);
+    return processed;
   };
 
   const loadInitialMessages = useCallback(() => {
@@ -29,6 +32,7 @@ export const useChat = () => {
     const initialQuery = query(messagesRef, orderByChild('createdAt'), limitToLast(20));
 
     onValue(initialQuery, (snapshot) => {
+      console.log('Initial snapshot received:', snapshot.val());
       const loadedMessages = processMessages(snapshot.val());
       setMessages(loadedMessages);
       if (loadedMessages.length > 0) {
@@ -44,6 +48,7 @@ export const useChat = () => {
 
     const recentMessagesQuery = query(messagesRef, orderByChild('createdAt'), limitToLast(1));
     const listener = onValue(recentMessagesQuery, (snapshot) => {
+      console.log('New message snapshot received:', snapshot.val());
       const newMessages = processMessages(snapshot.val());
       if (newMessages.length > 0) {
         const newMessage = newMessages[0];
@@ -56,7 +61,7 @@ export const useChat = () => {
       }
     });
 
-    return () => off(messagesRef, 'value', listener);
+    return () => off(recentMessagesQuery, 'value', listener);
   }, [loadInitialMessages, messagesRef]);
 
   const sendMessage = async (messageText) => {
