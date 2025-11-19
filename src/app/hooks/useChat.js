@@ -35,12 +35,18 @@ export const useChat = () => {
     const unsubscribe = onValue(initialQuery, (snapshot) => {
       try {
         console.log('Initial snapshot received:', snapshot.val());
-        const loadedMessages = processMessages(snapshot.val());
-        setMessages(loadedMessages);
-        if (loadedMessages.length > 0) {
-          oldestMessageTimestamp.current = loadedMessages[0].createdAt;
+        const val = snapshot.val();
+        if (val) {
+          const loadedMessages = processMessages(val);
+          setMessages(loadedMessages);
+          if (loadedMessages.length > 0) {
+            oldestMessageTimestamp.current = loadedMessages[0].createdAt;
+          }
+          setHasMore(loadedMessages.length === MESSAGE_LIMIT);
+        } else {
+          setMessages([]);
+          setHasMore(false);
         }
-        setHasMore(loadedMessages.length === MESSAGE_LIMIT);
       } catch (error) {
         console.error("Error processing initial messages:", error);
       } finally {
