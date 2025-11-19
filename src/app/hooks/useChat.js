@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useUser } => '../context/UserContext';
+import { useUser } from '../context/UserContext';
 import { database } from '../../../lib/firebase';
 import { ref, push, serverTimestamp, query, orderByChild, limitToLast, onValue, off, get, remove } from 'firebase/database';
 
