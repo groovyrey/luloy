@@ -38,7 +38,12 @@ export default function ChatClient() {
         data: msg.message,
       })).reverse();
 
-      setMessages(prev => [...formattedMessages, ...prev]);
+      setMessages(prev => {
+        const newMessages = formattedMessages.filter(
+          (fm) => !prev.some((p) => p.id === fm.id)
+        );
+        return [...newMessages, ...prev];
+      });
       setNextCursor(data.nextCursor);
       setHasMore(data.hasMore);
     } catch (error) {
