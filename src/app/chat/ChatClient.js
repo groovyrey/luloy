@@ -88,23 +88,33 @@ export default function ChatClient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (messageText.trim() === '') return;
+    if (messageText.trim() === '' || !user) return;
+
+    const ownMessage = {
+      id: Date.now().toString(),
+      name: user.displayName,
+      data: messageText,
+      isOwn: true,
+    };
+
+    setMessages((prev) => [...prev, ownMessage]);
+    setMessageText('');
 
     try {
-        await channel.publish({ name: user?.firstName || 'Anonymous', data: messageText });
-        await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: messageText }),
-        });
+      await channel.publish({ name: user.firstName || 'Anonymous', data: messageText });
+      await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: messageText }),
+      });
     } catch (error) {
-        console.error('Failed to send message:', error);
+      console.error('Failed to send message:', error);
+      // Optional: handle failed message, e.g., remove it or show an error
     }
-    setMessageText('');
   };
 
   const messageElements = messages.map((msg) => {
-    const isMe = user && msg.name === user.displayName;
+    const isMe = msg.isOwn || (user && msg.name === user.displayName);
     return (
       <div key={msg.id} className={`${styles.messageContainer} ${isMe ? styles.alignRight : ''}`}>
         <div className={`${styles.message} ${isMe ? styles.myMessage : styles.otherMessage}`}>
