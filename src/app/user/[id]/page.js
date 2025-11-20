@@ -14,6 +14,35 @@ import Link from 'next/link';
 import ReactIconRenderer from '../../../app/components/ReactIconRenderer';
 import CodeSnippetCard from '../../../app/components/CodeSnippetCard'; // Import CodeSnippetCard
 
+// Simple UserCard component for displaying users in modals
+const UserCard = ({ user }) => (
+  <Link href={`/user/${user.uid}`} className="text-decoration-none text-dark">
+    <div className="d-flex align-items-center p-2 border-bottom">
+      {user.profilePictureUrl ? (
+        <CldImage
+          src={user.profilePictureUrl}
+          alt={user.fullName}
+          width={40}
+          height={40}
+          crop="fill"
+          className="rounded-circle me-3"
+        />
+      ) : (
+        <div
+          className="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3"
+          style={{ width: '40px', height: '40px' }}
+        >
+          <i className="bi bi-person-fill text-white"></i>
+        </div>
+      )}
+      <div>
+        <h6 className="mb-0">{user.fullName}</h6>
+        {user.bio && <small className="text-muted text-truncate d-block" style={{ maxWidth: '150px' }}>{user.bio}</small>}
+      </div>
+    </div>
+  </Link>
+);
+
 export default function UserProfilePage({ params }) {
   const { id } = params;
   const { user, userData, refreshUserData } = useUser(); // Get current user and refresh function
@@ -25,8 +54,11 @@ export default function UserProfilePage({ params }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
   const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
-  const [followersList, setFollowersList] = useState([]);
-  const [followingList, setFollowingList] = useState([]);
+  const [followersUids, setFollowersUids] = useState([]); // Store UIDs
+  const [followingUids, setFollowingUids] = useState([]); // Store UIDs
+  const [detailedFollowers, setDetailedFollowers] = useState([]); // Store detailed user objects
+  const [detailedFollowing, setDetailedFollowing] = useState([]); // Store detailed user objects
+  const [loadingFollowLists, setLoadingFollowLists] = useState(false);
 
   useEffect(() => {
     if (profileData) {
@@ -70,7 +102,7 @@ export default function UserProfilePage({ params }) {
     }
   }, [id]);
 
-  const fetchFollowersAndFollowing = useCallback(async () => {
+  const fetchFollowUids = useCallback(async () => {
     if (!id) return;
     try {
       const [followersRes, followingRes] = await Promise.all([
@@ -80,22 +112,49 @@ export default function UserProfilePage({ params }) {
 
       if (followersRes.ok) {
         const data = await followersRes.json();
-        setFollowersList(data.followers || []);
+        setFollowersUids(data.followers || []);
       }
       if (followingRes.ok) {
         const data = await followingRes.json();
-        setFollowingList(data.following || []);
+        setFollowingUids(data.following || []);
       }
     } catch (error) {
-      console.error("Failed to fetch followers/following lists:", error);
+      console.error("Failed to fetch followers/following UIDs:", error);
     }
   }, [id]);
+
+  const fetchDetailedUsers = useCallback(async (uids, setter) => {
+    if (uids.length === 0) {
+      setter([]);
+      return;
+    }
+    setLoadingFollowLists(true);
+    try {
+      const res = await fetch('/api/user/details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uids }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setter(data.users || []);
+      } else {
+        const errorData = await res.json();
+        showToast(errorData.error || 'Failed to fetch user details.', 'error');
+      }
+    } catch (error) {
+      showToast('An unexpected error occurred while fetching user details.', 'error');
+      console.error("Error fetching detailed users:", error);
+    } finally {
+      setLoadingFollowLists(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchProfile();
     fetchSnippets();
-    fetchFollowersAndFollowing();
-  }, [id, fetchProfile, fetchSnippets, fetchFollowersAndFollowing]);
+    fetchFollowUids();
+  }, [id, fetchProfile, fetchSnippets, fetchFollowUids]);
 
   useEffect(() => {
     // Re-check follow status if current user's data changes
@@ -122,7 +181,7 @@ export default function UserProfilePage({ params }) {
         showToast(isFollowing ? "Unfollowed successfully!" : "Followed successfully!", 'success');
         setIsFollowing(!isFollowing);
         refreshUserData(); // Refresh current user's data to update following list
-        fetchFollowersAndFollowing(); // Refresh profile user's follower/following counts
+        fetchFollowUids(); // Refresh profile user's follower/following counts
       } else {
         const errorData = await res.json();
         showToast(errorData.error || "Failed to update follow status.", 'error');
@@ -208,12 +267,18 @@ export default function UserProfilePage({ params }) {
               </div>
 
               <div className="d-flex justify-content-center gap-4 mb-4">
-                <div className="text-center">
-                  <h5 className="mb-0">{followingList.length}</h5>
+                <div className="text-center cursor-pointer" onClick={() => {
+                  setIsFollowingModalOpen(true);
+                  fetchDetailedUsers(followingUids, setDetailedFollowing);
+                }}>
+                  <h5 className="mb-0">{followingUids.length}</h5>
                   <span className="text-muted">Following</span>
                 </div>
-                <div className="text-center">
-                  <h5 className="mb-0">{followersList.length}</h5>
+                <div className="text-center cursor-pointer" onClick={() => {
+                  setIsFollowersModalOpen(true);
+                  fetchDetailedUsers(followersUids, setDetailedFollowers);
+                }}>
+                  <h5 className="mb-0">{followersUids.length}</h5>
                   <span className="text-muted">Followers</span>
                 </div>
               </div>
@@ -433,6 +498,44 @@ export default function UserProfilePage({ params }) {
           <p className="text-center text-muted">{selectedBadge.description}</p>
         </Modal>
       )}
+
+      {/* Followers Modal */}
+      <Modal
+        isOpen={isFollowersModalOpen}
+        onClose={() => setIsFollowersModalOpen(false)}
+      >
+        <h2 className="text-center mb-4">Followers</h2>
+        {loadingFollowLists ? (
+          <LoadingMessage />
+        ) : detailedFollowers.length > 0 ? (
+          <div>
+            {detailedFollowers.map(follower => (
+              <UserCard key={follower.uid} user={follower} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-muted">No followers yet.</p>
+        )}
+      </Modal>
+
+      {/* Following Modal */}
+      <Modal
+        isOpen={isFollowingModalOpen}
+        onClose={() => setIsFollowingModalOpen(false)}
+      >
+        <h2 className="text-center mb-4">Following</h2>
+        {loadingFollowLists ? (
+          <LoadingMessage />
+        ) : detailedFollowing.length > 0 ? (
+          <div>
+            {detailedFollowing.map(followedUser => (
+              <UserCard key={followedUser.uid} user={followedUser} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-muted">Not following anyone yet.</p>
+        )}
+      </Modal>
     </div>
   );
 }
