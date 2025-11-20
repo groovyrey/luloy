@@ -65,6 +65,10 @@ export const useChat = () => {
       const newMessage = { id: snapshot.key, ...snapshot.val() };
       setMessages(prev => {
         // Ensure no duplicates and maintain limit
+        // Only add if not already present (e.g., from optimistic update or previous listener)
+        if (prev.some(m => m.id === newMessage.id)) {
+          return prev;
+        }
         const updatedMessages = [...prev, newMessage]
           .sort((a, b) => a.createdAt - b.createdAt)
           .slice(-MESSAGE_LIMIT); // Keep only the last MESSAGE_LIMIT messages
@@ -91,16 +95,9 @@ export const useChat = () => {
     try {
       await push(messagesRef, newMessage);
 
-      // Enforce message limit (this will be handled by the onChildAdded listener more robustly)
-      // This client-side check is a fallback/immediate enforcement
-      const snapshot = await get(query(messagesRef, orderByChild('createdAt')));
-      const allMessages = processMessages(snapshot.val());
-
-      if (allMessages.length > MESSAGE_LIMIT) {
-        const oldestMessage = allMessages[0];
-        await remove(ref(database, `${MESSAGES_COLLECTION}/${oldestMessage.id}`));
-        console.log('Removed oldest message:', oldestMessage.id);
-      }
+      // The client-side message limit enforcement is removed from here.
+      // Database-level enforcement should ideally be done via Firebase Security Rules or Cloud Functions.
+      // The local state limit is handled by the onChildAdded listener.
 
     } catch (error) {
       console.error("Failed to send message:", error);
