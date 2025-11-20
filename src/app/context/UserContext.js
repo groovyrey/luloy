@@ -35,7 +35,7 @@ export function UserProvider({ children }) {
   };
 
   const fetchAndStoreUserData = useCallback(async (uid) => {
-    if (allUsersData[uid] || fetchingUsers.current.has(uid)) {
+    if (fetchingUsers.current.has(uid)) {
       return;
     }
 
@@ -48,7 +48,7 @@ export function UserProvider({ children }) {
     } finally {
       fetchingUsers.current.delete(uid);
     }
-  }, [allUsersData, fetchingUsers, fetchUserData]);
+  }, [fetchingUsers, fetchUserData]);
 
   // Function to refresh user data, exposed via context
   const refreshUserData = async () => {

@@ -6,7 +6,8 @@ const firestore = admin.firestore();
 
 export async function GET(request, { params }) {
   try {
-    const { id: userId } = params; // The user whose following list we want
+    const awaitedParams = await params;
+    const { id: userId } = awaitedParams; // The user whose following list we want
 
     const userRef = firestore.collection("users").doc(userId);
     const userDoc = await userRef.get();

@@ -43,8 +43,9 @@ const UserCard = ({ user }) => (
   </Link>
 );
 
-export default function UserProfilePage({ params }) {
-  const { id } = params;
+export default function UserProfilePage(props) {
+  const unwrappedParams = React.use(props.params);
+  const { id } = unwrappedParams;
   const { user, userData, refreshUserData } = useUser(); // Get current user and refresh function
   const [profileData, setProfileData] = useState(null);
   const [userSnippets, setUserSnippets] = useState(null); // New state for user snippets
