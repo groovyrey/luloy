@@ -6,7 +6,7 @@ import { useUser } from '../context/UserContext';
 import { database } from '../../../lib/firebase';
 import { ref, push, serverTimestamp, query, orderByChild, limitToLast, onValue, off, get, remove, onChildAdded } from 'firebase/database';
 
-const MESSAGES_COLLECTION = 'public-chat';
+const MESSAGES_COLLECTION = 'messages';
 const MESSAGE_LIMIT = 50;
 
 export const useChat = () => {
