@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
+import { useEffect, useState, useCallback } from 'react';
+import { useUser } from '../../../app/context/UserContext'; // Import useUser
 import LoadingMessage from '../../../app/components/LoadingMessage';
 import { CldImage } from 'next-cloudinary';
 import Modal from '../../../app/components/Modal';
@@ -15,12 +15,18 @@ import ReactIconRenderer from '../../../app/components/ReactIconRenderer';
 import CodeSnippetCard from '../../../app/components/CodeSnippetCard'; // Import CodeSnippetCard
 
 export default function UserProfilePage({ params }) {
-  const { id } = React.use(params);
+  const { id } = params;
+  const { user, userData, refreshUserData } = useUser(); // Get current user and refresh function
   const [profileData, setProfileData] = useState(null);
   const [userSnippets, setUserSnippets] = useState(null); // New state for user snippets
   const [isProfilePictureModalOpen, setIsProfilePictureModalOpen] = useState(false);
   const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false);
   const [selectedBadge, setSelectedBadge] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
+  const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
+  const [followersList, setFollowersList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
 
   useEffect(() => {
     if (profileData) {
@@ -28,46 +34,104 @@ export default function UserProfilePage({ params }) {
     }
   }, [profileData]);
 
-  useEffect(() => {
-    if (id) {
-      const fetchProfile = async () => {
-        try {
-          const res = await fetch(`/api/user/${id}`, { next: { revalidate: 3600, tags: ['profile-picture'] } });
-          if (res.ok) {
-            const data = await res.json();
-            setProfileData(data);
-          } else {
-            const errorData = await res.json();
-            showToast(errorData.error || 'Failed to fetch profile.', 'error');
-          }
-        } catch (err) {
-          showToast('An unexpected error occurred while fetching profile.', 'error');
+  const fetchProfile = useCallback(async () => {
+    if (!id) return;
+    try {
+      const res = await fetch(`/api/user/${id}`, { next: { revalidate: 3600, tags: ['profile-picture'] } });
+      if (res.ok) {
+        const data = await res.json();
+        setProfileData(data);
+        // Check if current user is following this profile
+        if (userData && userData.following) {
+          setIsFollowing(userData.following.includes(id));
         }
-      };
+      } else {
+        const errorData = await res.json();
+        showToast(errorData.error || 'Failed to fetch profile.', 'error');
+      }
+    } catch (err) {
+      showToast('An unexpected error occurred while fetching profile.', 'error');
+    }
+  }, [id, userData]);
 
-      const fetchSnippets = async () => {
-        try {
-          const res = await fetch(`/api/user-snippets/${id}`);
-          if (res.ok) {
-            const data = await res.json();
-            setUserSnippets(data);
-          } else {
-            const errorData = await res.json();
-            showToast(errorData.error || 'Failed to fetch user snippets.', 'error');
-          }
-        } catch (err) {
-          showToast('An unexpected error occurred while fetching user snippets.', 'error');
-        }
-      };
-
-      fetchProfile();
-      fetchSnippets();
+  const fetchSnippets = useCallback(async () => {
+    if (!id) return;
+    try {
+      const res = await fetch(`/api/user-snippets/${id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUserSnippets(data);
+      } else {
+        const errorData = await res.json();
+        showToast(errorData.error || 'Failed to fetch user snippets.', 'error');
+      }
+    } catch (err) {
+      showToast('An unexpected error occurred while fetching user snippets.', 'error');
     }
   }, [id]);
 
-  
+  const fetchFollowersAndFollowing = useCallback(async () => {
+    if (!id) return;
+    try {
+      const [followersRes, followingRes] = await Promise.all([
+        fetch(`/api/user/${id}/followers`),
+        fetch(`/api/user/${id}/following`)
+      ]);
 
-  
+      if (followersRes.ok) {
+        const data = await followersRes.json();
+        setFollowersList(data.followers || []);
+      }
+      if (followingRes.ok) {
+        const data = await followingRes.json();
+        setFollowingList(data.following || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch followers/following lists:", error);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchProfile();
+    fetchSnippets();
+    fetchFollowersAndFollowing();
+  }, [id, fetchProfile, fetchSnippets, fetchFollowersAndFollowing]);
+
+  useEffect(() => {
+    // Re-check follow status if current user's data changes
+    if (userData && profileData) {
+      setIsFollowing(userData.following?.includes(profileData.uid) || false);
+    }
+  }, [userData, profileData]);
+
+  const handleFollowToggle = async () => {
+    if (!user) {
+      showToast("Please log in to follow users.", 'info');
+      return;
+    }
+    if (!profileData) return;
+
+    const endpoint = isFollowing ? `/api/user/${profileData.uid}/unfollow` : `/api/user/${profileData.uid}/follow`;
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (res.ok) {
+        showToast(isFollowing ? "Unfollowed successfully!" : "Followed successfully!", 'success');
+        setIsFollowing(!isFollowing);
+        refreshUserData(); // Refresh current user's data to update following list
+        fetchFollowersAndFollowing(); // Refresh profile user's follower/following counts
+      } else {
+        const errorData = await res.json();
+        showToast(errorData.error || "Failed to update follow status.", 'error');
+      }
+    } catch (error) {
+      showToast("An unexpected error occurred.", 'error');
+      console.error("Follow/Unfollow error:", error);
+    }
+  };
 
   useEffect(() => {
     // Initialize tooltips after component mounts and data is loaded
@@ -87,10 +151,8 @@ export default function UserProfilePage({ params }) {
   };
   
   if (!profileData || !userSnippets) {
-  return <LoadingMessage />;
-}
-
-  
+    return <LoadingMessage />;
+  }
 
   const userBadges = profileData.badges ? profileData.badges.map(badgeId => BADGES[badgeId]).filter(Boolean) : [];
 
@@ -134,6 +196,26 @@ export default function UserProfilePage({ params }) {
                 {profileData.bio && (
                   <p className="text-muted fst-italic text-center mb-0">{profileData.bio}</p>
                 )}
+
+                {user && user.uid !== id && ( // Only show follow button if not viewing own profile
+                  <button
+                    className={`btn mt-3 ${isFollowing ? 'btn-outline-secondary' : 'btn-primary'}`}
+                    onClick={handleFollowToggle}
+                  >
+                    {isFollowing ? 'Unfollow' : 'Follow'}
+                  </button>
+                )}
+              </div>
+
+              <div className="d-flex justify-content-center gap-4 mb-4">
+                <div className="text-center">
+                  <h5 className="mb-0">{followingList.length}</h5>
+                  <span className="text-muted">Following</span>
+                </div>
+                <div className="text-center">
+                  <h5 className="mb-0">{followersList.length}</h5>
+                  <span className="text-muted">Followers</span>
+                </div>
               </div>
 
               <hr className="my-4" />
@@ -176,6 +258,7 @@ export default function UserProfilePage({ params }) {
                             textArea.value = profileData.uid;
                             textArea.style.position = "fixed";
                             textArea.style.left = "-999999px";
+                            textArea.style.opacity = "0"; // Make it invisible
                             document.body.appendChild(textArea);
                             textArea.focus();
                             textArea.select();

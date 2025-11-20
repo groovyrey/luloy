@@ -47,6 +47,8 @@ export async function GET(request, { params }) {
       bio: userData.bio || null,
       profilePictureUrl: userData.profilePictureUrl || null,
       badges: userData.badges, // Send the badges array to the client
+      following: userData.following || [], // Include following list
+      followers: userData.followers || [], // Include followers list
       lastFieldUpdates: lastFieldUpdatesMillis, // Include lastFieldUpdates as milliseconds
     };
 

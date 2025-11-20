@@ -143,6 +143,8 @@ export function UserProvider({ children }) {
             badges: userBadges,
             permissions: userPermissions,
             firstName: fetchedUserData.firstName,
+            following: fetchedUserData.following || [], // Include following
+            followers: fetchedUserData.followers || [], // Include followers
           };
           setUser(userObject);
         } else {
