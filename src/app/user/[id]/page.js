@@ -507,7 +507,11 @@ export default function UserProfilePage(props) {
       >
         <h2 className="text-center mb-4">Followers</h2>
         {loadingFollowLists ? (
-          <LoadingMessage />
+          <div className="d-flex justify-content-center my-3">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
         ) : detailedFollowers.length > 0 ? (
           <div>
             {detailedFollowers.map(follower => (
@@ -526,7 +530,11 @@ export default function UserProfilePage(props) {
       >
         <h2 className="text-center mb-4">Following</h2>
         {loadingFollowLists ? (
-          <LoadingMessage />
+          <div className="d-flex justify-content-center my-3">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
         ) : detailedFollowing.length > 0 ? (
           <div>
             {detailedFollowing.map(followedUser => (
