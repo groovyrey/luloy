@@ -5,15 +5,20 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { del } from '@vercel/blob';
 
-export async function GET(request, { params }) {
+export async function GET(request, context) {
   try {
+    const params = await context.params; // Await the params object
+    if (!params || !params.slug) {
+      console.error('Slug is missing from request parameters.');
+      return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
+    }
     const postData = await getPostData(params.slug);
     if (!postData) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
     return NextResponse.json(postData);
   } catch (error) {
-    console.error(`Error fetching post data for slug: ${params.slug}`, error);
+    console.error(`Error fetching post data for slug: ${context.params?.slug}`, error);
     return NextResponse.json({ error: 'Failed to fetch post data' }, { status: 500 });
   }
 }
@@ -45,8 +50,8 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: 'Forbidden: Only staff members can delete posts' }, { status: 403 });
     }
   } catch (error) {
-    console.error('Error checking user badges:', error);
-    return NextResponse.json({ error: 'Forbidden: Could not verify user permissions' }, { status: 403 });
+      console.error('Error checking user badges:', error);
+      return NextResponse.json({ error: 'Forbidden: Could not verify user permissions' }, { status: 403 });
   }
 
   const { slug } = params;

@@ -1,5 +1,6 @@
 import ArchivePostClient from '../ArchivePostClient';
 
-export default function Post({ params }) {
-  return <ArchivePostClient slug={params.slug} />;
+export default async function Post({ params }) {
+  const resolvedParams = await params;
+  return <ArchivePostClient slug={resolvedParams.slug} />;
 }
