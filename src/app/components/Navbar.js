@@ -24,7 +24,7 @@ export default function Navbar() {
     >
       <div className={styles.navbarBrandContainer}>
         <Link href="/">
-          <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '1.5em', marginRight: '0.5em' }} />
+          <img src="/luloy.svg" alt="Luloy Logo" style={{ height: '1.5em' }} />
         </Link>
         
       </div>

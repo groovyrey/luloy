@@ -22,7 +22,7 @@
 }
 
 .offcanvasBody {
-  padding-top: 2.5rem; /* Adjusted top padding to prevent overlap with hamburger button */
+  padding-top: 4.5rem; /* Adjusted top padding to prevent overlap with hamburger button */
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-bottom: 1.5rem;

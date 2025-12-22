@@ -3,14 +3,10 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useUser } from '../context/UserContext';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
 
 export default function LandingPageContent() {
   const { user, loading } = useUser();
 
-  const [particlesInitState, setParticlesInitState] = useState(false);
-  
   const itemVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -18,91 +14,8 @@ export default function LandingPageContent() {
   };
 
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setParticlesInitState(true);
-    });
     document.title = "Welcome to Luloy!";
   }, [user, loading]);
-
-  const particlesOptions = useMemo(
-    () => ({
-      background: {
-        color: {
-          value: "transparent",
-        },
-      },
-      fpsLimit: 120,
-      fullScreen: {
-        enable: false,
-      },
-      interactivity: {
-        events: {
-          onClick: {
-            enable: false,
-            mode: "push",
-          },
-          onHover: {
-            enable: true,
-            mode: "attract",
-          },
-        },
-        modes: {
-          push: {
-            quantity: 1,
-          },
-          repulse: {
-            distance: 200,
-            duration: 0.4,
-          },
-        },
-      },
-      particles: {
-        color: {
-          value: "#007bff",
-        },
-        links: {
-          color: "#007bff",
-          distance: 150,
-          enable: true,
-          opacity: 0.5,
-          width: 1,
-        },
-        move: {
-          direction: "none",
-          enable: true,
-          outModes: {
-            default: "bounce",
-          },
-          random: false,
-          speed: 2,
-          straight: false,
-        },
-        number: {
-          density: {
-            enable: true,
-          },
-          value: 30,
-          max: 30,
-        },
-        opacity: {
-          value: 0.5,
-        },
-        shape: {
-          type: "star",
-        },
-        size: {
-          value: {
-            min: 1,
-            max: 5
-          },
-        },
-      },
-      detectRetina: true,
-    }),
-    [],
-  );
 
   return (
     <motion.div
@@ -113,31 +26,6 @@ export default function LandingPageContent() {
         className="my-5 p-3 rounded-3"
         style={{ position: 'relative', height: '500px', overflow: 'hidden', backgroundColor: 'transparent' }}
       >
-        {particlesInitState && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex: 0,
-              width: '100%',
-              height: '100vh',
-              border: '1px solid transparent'
-            }}
-          >
-            <Particles
-              id="tsparticles"
-              particlesLoaded={async (container) => {
-              
-            }}
-              options={particlesOptions}
-              style={{
-                width: '100%',
-                border: '1px solid red'
-              }}
-            />
-          </div>
-        )}
         <motion.div variants={itemVariants} style={{ position: 'relative', zIndex: 1 }} className="p-5 d-flex flex-column justify-content-start align-items-center h-100">
           <h1 className="display-3 fw-bold text-primary">Welcome to Luloy</h1>
           <p className="lead text-muted mt-3">
