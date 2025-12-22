@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useUser } from '../context/UserContext';
-import { database } from '../../../lib/firebase';
+import { database } from '@/lib/firebase';
 import { ref, push, serverTimestamp, query, orderByChild, limitToLast, onValue, off, get, remove, onChildAdded, endBefore } from 'firebase/database';
 
 const MESSAGES_COLLECTION = 'messages';

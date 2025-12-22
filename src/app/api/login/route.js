@@ -1,5 +1,5 @@
 
-import { auth } from "/lib/firebase-admin.js";
+import { auth } from "@/lib/firebase-admin.js";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { rateLimit } from '../../utils/rateLimit';

@@ -1,4 +1,4 @@
-import { admin, auth, firestore } from '/lib/firebase-admin';
+import { admin, auth, firestore } from '@/lib/firebase-admin';
 
 export async function POST(req) {
   try {

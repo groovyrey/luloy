@@ -1,7 +1,7 @@
-import { firestore } from '/lib/firebase-admin';
+import { firestore } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { auth } from '/lib/firebase-admin';
+import { auth } from '@/lib/firebase-admin';
 import { del, put } from '@vercel/blob';
 import { revalidatePath } from 'next/cache'; // Import revalidatePath
 

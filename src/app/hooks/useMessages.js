@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { database } from '../../../lib/firebase';
+import { database } from '@/lib/firebase';
 import { ref, query, orderByChild, limitToLast, onValue, off, onChildAdded, onChildChanged, onChildRemoved, endBefore } from 'firebase/database';
 
 const INITIAL_MESSAGE_LOAD_COUNT = 8;

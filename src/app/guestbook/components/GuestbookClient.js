@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { db } from '../../../../lib/firebase';
+import { db } from '@/lib/firebase';
 import { collection, query, where, orderBy, limit, getDocs, startAfter, addDoc } from 'firebase/firestore';
 import GuestbookEntryCard from '@/app/components/GuestbookEntryCard';
 import LoadingMessage from '@/app/components/LoadingMessage';

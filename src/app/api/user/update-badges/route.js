@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { admin } from "/lib/firebase-admin.js";
+import { admin } from "@/lib/firebase-admin.js";
 import { getComputedPermissions, BADGES } from "@/app/utils/BadgeSystem";
 
 export async function PUT(request) {

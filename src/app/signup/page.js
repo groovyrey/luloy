@@ -10,7 +10,7 @@ import AuthLayout from '../components/AuthLayout';
 import formStyles from '../components/AuthForm.module.css';
 import { showToast } from '../utils/toast';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "/lib/firebase.js";
+import { auth } from "@/lib/firebase.js";
 
 export default function SignupPage() {
     const [email, setEmail] = useState('');

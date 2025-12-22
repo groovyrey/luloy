@@ -1,4 +1,4 @@
-import { admin } from "/lib/firebase-admin.js";
+import { admin } from "@/lib/firebase-admin.js";
 import { NextResponse } from "next/server";
 import { capitalizeName } from "../../utils/capitalizeName";
 import { rateLimit } from '../../utils/rateLimit';

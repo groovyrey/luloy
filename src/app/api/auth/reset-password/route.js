@@ -1,5 +1,5 @@
 
-import { auth } from '../../../../../lib/firebase-admin';
+import { auth } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { sendPasswordResetEmail } from '../../../utils/email';
 import { rateLimit } from '../../../utils/rateLimit';

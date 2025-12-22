@@ -1,4 +1,4 @@
-import { admin } from "/lib/firebase-admin.js";
+import { admin } from "@/lib/firebase-admin.js";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { revalidateTag } from 'next/cache';
@@ -9,11 +9,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+
 
 export async function POST(request) {
   try {

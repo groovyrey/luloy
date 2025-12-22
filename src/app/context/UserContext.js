@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '/lib/firebase';
+import { auth } from '@/lib/firebase';
 import { getComputedPermissions } from '../utils/BadgeSystem';
 import { showToast } from '../utils/toast';
 

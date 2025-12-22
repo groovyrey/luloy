@@ -1,7 +1,7 @@
 
 import { spawn } from 'child_process';
 import { NextResponse } from 'next/server';
-import { auth, admin } from "/lib/firebase-admin.js";
+import { auth, admin } from "@/lib/firebase-admin.js";
 import { cookies } from "next/headers";
 
 export async function GET(request) {

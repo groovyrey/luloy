@@ -1,5 +1,5 @@
-import { firestore, auth } from '../../../../../lib/firebase-admin';
-import { getPostData } from '../../../../../lib/markdown';
+import { firestore, auth } from '@/lib/firebase-admin';
+import { getPostData } from '@/lib/markdown';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';

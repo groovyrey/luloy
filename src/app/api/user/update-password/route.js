@@ -1,4 +1,4 @@
-import { auth } from '../../../../../lib/firebase-admin';
+import { auth } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 
 export async function PUT(request) {

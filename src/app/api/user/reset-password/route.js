@@ -1,4 +1,4 @@
-import { admin } from "/lib/firebase-admin.js";
+import { admin } from "@/lib/firebase-admin.js";
 import { NextResponse } from "next/server";
 import { getComputedPermissions } from "@/app/utils/BadgeSystem";
 

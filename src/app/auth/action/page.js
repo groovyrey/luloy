@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { verifyPasswordResetCode, confirmPasswordReset } from 'firebase/auth';
-import { auth } from '../../../../lib/firebase';
+import { auth } from '@/lib/firebase';
 import { showToast } from '../../utils/toast';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
