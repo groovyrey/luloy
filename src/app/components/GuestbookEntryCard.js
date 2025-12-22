@@ -43,6 +43,7 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [showVisibilityConfirmModal, setShowVisibilityConfirmModal] = useState(false);
   const [senderUserData, setSenderUserData] = useState(null);
+  const [isLoadingSender, setIsLoadingSender] = useState(false); // New state for sender loading
   const optionsRef = useRef(null);
 
   const optionsVariants = {
@@ -53,13 +54,18 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
 
   useEffect(() => {
     if (message.sender && message.sender.length === 28) { // Basic check for UID format
+      setIsLoadingSender(true); // Set loading to true when a potential UID is found
       if (allUsersData[message.sender]) {
         setSenderUserData(allUsersData[message.sender]);
+        setIsLoadingSender(false); // Set loading to false if data is already available
       } else {
-        fetchAndStoreUserData(message.sender);
+        fetchAndStoreUserData(message.sender).then(() => {
+          setIsLoadingSender(false); // Set loading to false after fetching
+        });
       }
     } else {
       setSenderUserData(null);
+      setIsLoadingSender(false); // Not a UID, so not loading sender data
     }
   }, [message.sender, allUsersData, fetchAndStoreUserData]);
 
@@ -176,26 +182,42 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
     >
       <div className="card-body">
         <div className={styles.cardHeader}>
-          {senderUserData ? (
-            <div className={`${styles.senderInfo} d-flex align-items-center justify-content-between`}>
-              <div className="d-flex align-items-center">
-                <img
-                  src={senderUserData.profilePictureUrl || '/luloy.svg'}
-                  alt={senderUserData.username || senderUserData.firstName || 'User'}
-                  className="rounded-circle me-2" style={{ width: '30px', height: '30px', objectFit: 'cover' }}
-                />
-                <h5 className={styles.senderName}>
-                  {senderUserData.username || senderUserData.firstName || 'Anonymous'}
-                </h5>
-              </div>
-              {senderUserData && (
-                <Link href={`/user/${senderUserData.uid}`} className="text-decoration-none" title="View Profile">
-                  <i className="bi bi-box-arrow-up-right"></i>
-                </Link>
-              )}
-            </div>
+          {isLoadingSender ? (
+            <h5 className={styles.senderName}>
+              <span className="spinner-border spinner-border-sm text-primary me-2" role="status" aria-hidden="true"></span>
+              Loading Sender...
+            </h5>
           ) : (
-            <h5 className={styles.senderName}><i className="bi bi-person-circle me-2"></i>{" "}{message.sender === "" ? <span className="text-danger">?</span> : <span>{message.sender}</span>}</h5>
+            senderUserData ? (
+              <div className={`${styles.senderInfo} d-flex align-items-center justify-content-between`}>
+                <div className="d-flex align-items-center">
+                  {senderUserData.profilePictureUrl ? (
+                    <img
+                      src={senderUserData.profilePictureUrl}
+                      alt={senderUserData.username || senderUserData.firstName || 'User'}
+                      className="rounded-circle me-2" style={{ width: '30px', height: '30px', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div
+                      className="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2"
+                      style={{ width: '30px', height: '30px', backgroundColor: 'var(--accent-color)' }}
+                    >
+                      <i className="bi bi-person-fill text-white" style={{ fontSize: '18px' }}></i>
+                    </div>
+                  )}
+                  <h5 className={styles.senderName}>
+                    {senderUserData.username || senderUserData.firstName || 'Anonymous'}
+                  </h5>
+                </div>
+                {senderUserData && (
+                  <Link href={`/user/${senderUserData.uid}`} className="text-decoration-none" title="View Profile">
+                    <i className="bi bi-box-arrow-up-right"></i>
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <h5 className={styles.senderName}><i className="bi bi-person-circle me-2"></i>{" "}{message.sender === "" ? <span className="text-danger">?</span> : <span>{message.sender}</span>}</h5>
+            )
           )}
         </div>
         <AnimatePresence>
