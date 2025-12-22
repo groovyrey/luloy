@@ -9,6 +9,8 @@ import { Analytics } from '@vercel/analytics/react';
 import Navbar from "./components/Navbar";
 import NavigationButtons from "./components/NavigationButtons";
 import BootstrapClient from "./BootstrapClient";
+import FadingGrid from "./components/FadingGrid.module.css";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -23,6 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
+        <div className={FadingGrid.grid}></div>
         <ThemeProvider>
           <UserProvider>
             <Navbar />
