@@ -3,21 +3,23 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: transparent;
+  background-color: var(--card-background-color);
   color: var(--navbar-text-color);
   position: sticky;
-  top: 0;
+  top: 0.5rem;
   z-index: 1060;
+  margin: 0.5rem;
+  border-radius: var(--border-radius-base);
+  border: 1px solid var(--card-border-color);
 }
 
 .navbarBrandContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--navbar-background-color);
-  border-radius: 50%;
+  background-color: transparent;
+  border-radius: var(--border-radius-base);
   padding: 0.8rem;
-  border: 2px solid var(--primary-color);
   width: 46px;
   height: 46px;
 }
@@ -38,11 +40,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--navbar-background-color);
-  border: 2px solid var(--primary-color);
+  background: transparent;
+  border: none;
   cursor: pointer;
   padding: 0.8rem;
-  border-radius: 50%;
+  border-radius: var(--border-radius-base);
   margin-left: 1rem;
   position: relative;
   z-index: 1070;

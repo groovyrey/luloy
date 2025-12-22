@@ -10,15 +10,17 @@
 
 .offcanvas {
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
   width: 250px; /* Reverted to original width */
-  height: 100%;
   background-color: var(--background-color);
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5); /* Reverted to original shadow */
   z-index: 1050;
   display: flex;
   flex-direction: column;
+  border-radius: var(--border-radius-base);
+  border: 1px solid var(--card-border-color);
 }
 
 .offcanvasBody {
