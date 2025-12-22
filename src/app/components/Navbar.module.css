@@ -3,25 +3,25 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: var(--card-background-color);
+  background-color: transparent;
   color: var(--navbar-text-color);
   position: sticky;
   top: 0.5rem;
   z-index: 1060;
   margin: 0.5rem;
   border-radius: var(--border-radius-base);
-  border: 1px solid var(--card-border-color);
+  border: none;
 }
 
 .navbarBrandContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
+  background-color: var(--card-background-color);
   border-radius: var(--border-radius-base);
   padding: 0.8rem;
-  width: 46px;
   height: 46px;
+  border: 1px solid var(--card-border-color);
 }
 
 .navbarBrandContainer a {
@@ -40,8 +40,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: transparent;
-  border: none;
+  background: var(--card-background-color); /* Changed background */
+  border: 1px solid var(--card-border-color); /* Added border */
   cursor: pointer;
   padding: 0.8rem;
   border-radius: var(--border-radius-base);
@@ -79,4 +79,11 @@
 
 .mobileMenuToggle.open .hamburgerLine:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.logoText {
+  margin-left: 0.5rem; /* Space between logo and text */
+  font-size: 1.5em; /* Match logo height */
+  font-weight: bold;
+  color: var(--text-color); /* Use theme text color */
 }

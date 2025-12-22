@@ -73,12 +73,10 @@ export async function POST(request) {
     if (existingDocsSnapshot.empty) {
       // No existing document, create a new one
       docRef = firestore.collection(collectionName).doc();
-      console.log(`Attempting to save to Firestore collection: ${collectionName}`);
     } else {
       // Existing document found, update it
       existingDocId = existingDocsSnapshot.docs[0].id;
       docRef = firestore.collection(collectionName).doc(existingDocId);
-      console.log(`Existing document found. Attempting to update Firestore document with ID: ${existingDocId}`);
     }
 
     const blob = await put(blobPath, file, {
@@ -110,9 +108,7 @@ export async function POST(request) {
       };
     }
 
-    console.log('Metadata to save/update:', JSON.stringify(metadata, null, 2));
     await docRef.set(metadata, { merge: true }); // Use merge: true to update existing fields
-    console.log(`Successfully saved/updated to Firestore with ID: ${docRef.id}`);
 
     // Revalidate the /learn path if a new post was added
     if (type === 'post') {

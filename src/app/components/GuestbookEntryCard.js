@@ -103,18 +103,14 @@ export default function MessageCard({ message, onDelete, onUpdateMessage }) {
         body: JSON.stringify({ messageId: message.id }),
       });
 
-      console.log('Delete API Response:', response);
       if (response.ok) {
-        console.log('Message deleted successfully on server.');
         if (onDelete) {
           onDelete(message.id);
         }
         showToast('Message deleted successfully', 'success');
         return true; // Indicate success
       } else {
-        console.error('Failed to delete message. Response status:', response.status);
         const errorData = await response.json();
-        console.error('Error data:', errorData);
         showToast(`Failed to delete message: ${errorData.message}`, 'error');
         return false; // Indicate failure
       }

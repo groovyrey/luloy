@@ -20,11 +20,9 @@ export const useChat = () => {
 
   const processMessages = (messageData) => {
     if (!messageData) return [];
-    console.log('Raw message data:', messageData);
     const processed = Object.keys(messageData)
       .map(key => ({ id: key, ...messageData[key] }))
       .sort((a, b) => a.createdAt - b.createdAt);
-    console.log('Processed messages:', processed);
     return processed;
   };
 
@@ -35,7 +33,6 @@ export const useChat = () => {
     // Initial messages listener
     const unsubscribeInitial = onValue(initialQuery, (snapshot) => {
       try {
-        console.log('Initial snapshot received:', snapshot.val());
         const val = snapshot.val();
         if (val) {
           const loadedMessages = processMessages(val);
@@ -57,7 +54,6 @@ export const useChat = () => {
 
     // New message listener
     const onChildAddedListener = onChildAdded(messagesRef, (snapshot) => {
-      console.log('New message added:', snapshot.val());
       const newMessage = { id: snapshot.key, ...snapshot.val() };
       setMessages(prev => {
         if (prev.some(m => m.id === newMessage.id)) {

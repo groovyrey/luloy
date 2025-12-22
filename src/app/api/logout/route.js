@@ -10,7 +10,6 @@ export async function GET(request) {
     secure: process.env.NODE_ENV === 'production',
     path: '/',
   };
-  console.log('DEBUG: Clearing session cookie with options:', cookieOptions);
 
   (await cookies()).set(cookieOptions);
 

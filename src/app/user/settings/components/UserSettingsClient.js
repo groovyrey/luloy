@@ -81,11 +81,6 @@ export default function UserSettingsClient() {
       setAge(userData.age || '');
       setGender(userData.gender || '');
       setInterests(userData.interests || []);
-      console.log("UserSettingsClient: Initializing gender with:", userData.gender);
-      console.log("UserSettingsClient: Initializing interests with:", userData.interests);
-      console.log("User data loaded in UserSettingsClient:", userData);
-      console.log("Setting gender to:", userData.gender);
-      console.log("Setting interests to:", userData.interests);
 
       if (userData.profilePictureUrl) {
         setProfilePicturePreviewUrl(userData.profilePictureUrl);
@@ -236,31 +231,25 @@ export default function UserSettingsClient() {
         if (firstNameChanged) {
           setLastFirstNameUpdate(now);
           setFirstNameDisabled(true);
-          console.log('firstNameDisabled set to true after update.');
           setTimeout(() => {
             setFirstNameDisabled(false);
             setFirstNameRemainingTime('');
-            console.log('firstName re-enabled after timeout.');
           }, COOLDOWN_PERIOD);
         }
         if (lastNameChanged) {
           setLastLastNameUpdate(now);
           setLastNameDisabled(true);
-          console.log('lastNameDisabled set to true after update.');
           setTimeout(() => {
             setLastNameDisabled(false);
             setLastNameRemainingTime('');
-            console.log('lastName re-enabled after timeout.');
           }, COOLDOWN_PERIOD);
         }
         if (ageChanged) {
           setLastAgeUpdate(now);
           setAgeDisabled(true);
-          console.log('ageDisabled set to true after update.');
           setTimeout(() => {
             setAgeDisabled(false);
             setAgeRemainingTime('');
-            console.log('age re-enabled after timeout.');
           }, COOLDOWN_PERIOD);
         }
 

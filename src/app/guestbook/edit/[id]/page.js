@@ -23,15 +23,12 @@ export default function EditMessagePage() {
     }
 
     const fetchMessage = async () => {
-      console.log('User object:', user);
-      console.log('User ID token:', user?.idToken);
       try {
         const response = await fetch(`/api/messages/${id}`, {
           headers: {
             'Authorization': `Bearer ${user.idToken}`,
           },
         });
-        console.log('Fetch response:', response);
         if (response.ok) {
           const data = await response.json();
           setMessage(data);

@@ -24,12 +24,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} d-flex flex-column min-vh-100`}>
         <div className={FadingGrid.grid}></div>
         <ThemeProvider>
           <UserProvider>
             <Navbar />
-            <main className="main-content">
+            <main className="d-flex flex-column align-items-center justify-content-start p-3 flex-grow-1">
               {children}
             </main>
             <NavigationButtons />
