@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <UserProvider>
             <Navbar />
-            <main className="d-flex flex-column align-items-center justify-content-start p-3 flex-grow-1">
+            <main className="main-content">
               {children}
             </main>
             <NavigationButtons />
